@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="FAWE">
+    <CLASSES>
+      <root url="jar://D:/donnees/jars/plugins/FAWE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
