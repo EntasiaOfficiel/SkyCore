@@ -28,7 +28,10 @@ public class IsCommand implements CommandExecutor {
 		if(!(sender instanceof Player))return false;
 		Player p = ((Player)sender);
 		SkyPlayer sp = BaseAPI.getOnlineSP(p.getUniqueId());
-		assert sp != null;
+		if(sp==null){
+			p.sendMessage("§cTon profil est mal chargé ! Contacte un Membre du Staff");
+			return true;
+		}
 		final ISPLink link = sp.referentIsland(true);
 		if (args.length == 0) {
 			if (sp.getIslands().size()==0) IsMenus.startIslandChooseOpen(sp);

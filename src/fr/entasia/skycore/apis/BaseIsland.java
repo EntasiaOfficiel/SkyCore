@@ -312,8 +312,8 @@ public class BaseIsland {
 	}
 
 
-	private static BaseComponent[] b1 = ChatComponent.create("§3Is-Chat§b>> ");
-	private static BaseComponent[] b2 = ChatComponent.create(" §8| §7");
+	private static final BaseComponent[] b1 = ChatComponent.create("§3Is-Chat§b>> ");
+	private static final BaseComponent[] b2 = ChatComponent.create(" §8| §7");
 
 	public void islandChat(ISPLink link, String msg){
 		islandChat(link, ChatComponent.create(msg));
