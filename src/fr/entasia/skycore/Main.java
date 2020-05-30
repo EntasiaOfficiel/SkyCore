@@ -2,7 +2,6 @@ package fr.entasia.skycore;
 
 import com.boydti.fawe.object.schematic.Schematic;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sun.istack.internal.NotNull;
 import fr.entasia.apis.sql.SQLConnection;
 import fr.entasia.skycore.apis.TerrainManager;
 import fr.entasia.skycore.commands.*;
@@ -14,16 +13,16 @@ import fr.entasia.skycore.otherobjs.IslandShematics;
 import fr.entasia.skycore.otherobjs.islevel.BlockType;
 import fr.entasia.skycore.others.enums.Dimension;
 import fr.entasia.skycore.others.enums.IslandType;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;

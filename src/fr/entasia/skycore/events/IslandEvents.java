@@ -17,9 +17,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class IslandEvents implements Listener {
 
