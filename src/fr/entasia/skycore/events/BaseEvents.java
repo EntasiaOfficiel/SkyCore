@@ -11,10 +11,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 
@@ -59,41 +62,44 @@ public class BaseEvents implements Listener {
 
 	@EventHandler
 	public static void onDamage(EntityDamageByEntityEvent e){
-		if(e.getEntity() instanceof Player){
-			Player p = (Player)e.getEntity();
-			if(e.getDamager() instanceof Firework) e.setCancelled(true);
-			else if(e.getDamager() instanceof Player)e.setCancelled(true);
-			else{
-				if (e.getCause() == EntityDamageEvent.DamageCause.FALL)
-					e.setDamage(e.getDamage() / 2);
-				if (e.getFinalDamage() >= p.getHealth()) {
-					e.setCancelled(true);
-					p.sendMessage("§c§kn§cTu es mort !§kn");
-					p.setMaxHealth(20);
-					p.setHealth(20);
-					p.setFoodLevel(20);
+		if(!(e.getEntity() instanceof Player))return;
+		Player p = (Player)e.getEntity();
+		if(!Dimension.isIslandWorld(p.getWorld()))return;
+		if(e.getDamager() instanceof Firework) e.setCancelled(true);
+		else if(e.getDamager() instanceof Player)e.setCancelled(true);
+		else{
+			if (e.getCause() == EntityDamageEvent.DamageCause.FALL)
+				e.setDamage(e.getDamage() / 2);
+			if (e.getFinalDamage() >= p.getHealth()) {
+				e.setCancelled(true);
+				p.sendMessage("§c§kn§cTu es mort !§kn");
+				for(PotionEffect pe : p.getActivePotionEffects()){
+					p.removePotionEffect(pe.getType());
+				}
+				p.setMaxHealth(20);
+				p.setHealth(20);
+				p.setFoodLevel(20);
 
 
-					SkyPlayer sp = BaseAPI.getOnlineSP(p.getUniqueId());
-					assert sp != null;
+				SkyPlayer sp = BaseAPI.getOnlineSP(p.getUniqueId());
+				assert sp != null;
 
-					BaseIsland is = null;
-					if (Dimension.isIslandWorld(p.getWorld())) {
-						is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
-					}
-					if (is == null) {
-						ArrayList<ISPLink> a = sp.getIslands();
-						if (a.size() == 1) is = a.get(0).is;
-						else {
-							is = sp.getDefaultIS().is;
-							if (is == null) {
-								p.teleport(Utils.spawn);
-								return;
-							}
+				BaseIsland is = null;
+				if (Dimension.isIslandWorld(p.getWorld())) {
+					is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
+				}
+				if (is == null) {
+					ArrayList<ISPLink> a = sp.getIslands();
+					if (a.size() == 1) is = a.get(0).is;
+					else {
+						is = sp.getDefaultIS().is;
+						if (is == null) {
+							p.teleport(Utils.spawn);
+							return;
 						}
 					}
-					p.teleport(is.getHome());
 				}
+				p.teleport(is.getHome());
 			}
 		}
 	}
@@ -122,5 +128,11 @@ public class BaseEvents implements Listener {
 			if(d.world==null)return;
 		}
 		InternalAPI.onPostEnable();
+	}
+
+
+	@EventHandler
+	public void a(EntityExplodeEvent e){
+		e.get
 	}
 }
