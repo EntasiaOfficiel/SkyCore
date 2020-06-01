@@ -152,10 +152,11 @@ public class BaseAPI {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if(TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimensions.OVERWORLD.world))&&TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimensions.NETHER.world))&&
-						TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimensions.END.world))){
-					code.run(false);
-				}else code.run(true);
+				boolean a = true;
+				if(!TerrainManager.clearTerrain(is.isid, TerrainManager.getSession(Dimensions.OVERWORLD.world)))a = false;
+				else if(!TerrainManager.clearTerrain(is.isid, TerrainManager.getSession(Dimensions.NETHER.world)))a = false;
+				else if(!TerrainManager.clearTerrain(is.isid, TerrainManager.getSession(Dimensions.END.world)))a = false;
+				code.run(a);
 			}
 		}.runTaskAsynchronously(Main.main);
 	}

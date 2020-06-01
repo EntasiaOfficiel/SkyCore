@@ -81,7 +81,7 @@ public class TerrainManager {
 	// LE BORDEL COMMENCE ICI
 
 
-	public static void genIsland(SkyPlayer sp, IslandType type){
+	public static void generateIsland(SkyPlayer sp, IslandType type){
 		if(sp.getIslands().size()>10||sp.generating)return;
 		sp.generating = true;
 		sp.p.sendMessage("§eGénération de votre île en cours.. merci de patienter !");
@@ -96,8 +96,7 @@ public class TerrainManager {
 					BaseAPI.registerIsland(link.is, sp);
 
 
-					genBaseDimension(link.is, Dimensions.OVERWORLD.world, type.schems);
-					setBiome(link.is, Dimensions.OVERWORLD.world, link.is.type.biome);
+					genOW(isid, type);
 					sp.p.sendMessage("§6Génération overworld terminée !");
 //					genDimension(link.is, Dimensions.NETHER.world, Dimensions.NETHER.schems);
 //					sp.p.sendMessage("§6Génération nether terminée !");
@@ -127,16 +126,46 @@ public class TerrainManager {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	public static void genOW(){
+	public static void genOW(ISID isid, IslandType type) throws Exception {
+		EditSession session = getSession(Dimensions.OVERWORLD.world);
+		genBaseDimension(isid, session, Dimensions.OVERWORLD.world, type.schems);
+		setBiome(isid, Dimensions.OVERWORLD.world, type.biome);
+
+		// Ile géante
+
+		Vector loc = new Vector(isid.getMinXTotal(), 70, isid.getMinZTotal());
+		switch (r.nextInt(4)) {
+			case 0:
+				loc.mutX(loc.getX() + 50);
+				loc.mutZ(loc.getZ() + r.nextInt(Utils.ISSIZE-100)+50);
+				break;
+			case 1:
+				loc.mutX(loc.getX() + Utils.ISSIZE - 50);
+				loc.mutZ(loc.getZ() + r.nextInt(Utils.ISSIZE-100)+50);
+				break;
+			case 2:
+				loc.mutX(loc.getX() + r.nextInt(Utils.ISSIZE-100)+50);
+				loc.mutZ(loc.getZ() + 50);
+				break;
+			case 3:
+				loc.mutX(loc.getX() + r.nextInt(Utils.ISSIZE-100)+50);
+				loc.mutZ(loc.getZ() + Utils.ISSIZE - 50);
+				break;
+		}
+		type.schems.structures[0].paste(session, loc, false);
 
 	}
 
-	public static void genNether(){
+	public static void genNether(ISID isid) throws Exception {
+		EditSession session = getSession(Dimensions.NETHER.world);
+		genBaseDimension(isid, session, Dimensions.NETHER.world, Dimensions.NETHER.schems);
+
 
 	}
 
-	public static void genEnd(){
-
+	public static void genEnd(ISID isid) throws Exception {
+		EditSession session = getSession(Dimensions.END.world);
+		genBaseDimension(isid, session, Dimensions.END.world, Dimensions.END.schems);
 	}
 
 	protected static void calcPoints(BaseIsland is, CodePasser.Void code){
@@ -185,12 +214,12 @@ public class TerrainManager {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	public static boolean clearTerrain(BaseIsland is, EditSession editSession){
+	public static boolean clearTerrain(ISID isid, EditSession editSession){
 		ServerUtils.wantChildThread();
 		try{
 			editSession.setBlocks(new CuboidRegion(
-					new Vector(is.isid.getMinXTotal(), 0, is.isid.getMinZTotal()),
-					new Vector(is.isid.getMaxXTotal(), 255, is.isid.getMaxZTotal())), airBlock);
+					new Vector(isid.getMinXTotal(), 0, isid.getMinZTotal()),
+					new Vector(isid.getMaxXTotal(), 255, isid.getMaxZTotal())), airBlock);
 			editSession.flushQueue();
 			return true;
 		}catch(Exception e){
@@ -199,11 +228,11 @@ public class TerrainManager {
 		return false;
 	}
 
-	public static void setBiome(BaseIsland is, World w, Biome biome){
-		int minx = is.isid.getMinXTotal();
-		int maxx = is.isid.getMaxXTotal();
-		int minz = is.isid.getMinZTotal();
-		int maxz = is.isid.getMaxZTotal();
+	public static void setBiome(ISID isid, World w, Biome biome){
+		int minx = isid.getMinXTotal();
+		int maxx = isid.getMaxXTotal();
+		int minz = isid.getMinZTotal();
+		int maxz = isid.getMaxZTotal();
 
 		for(int x=minx;x<=maxx;x++){
 			for(int z=minz;z<=maxz;z++){
@@ -213,27 +242,26 @@ public class TerrainManager {
 	}
 
 
-	protected static void genBaseDimension(BaseIsland is, World w, IslandShematics isc) throws Throwable {
+	protected static void genBaseDimension(ISID isid, EditSession session, World w, IslandShematics isc) throws Exception {
 		ServerUtils.wantChildThread();
 
-		Vector bloc = new Vector(is.isid.getMinXTotal(), 70, is.isid.getMinZTotal());
+		Vector bloc = new Vector(isid.getMinXTotal(), 70, isid.getMinZTotal());
 		Vector loc = new Vector(bloc);
 
-		// FILL OVERWORLD
-		EditSession editSession = getSession(w);
-		clearTerrain(is, editSession);
+		// FILL
+		clearTerrain(isid, session);
 
 
 
-		//				 GENERATION ILE NORMALE
+		// GENERATION ILE NORMALE
 
-		loc.mutX(is.isid.getMiddleX());
-		loc.mutZ(is.isid.getMiddleZ());
-		isc.island.paste(editSession, loc, false); // ca marche
+		loc.mutX(isid.getMiddleX());
+		loc.mutZ(isid.getMiddleZ());
+		isc.island.paste(session, loc, false); // ca marche
 
-		editSession.setBlock(loc.setY(65), bedrockBlock);
+		session.setBlock(loc.setY(65), bedrockBlock);
 
-		editSession.flushQueue();
+		session.flushQueue();
 
 		// GENERATION MINI ILES
 
@@ -244,92 +272,11 @@ public class TerrainManager {
 			loc.mutX(bloc.getX() + getRandom());
 			loc.mutZ(bloc.getZ() + getRandom());
 
-			isc.miniIslands[j].paste(editSession, wd, loc, false, transform.rotateY(90*r.nextInt(4)));
+			isc.miniIslands[j].paste(session, wd, loc, false, transform.rotateY(90*r.nextInt(4)));
 			j++;
 			if (j == isc.miniIslands.length)j = 0;
 		}
+		session.flushQueue();
 
-		editSession.flushQueue();
-
-		// GENERATION OTHERS :
-		if(w==Dimensions.NETHER.world){
-
-		}else if(w==Dimensions.END.world){
-
-		}else{
-			// Ile géante
-
-			loc = new Vector(bloc);
-			switch (r.nextInt(4)) {
-				case 0:
-					loc.mutX(loc.getX() + 50);
-					loc.mutZ(loc.getZ() + r.nextInt(Utils.ISSIZE-100)+50);
-					break;
-				case 1:
-					loc.mutX(loc.getX() + Utils.ISSIZE - 50);
-					loc.mutZ(loc.getZ() + r.nextInt(Utils.ISSIZE-100)+50);
-					break;
-				case 2:
-					loc.mutX(loc.getX() + r.nextInt(Utils.ISSIZE-100)+50);
-					loc.mutZ(loc.getZ() + 50);
-					break;
-				case 3:
-					loc.mutX(loc.getX() + r.nextInt(Utils.ISSIZE-100)+50);
-					loc.mutZ(loc.getZ() + Utils.ISSIZE - 50);
-					break;
-			}
-			isc.structures[0].paste(editSession, loc, false);
-
-		}
-		editSession.flushQueue();
-
-	}
-
-
-
-	public static void genOW(SkyPlayer sp, IslandType type){
-		if(sp.getIslands().size()>10||sp.generating)return;
-		sp.generating = true;
-		sp.p.sendMessage("§eGénération de votre île en cours.. merci de patienter !");
-
-		new BukkitRunnable(){
-			@Override
-			public void run() {
-				try {
-
-					ISID isid = CooManager.findFreeSpot();
-					ISPLink link = new ISPLink(new BaseIsland(isid, type), sp, MemberRank.CHEF);
-					BaseAPI.registerIsland(link.is, sp);
-
-
-					genBase(link.is, Dimensions.OVERWORLD.world, type.schems);
-					setBiome(link.is, Dimensions.OVERWORLD.world, link.is.type.biome);
-					sp.p.sendMessage("§6Génération overworld terminée !");
-//					genDimension(link.is, Dimensions.NETHER.world, Dimensions.NETHER.schems);
-//					sp.p.sendMessage("§6Génération nether terminée !");
-//					genDimension(link.is, Dimensions.END.world, Dimensions.END.schems);
-//					sp.p.sendMessage("§6Génération end terminée !");
-
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							calcPoints(link.is, new CodePasser.Void() {
-								@Override
-								public void run() {
-									link.is.setMalus((int) link.is.rawpoints);
-									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
-									sp.p.teleport(link.is.getHome());
-									sp.generating = false;
-								}
-							});
-						}
-					}.runTask(Main.main);
-
-				}catch(Throwable e){
-					e.printStackTrace();
-					sp.p.sendMessage("§cUne erreur s'est produite lors de la création de ton île ! Contacte un membre du Staff");
-				}
-			}
-		}.runTaskAsynchronously(Main.main);
 	}
 }

@@ -1,6 +1,7 @@
 package fr.entasia.skycore.otherobjs;
 
 import fr.entasia.skycore.apis.BaseIsland;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class CodePasser {
@@ -15,6 +16,10 @@ public class CodePasser {
 
 	public static abstract class Bool {
 		abstract public void run(boolean b);
+	}
+
+	public static abstract class Loc {
+		abstract public void run(Location loc);
 	}
 
 }

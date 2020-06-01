@@ -54,15 +54,19 @@ public class IsAdminCommand implements CommandExecutor {
 							BaseIsland is = BaseAPI.getIsland(isid);
 							if (is == null) p.sendMessage("§cIle non existante !");
 							else {
-								p.sendMessage("ID : "+isid.str());
+								p.sendMessage("§8Global");
+								p.sendMessage("§7ID : §b"+isid.str());
 								ISPLink link = is.getOwner();
-								p.sendMessage("Owner UUID : "+link.sp.uuid);
-								if(link.sp.p!=null)p.sendMessage("Owner Name : "+link.sp.p.getName());
-								p.sendMessage("Membres :");
+								p.sendMessage("§7Owner UUID : §b"+link.sp.uuid);
+								if(link.sp.p!=null)p.sendMessage("§7Owner Name : §b"+link.sp.p.getName());
+								p.sendMessage("§7Membres :");
 								for(ISPLink ll : link.is.getSortedMembers()){
-									p.sendMessage("- "+ll.getName());
+									p.sendMessage("§8- §b"+ll.getName());
 								}
-								p.sendMessage("Niveau : " + is.getLevel());
+								p.sendMessage("§7Niveau : §b" + is.getLevel());
+								p.sendMessage("§8Dimensions :");
+								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));
+								p.sendMessage("§7End : §b"+is.hasDimension(Dimensions.END));
 							}
 						}
 						break;

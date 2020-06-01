@@ -10,7 +10,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
-//@Deprecated
 public class PortalHelper {
 
 	protected static void findNetherPortal(BaseIsland is, Player p, Dimensions in) {
@@ -18,13 +17,8 @@ public class PortalHelper {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				final boolean x_axis;
 				Location loc = p.getLocation();
-				if (loc.getBlock().getType() == Material.PORTAL &&
-						(loc.clone().add(0, 0, 1).getBlock().getType() == Material.PORTAL ||
-								loc.clone().add(0, 0, -1).getBlock().getType() == Material.PORTAL)) {
-					x_axis = true;
-				} else x_axis = false;
+				final boolean y_axis = loc.getBlock().getData() == 2;
 
 				Material type;
 				for (ChunkSnapshot cs : chunks) {
@@ -41,11 +35,8 @@ public class PortalHelper {
 										public void run() {
 											Location finalLoc = new Location(in.world, cs.getX() * 16 + finalX, finalY, cs.getZ() * 16 + finalZ,
 													loc.getYaw(), loc.getPitch());
-											boolean dest_x_axis;
-											if (finalLoc.clone().add(0, 0, 1).getBlock().getType() == Material.PORTAL || finalLoc.clone().add(0, 0, -1).getBlock().getType() == Material.PORTAL) {
-												dest_x_axis = true;
-											} else dest_x_axis = false;
-											if (dest_x_axis != x_axis) {
+											final boolean dest_y_axis = loc.getBlock().getData() == 2;
+											if (dest_y_axis != y_axis) {
 												float yaw = finalLoc.getYaw();
 												yaw += 90;
 												finalLoc.setYaw(yaw);
@@ -58,7 +49,6 @@ public class PortalHelper {
 											else if (in == Dimensions.NETHER) is.netherPortal = finalLoc;
 											else{
 												InternalAPI.warn("Dimension invalide !");
-												return;
 											}
 											p.teleport(finalLoc);
 										}

@@ -35,10 +35,13 @@ public class SkyCoreCommand implements CommandExecutor {
 						p.sendMessage("§cSauvegardes SQL désactivées !");
 
 					}else p.sendMessage("§cArgument invalide !");
+				}else if(args[0].equalsIgnoreCase("sqlreload")){
+					p.sendMessage("§4§lATTENTION : ");
 				}else{
-					p.sendMessage("§cArgument invalide ! Arguments disponibles :\n" +
-							"- reload\n"+
-							"- sql");
+					p.sendMessage("§cArgument invalide ! Arguments disponibles :");
+					p.sendMessage("§c- reload");
+					p.sendMessage("§c- sql");
+					p.sendMessage("§c- sqlreload");
 				}
 			}
 		}else sender.sendMessage("§cTu n'as pas accès à cette commande !");

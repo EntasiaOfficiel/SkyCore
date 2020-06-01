@@ -71,10 +71,8 @@ public class InternalAPI {
 			is.addBank(rs.getLong("bank"));
 			is.setExtension(rs.getByte("extension"));
 
-//					if(rs.getByte("hasNether")==1)is.allowNether();
-//					if(rs.getByte("hasEnd")==1)is.allowEnd();
-			is.allowDimension(Dimensions.NETHER);
-			is.allowDimension(Dimensions.END);
+			if(rs.getByte("hasNether")==1)is.hasNether = true;
+			if(rs.getByte("hasEnd")==1)is.hasEnd = true;
 			Utils.islandCache.add(is);
 		}
 
@@ -118,6 +116,30 @@ public class InternalAPI {
 		Main.main.getLogger().info(Utils.playerCache.size()+" joueurs");
 		Main.main.getLogger().info(i+" liens");
 
+	}
+
+
+
+	public static boolean allowDimension(BaseIsland is, Dimensions d) {
+		ServerUtils.wantChildThread();
+		try{
+			if(d==Dimensions.NETHER){
+				TerrainManager.genNether(is.isid);
+				is.hasNether = true;
+				if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasNether=1 WHERE x=? and z=?", is.isid.x, is.isid.z);
+			}else if(d==Dimensions.END){
+				TerrainManager.genEnd(is.isid);
+				is.hasEnd = true;
+				if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasEnd=1 WHERE x=? and z=?", is.isid.x, is.isid.z);
+			}else{
+				InternalAPI.warn("Activation d'une dimension invalide : "+d);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			InternalAPI.warn("Erreur d'activation de dimension "+d+" ! "+is.isid);
+			return false;
+		}
+		return true;
 	}
 
 }

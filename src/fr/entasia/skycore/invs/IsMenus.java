@@ -23,7 +23,7 @@ public class IsMenus {
 
 	// MENU CHOISIR UNE ILE DE DEPART
 
-	private static MenuCreator startIslandChooseMenu = new MenuCreator(null, null) {
+	private static final MenuCreator startIslandChooseMenu = new MenuCreator(null, null) {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -101,7 +101,7 @@ public class IsMenus {
 	// MENU CHOISIR IS PAR DEFAUT
 
 
-	private static MenuCreator chooseDefaultIsland = new MenuCreator(null, null) {
+	private static final MenuCreator chooseDefaultIsland = new MenuCreator(null, null) {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -141,7 +141,7 @@ public class IsMenus {
 
 	// MENU IS DE BASE DE L'ILE
 
-	private static MenuCreator baseIslandMenu = new MenuCreator(null, null) {
+	private static final MenuCreator baseIslandMenu = new MenuCreator(null, null) {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -223,7 +223,7 @@ public class IsMenus {
 	// MENU DE TEAM
 
 
-	private static MenuCreator manageTeamMenu = new MenuCreator(null, null) {
+	private static final MenuCreator manageTeamMenu = new MenuCreator(null, null) {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -231,7 +231,6 @@ public class IsMenus {
 			if(e.item.getType()==Material.BOOK_AND_QUILL) baseIslandOpen(link);
 		}
 	};
-
 
 	public static void manageTeamOpen(ISPLink link){
 		Inventory inv = manageTeamMenu.createInv(3, "§6Ton équipe :", link);

@@ -10,7 +10,6 @@ import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -85,7 +84,20 @@ public class BaseIsland {
 	- PRIER BORDEL
 	 */
 
-	public void teleportOverWord(Dimensions from, Player p) {
+	// A FAIRE : FAIRE RETURN LA LOC (donc passer en thread child)
+
+
+	public Location getOWPortal(Dimensions from){
+		if(from==Dimensions.NETHER)return OWNetherPortal;
+		else if(from==Dimensions.END)return OWNetherPortal;
+		else{
+			InternalAPI.warn("Invalid dimension location request");
+			return null;
+		}
+	}
+
+
+	public void teleportOW(Dimensions from, Player p) {
 		if(from==Dimensions.NETHER) {
 			if(OWNetherPortal==null||OWNetherPortal.getBlock().getType()!= Material.PORTAL){
 				PortalHelper.findNetherPortal(this, p, Dimensions.OVERWORLD);
@@ -152,20 +164,6 @@ public class BaseIsland {
 		}
 	}
 
-
-
-	public void allowDimension(Dimensions d){
-		if(d==Dimensions.NETHER){
-			hasNether = true;
-			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasNether=1 WHERE x=? and z=?", isid.x, isid.z);
-		}else if(d==Dimensions.END){
-			hasEnd = true;
-			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasEnd=1 WHERE x=? and z=?", isid.x, isid.z);
-		}else{
-			InternalAPI.warn("Invalid dimension loading");
-		}
-	}
-
 	public boolean hasDimension(Dimensions dim){
 		if(dim==Dimensions.OVERWORLD)return true;
 		else if(dim==Dimensions.NETHER)return hasNether;
@@ -208,6 +206,7 @@ public class BaseIsland {
 	}
 
 
+
 	public Location getHome(){
 		return home;
 	}
@@ -221,6 +220,7 @@ public class BaseIsland {
 		this.home = home;
 		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET home_w=? and home_x=? and home_y=? and home_z=? where x =? and z=?", Dimensions.getDimension(home.getWorld()).id, isid.x, isid.z);
 	}
+
 
 
 	public ArrayList<ISPLink> getMembers(){
