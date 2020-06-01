@@ -49,6 +49,7 @@ public class PortalHelper {
 											else if (in == Dimensions.NETHER) is.netherPortal = finalLoc;
 											else{
 												InternalAPI.warn("Dimension invalide !");
+												return;
 											}
 											p.teleport(finalLoc);
 										}
