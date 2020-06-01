@@ -3,7 +3,7 @@ package fr.entasia.skycore.others.enums;
 import fr.entasia.skycore.otherobjs.IslandShematics;
 import org.bukkit.World;
 
-public enum Dimension {
+public enum Dimensions {
 	OVERWORLD(0),
 	NETHER(1),
 	END(2);
@@ -13,19 +13,19 @@ public enum Dimension {
 	public World world;
 	public IslandShematics schems;
 
-	Dimension(int id){
+	Dimensions(int id){
 		this.id = id;
 	}
 
-	public static Dimension getDimension(World w){
-		for(Dimension d : Dimension.values()){
+	public static Dimensions getDimension(World w){
+		for(Dimensions d : Dimensions.values()){
 			if(d.world==w)return d;
 		}
 		return null;
 	}
 
 	public static boolean isIslandWorld(World w){
-		for(Dimension d : Dimension.values()){
+		for(Dimensions d : Dimensions.values()){
 			if(d.world!=null&&d.world==w)return true;
 		}
 		return false;

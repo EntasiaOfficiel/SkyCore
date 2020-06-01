@@ -4,12 +4,13 @@ package fr.entasia.skycore.apis;
 import fr.entasia.apis.ChatComponent;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.otherobjs.CodePasser;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class BaseIsland {
 
 	protected long cooldown=10000;
 
+	public boolean generating = false;
+
 
 
 	// CONSTRUCTEURS
@@ -51,9 +54,9 @@ public class BaseIsland {
 	public BaseIsland(ISID isid, IslandType type){
 		this.isid = isid;
 		this.type = type;
-		home = new Location(Dimension.OVERWORLD.world, isid.getMiddleX(), 70.2, isid.getMiddleZ());
+		home = new Location(Dimensions.OVERWORLD.world, isid.getMiddleX(), 70.2, isid.getMiddleZ());
 
-		Dimension[] v = Dimension.values();
+		Dimensions[] v = Dimensions.values();
 
 	}
 
@@ -82,39 +85,37 @@ public class BaseIsland {
 	- PRIER BORDEL
 	 */
 
-	public void teleportOverWord(Player p) {
-		Dimension dim = Dimension.getDimension(p.getWorld());
-		if(dim==Dimension.NETHER) {
+	public void teleportOverWord(Dimensions from, Player p) {
+		if(from==Dimensions.NETHER) {
 			if(OWNetherPortal==null||OWNetherPortal.getBlock().getType()!= Material.PORTAL){
-				DimensionHelper.findNetherPortal(this, p, Dimension.OVERWORLD);
+				PortalHelper.findNetherPortal(this, p, Dimensions.OVERWORLD);
 			}else p.teleport(OWNetherPortal);
-		}else if(dim==Dimension.END){
+		}else if(from==Dimensions.END){
 			if(OWEndPortal==null||
 					(OWEndPortal.getBlock().getType()!= Material.ENDER_PORTAL&&OWEndPortal.getBlock().getType()!= Material.END_GATEWAY)){
-					DimensionHelper.findEndPortal(this, p, Dimension.OVERWORLD);
+					PortalHelper.findEndPortal(this, p, Dimensions.OVERWORLD);
 			}else p.teleport(OWEndPortal);
 		}
 	}
 
-	public void teleportNether(Player p) {
-		Dimension dim = Dimension.getDimension(p.getWorld());
+	public boolean teleportNether(Player p) {
 		if(hasNether){
 			if(netherPortal==null||netherPortal.getBlock().getType()!= Material.PORTAL) {
-				DimensionHelper.findNetherPortal(this, p, Dimension.NETHER);
+				PortalHelper.findNetherPortal(this, p, Dimensions.NETHER);
 			} else
 				p.teleport(netherPortal);
-		}
+		}else return false;
+		return true;
 	}
 
-	public void teleportEnd(Player p) {
-		Dimension dim = Dimension.getDimension(p.getWorld());
+	public boolean teleportEnd(Player p) {
 		if (hasEnd) {
 			if (endPortal == null ||
 					(endPortal.getBlock().getType() != Material.ENDER_PORTAL && endPortal.getBlock().getType() != Material.END_GATEWAY)) {
-				DimensionHelper.findEndPortal(this, p, Dimension.END);
+				PortalHelper.findEndPortal(this, p, Dimensions.END);
 			} else p.teleport(endPortal);
-		}
-
+		}else return false;
+		return true;
 	}
 
 	// FONCTIONS A AVOIR
@@ -153,20 +154,22 @@ public class BaseIsland {
 
 
 
-	public void allowNether(){
-		hasNether = true;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasNether=1 WHERE x=? and z=?", isid.x, isid.z);
+	public void allowDimension(Dimensions d){
+		if(d==Dimensions.NETHER){
+			hasNether = true;
+			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasNether=1 WHERE x=? and z=?", isid.x, isid.z);
+		}else if(d==Dimensions.END){
+			hasEnd = true;
+			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasEnd=1 WHERE x=? and z=?", isid.x, isid.z);
+		}else{
+			InternalAPI.warn("Invalid dimension loading");
+		}
 	}
 
-	public void allowEnd(){
-		hasEnd = true;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasEnd=1 WHERE x=? and z=?", isid.x, isid.z);
-	}
-
-	public boolean hasDimension(Dimension dim){
-		if(dim==Dimension.OVERWORLD)return true;
-		else if(dim==Dimension.NETHER)return hasNether;
-		else if(dim==Dimension.END)return hasEnd;
+	public boolean hasDimension(Dimensions dim){
+		if(dim==Dimensions.OVERWORLD)return true;
+		else if(dim==Dimensions.NETHER)return hasNether;
+		else if(dim==Dimensions.END)return hasEnd;
 		else return false;
 	}
 
@@ -216,7 +219,7 @@ public class BaseIsland {
 
 	public void setHome(Location home){
 		this.home = home;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET home_w=? and home_x=? and home_y=? and home_z=? where x =? and z=?", Dimension.getDimension(home.getWorld()).id, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET home_w=? and home_x=? and home_y=? and home_z=? where x =? and z=?", Dimensions.getDimension(home.getWorld()).id, isid.x, isid.z);
 	}
 
 
@@ -224,7 +227,7 @@ public class BaseIsland {
 		return new ArrayList<>(members);
 	}
 
-	private static Comparator<ISPLink> memberComparator = Comparator.comparingInt(o -> o.getRank().id);
+	private static final Comparator<ISPLink> memberComparator = Comparator.comparingInt(o -> o.getRank().id);
 
 	public ArrayList<ISPLink> getSortedMembers(){
 		ArrayList<ISPLink> a = getMembers();

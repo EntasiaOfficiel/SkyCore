@@ -1,7 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,9 +11,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 
 //@Deprecated
-public class DimensionHelper {
+public class PortalHelper {
 
-	protected static void findNetherPortal(BaseIsland is, Player p, Dimension in) {
+	protected static void findNetherPortal(BaseIsland is, Player p, Dimensions in) {
 		ArrayList<ChunkSnapshot> chunks = TerrainManager.getChunks(is, in);
 		new BukkitRunnable() {
 			@Override
@@ -54,8 +54,8 @@ public class DimensionHelper {
 												finalLoc = finalLoc.add(0, -1, 0);
 											}
 											finalLoc = finalLoc.add(0.5, 1.2, 0.5);
-											if (in == Dimension.OVERWORLD) is.OWNetherPortal = finalLoc;
-											else if (in == Dimension.NETHER) is.netherPortal = finalLoc;
+											if (in == Dimensions.OVERWORLD) is.OWNetherPortal = finalLoc;
+											else if (in == Dimensions.NETHER) is.netherPortal = finalLoc;
 											else{
 												InternalAPI.warn("Dimension invalide !");
 												return;
@@ -72,8 +72,8 @@ public class DimensionHelper {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						if(in==Dimension.OVERWORLD)p.teleport(is.getHome());
-						else if(in==Dimension.NETHER) p.teleport(is.isid.getMiddleLoc(Dimension.NETHER));
+						if(in== Dimensions.OVERWORLD)p.teleport(is.getHome());
+						else if(in== Dimensions.NETHER) p.teleport(is.isid.getMiddleLoc(Dimensions.NETHER));
 						else InternalAPI.warn("Dimension invalide !");
 					}
 				}.runTask(Main.main);
@@ -81,7 +81,7 @@ public class DimensionHelper {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	protected static void findEndPortal(BaseIsland is, Player p, Dimension in) {
+	protected static void findEndPortal(BaseIsland is, Player p, Dimensions in) {
 		ArrayList<ChunkSnapshot> chunks = TerrainManager.getChunks(is, in);
 		new BukkitRunnable() {
 			@Override
@@ -110,8 +110,8 @@ public class DimensionHelper {
 									new BukkitRunnable() {
 										@Override
 										public void run() {
-											if (in == Dimension.OVERWORLD) is.OWNetherPortal = finalLoc;
-											else if (in == Dimension.END) is.endPortal = finalLoc;
+											if (in == Dimensions.OVERWORLD) is.OWNetherPortal = finalLoc;
+											else if (in == Dimensions.END) is.endPortal = finalLoc;
 											else{
 												InternalAPI.warn("Dimension invalide !");
 												return;
@@ -130,39 +130,12 @@ public class DimensionHelper {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						if(in==Dimension.OVERWORLD)p.teleport(is.getHome());
-						else if(in==Dimension.END)p.teleport(is.isid.getMiddleLoc(Dimension.END));
+						if(in== Dimensions.OVERWORLD)p.teleport(is.getHome());
+						else if(in== Dimensions.END)p.teleport(is.isid.getMiddleLoc(Dimensions.END));
 						else InternalAPI.warn("Dimension invalide ! "+in);
 					}
 				}.runTask(Main.main);
 			}
 		}.runTaskAsynchronously(Main.main);
 	}
-
-	@Deprecated
-	public static void enableDimension(BaseIsland is, Dimension dim) throws Throwable {
-
-//		String c;
-//		switch(dim){
-//			case NETHER:{
-//				is.hasNether = true;
-//				c = "hasNether";
-//				break;
-//			}
-//			case END:{
-//				is.hasEnd = true;
-//				c = "hasEnd";
-//				break;
-//			}
-//			default:{
-//				throw new EntasiaException("Invalid dimension");
-//			}
-//		}
-//
-//		TerrainManager.genDimension(is, dim.world, dim.schems);
-//
-//		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands set "+c+"=1 WHERE x = ? and z = ?", is.isid.x, is.isid.z);
-	}
-
-
 }

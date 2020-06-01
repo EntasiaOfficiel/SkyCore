@@ -2,7 +2,7 @@ package fr.entasia.skycore.events;
 
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -13,7 +13,6 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -65,7 +64,7 @@ public class BaseEvents implements Listener {
 	public static void onDamage(EntityDamageByEntityEvent e){
 		if(!(e.getEntity() instanceof Player))return;
 		Player p = (Player)e.getEntity();
-		if(!Dimension.isIslandWorld(p.getWorld()))return;
+		if(!Dimensions.isIslandWorld(p.getWorld()))return;
 		if(e.getDamager() instanceof Firework) e.setCancelled(true);
 		else if(e.getDamager() instanceof Player)e.setCancelled(true);
 		else{
@@ -86,7 +85,7 @@ public class BaseEvents implements Listener {
 				assert sp != null;
 
 				BaseIsland is = null;
-				if (Dimension.isIslandWorld(p.getWorld())) {
+				if (Dimensions.isIslandWorld(p.getWorld())) {
 					is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
 				}
 				if (is == null) {
@@ -114,22 +113,23 @@ public class BaseEvents implements Listener {
 	public void initEvent(WorldInitEvent e){
 		switch(e.getWorld().getName().toLowerCase()){
 			case "iles":
-				Dimension.OVERWORLD.world = e.getWorld();
+				Dimensions.OVERWORLD.world = e.getWorld();
 				break;
 			case "iles_nether":
-				Dimension.NETHER.world = e.getWorld();
+				Dimensions.NETHER.world = e.getWorld();
 				break;
 			case "iles_the_end":
-				Dimension.END.world = e.getWorld();
+				Dimensions.END.world = e.getWorld();
 				break;
 			default:
 				return;
 		}
-		for(Dimension d : Dimension.values()){
+		for(Dimensions d : Dimensions.values()){
 			if(d.world==null)return;
 		}
 		InternalAPI.onPostEnable();
 	}
+
 
 
 	@EventHandler

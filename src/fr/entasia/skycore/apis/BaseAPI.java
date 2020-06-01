@@ -4,7 +4,7 @@ import fr.entasia.apis.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.otherobjs.CodePasser;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -77,7 +77,6 @@ public class BaseAPI {
 
 	// FIRST SAVE - REGISTER
 
-	@Deprecated
 	public static SkyPlayer registerSkyPlayer(Player p) throws SQLException {
 		SkyPlayer sp = new SkyPlayer(p);
 		playerCache.add(sp);
@@ -97,7 +96,6 @@ public class BaseAPI {
 		return sp;
 	}
 
-	@Deprecated
 	public static void registerIsland(BaseIsland is, SkyPlayer sp) throws SQLException {
 		if(InternalAPI.SQLEnabled()){
 			Main.sqlConnection.checkConnect();
@@ -119,7 +117,6 @@ public class BaseAPI {
 	}
 	// DELETE
 
-	@Deprecated
 	public static void deleteIsland(BaseIsland is, CodePasser.Bool code){
 		ServerUtils.wantMainThread();
 		if(InternalAPI.SQLEnabled()){
@@ -155,15 +152,14 @@ public class BaseAPI {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if(TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimension.OVERWORLD.world))&&TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimension.NETHER.world))&&
-						TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimension.END.world))){
+				if(TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimensions.OVERWORLD.world))&&TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimensions.NETHER.world))&&
+						TerrainManager.clearTerrain(is, TerrainManager.getSession(Dimensions.END.world))){
 					code.run(false);
 				}else code.run(true);
 			}
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	@Deprecated
 	public static boolean deleteSkyPlayer(SkyPlayer sp) {
 
 		int a = Main.sqlConnection.fastUpdate("DELETE FROM sky_players WHERE uuid=?", sp.uuid);

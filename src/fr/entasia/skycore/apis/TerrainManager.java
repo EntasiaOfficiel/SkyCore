@@ -15,7 +15,7 @@ import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.otherobjs.CodePasser;
 import fr.entasia.skycore.otherobjs.IslandShematics;
 import fr.entasia.skycore.otherobjs.islevel.BlockType;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.Chunk;
@@ -30,15 +30,58 @@ import java.util.HashMap;
 import java.util.Random;
 
 	/*
-	INFOS :
-	25 chunks par île, ca tombe pile. Faudra faire un système si jamais le diamètre de l'île est pas un nombre entier de chunks (réfléchis)
+	400/16 = 25 chunks par île, ca tombe pile. Faudra faire un système si jamais le diamètre de l'île est pas un nombre entier de chunks (réfléchis)
 	 */
 
 public class TerrainManager {
 
+	private static final BaseBlock bedrockBlock = FaweCache.getBlock(7, 0);
+	private static final BaseBlock airBlock = FaweCache.getBlock(0, 0);
+	public static HashMap<Material, BlockType> blockValues = new HashMap<>();
+	private static Random r = new Random();
+
+	private static int getRandom() {
+		int possibilities = Utils.ISSIZE - 30 - 20;
+		int a = r.nextInt(possibilities); // 0-349 = 350 possibilités
+		if (a >= possibilities /2) a += 30;
+		return a+10;
+	}
+
+	public static EditSession getSession(World w){
+		return new EditSessionBuilder(w.getName()).fastmode(true).allowedRegionsEverywhere().build();
+	}
+
+	protected static ArrayList<ChunkSnapshot> getChunks(BaseIsland is, Dimensions dim){
+		return getChunks(is.getMinXBuild(), is.getMaxXBuild(), is.getMinZBuild(), is.getMaxZBuild(), dim);
+	}
+
+	protected static ArrayList<ChunkSnapshot> getChunks(ISID isid, Dimensions dim){
+		return getChunks(isid.getMinXTotal(), isid.getMaxXTotal(), isid.getMinZTotal(), isid.getMaxZTotal(), dim);
+	}
+
+	protected static ArrayList<ChunkSnapshot> getChunks(int minx, int maxx, int minz, int maxz, Dimensions dim){
+		ServerUtils.wantMainThread();
+		ArrayList<ChunkSnapshot> chunks = new ArrayList<>();
+
+		Chunk ch;
+		for(int x=minx;x<maxx;x+=16){
+			for(int z=minz;z<maxz;z+=16) {
+				ch = dim.world.getBlockAt(x, 70, z).getChunk();
+				if (ch.isLoaded()) chunks.add(ch.getChunkSnapshot());
+				else {
+					ch.load();
+					chunks.add(ch.getChunkSnapshot());
+					ch.unload();
+				}
+			}
+		}
+		return chunks;
+	}
+
+	// LE BORDEL COMMENCE ICI
 
 
-	public static void generateIsland(SkyPlayer sp, IslandType type){
+	public static void genIsland(SkyPlayer sp, IslandType type){
 		if(sp.getIslands().size()>10||sp.generating)return;
 		sp.generating = true;
 		sp.p.sendMessage("§eGénération de votre île en cours.. merci de patienter !");
@@ -53,8 +96,8 @@ public class TerrainManager {
 					BaseAPI.registerIsland(link.is, sp);
 
 
-					genDimension(link.is, Dimension.OVERWORLD.world, type.schems);
-					setBiome(link.is, Dimension.OVERWORLD.world, link.is.type.biome);
+					genBaseDimension(link.is, Dimensions.OVERWORLD.world, type.schems);
+					setBiome(link.is, Dimensions.OVERWORLD.world, link.is.type.biome);
 					sp.p.sendMessage("§6Génération overworld terminée !");
 //					genDimension(link.is, Dimensions.NETHER.world, Dimensions.NETHER.schems);
 //					sp.p.sendMessage("§6Génération nether terminée !");
@@ -84,38 +127,21 @@ public class TerrainManager {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	protected static ArrayList<ChunkSnapshot> getChunks(BaseIsland is, Dimension dim){
-		return getChunks(is.getMinXBuild(), is.getMaxXBuild(), is.getMinZBuild(), is.getMaxZBuild(), dim);
+	public static void genOW(){
+
 	}
 
-	protected static ArrayList<ChunkSnapshot> getChunks(ISID isid, Dimension dim){
-		return getChunks(isid.getMinXTotal(), isid.getMaxXTotal(), isid.getMinZTotal(), isid.getMaxZTotal(), dim);
+	public static void genNether(){
+
 	}
 
-	protected static ArrayList<ChunkSnapshot> getChunks(int minx, int maxx, int minz, int maxz, Dimension dim){
-		ServerUtils.wantMainThread();
-		ArrayList<ChunkSnapshot> chunks = new ArrayList<>();
+	public static void genEnd(){
 
-		Chunk ch;
-		for(int x=minx;x<maxx;x+=16){
-			for(int z=minz;z<maxz;z+=16) {
-				ch = dim.world.getBlockAt(x, 70, z).getChunk();
-				if (ch.isLoaded()) chunks.add(ch.getChunkSnapshot());
-				else {
-					ch.load();
-					chunks.add(ch.getChunkSnapshot());
-					ch.unload();
-				}
-			}
-		}
-		return chunks;
 	}
-
-	public static HashMap<Material, BlockType> blockValues = new HashMap<>();
 
 	protected static void calcPoints(BaseIsland is, CodePasser.Void code){
 		ServerUtils.wantMainThread();
-		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimension.OVERWORLD);
+		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimensions.OVERWORLD);
 
 		new BukkitRunnable() {
 			@Override
@@ -159,22 +185,7 @@ public class TerrainManager {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	private static Random r = new Random();
-
-	private static int getRandom() {
-		int possibilities = Utils.ISSIZE - 30 - 20;
-		int a = r.nextInt(possibilities); // 0-349 = 350 possibilités
-		if (a >= possibilities /2) a += 30;
-		return a+10;
-	}
-
-	public static EditSession getSession(World w){
-		return new EditSessionBuilder(w.getName()).fastmode(true).allowedRegionsEverywhere().build();
-	}
-
-	private static BaseBlock airBlock = FaweCache.getBlock(0, 0);
-
-	protected static boolean clearTerrain(BaseIsland is, EditSession editSession){
+	public static boolean clearTerrain(BaseIsland is, EditSession editSession){
 		ServerUtils.wantChildThread();
 		try{
 			editSession.setBlocks(new CuboidRegion(
@@ -201,9 +212,8 @@ public class TerrainManager {
 		}
 	}
 
-	private static BaseBlock bedrockBlock = FaweCache.getBlock(7, 0);
 
-	protected static void genDimension(BaseIsland is, World w, IslandShematics isc) throws Throwable {
+	protected static void genBaseDimension(BaseIsland is, World w, IslandShematics isc) throws Throwable {
 		ServerUtils.wantChildThread();
 
 		Vector bloc = new Vector(is.isid.getMinXTotal(), 70, is.isid.getMinZTotal());
@@ -242,9 +252,9 @@ public class TerrainManager {
 		editSession.flushQueue();
 
 		// GENERATION OTHERS :
-		if(w== Dimension.NETHER.world){
+		if(w==Dimensions.NETHER.world){
 
-		}else if(w== Dimension.END.world){
+		}else if(w==Dimensions.END.world){
 
 		}else{
 			// Ile géante
@@ -275,4 +285,51 @@ public class TerrainManager {
 
 	}
 
+
+
+	public static void genOW(SkyPlayer sp, IslandType type){
+		if(sp.getIslands().size()>10||sp.generating)return;
+		sp.generating = true;
+		sp.p.sendMessage("§eGénération de votre île en cours.. merci de patienter !");
+
+		new BukkitRunnable(){
+			@Override
+			public void run() {
+				try {
+
+					ISID isid = CooManager.findFreeSpot();
+					ISPLink link = new ISPLink(new BaseIsland(isid, type), sp, MemberRank.CHEF);
+					BaseAPI.registerIsland(link.is, sp);
+
+
+					genBase(link.is, Dimensions.OVERWORLD.world, type.schems);
+					setBiome(link.is, Dimensions.OVERWORLD.world, link.is.type.biome);
+					sp.p.sendMessage("§6Génération overworld terminée !");
+//					genDimension(link.is, Dimensions.NETHER.world, Dimensions.NETHER.schems);
+//					sp.p.sendMessage("§6Génération nether terminée !");
+//					genDimension(link.is, Dimensions.END.world, Dimensions.END.schems);
+//					sp.p.sendMessage("§6Génération end terminée !");
+
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							calcPoints(link.is, new CodePasser.Void() {
+								@Override
+								public void run() {
+									link.is.setMalus((int) link.is.rawpoints);
+									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
+									sp.p.teleport(link.is.getHome());
+									sp.generating = false;
+								}
+							});
+						}
+					}.runTask(Main.main);
+
+				}catch(Throwable e){
+					e.printStackTrace();
+					sp.p.sendMessage("§cUne erreur s'est produite lors de la création de ton île ! Contacte un membre du Staff");
+				}
+			}
+		}.runTaskAsynchronously(Main.main);
+	}
 }

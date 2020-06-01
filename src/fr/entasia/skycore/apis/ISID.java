@@ -1,7 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.Location;
 
 public class ISID {
@@ -66,7 +66,7 @@ public class ISID {
 		return Math.max(Math.abs(getMiddleX()-x), Math.abs(getMiddleZ()-z));
 	}
 
-	public Location getMiddleLoc(Dimension d){
+	public Location getMiddleLoc(Dimensions d){
 		return new Location(d.world, getMiddleX(), 70.5, getMiddleZ());
 	}
 }

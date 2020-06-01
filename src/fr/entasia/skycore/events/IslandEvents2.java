@@ -6,7 +6,7 @@ import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.apis.ISPLink;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -33,15 +33,15 @@ public class IslandEvents2 implements Listener {
 			ISPLink link = is.getMember(e.getPlayer().getUniqueId());
 			if(link!=null){
 				e.setCancelled(true);
-				if (loc.getWorld()== Dimension.OVERWORLD.world) {
+				if (loc.getWorld()== Dimensions.OVERWORLD.world) {
 					if (loc.getBlock().getType() == Material.PORTAL||loc2.getBlock().getType()==Material.PORTAL) is.teleportNether(link.sp.p);
 					else if (loc.getBlock().getType() == Material.ENDER_PORTAL||loc2.getBlock().getType()==Material.ENDER_PORTAL){
 						is.teleportEnd(link.sp.p);
 					} else link.sp.p.sendMessage("§cPortail invalide !");
-				}else if (loc.getWorld()== Dimension.NETHER.world) {
+				}else if (loc.getWorld()== Dimensions.NETHER.world) {
 					if (loc.getBlock().getType() == Material.PORTAL||loc2.getBlock().getType()==Material.PORTAL) is.teleportOverWord(link.sp.p);
 					else link.sp.p.sendMessage("§cPortail invalide !");
-				}else if (loc.getWorld()== Dimension.END.world) {
+				}else if (loc.getWorld()== Dimensions.END.world) {
 					if (loc.getBlock().getType() == Material.ENDER_PORTAL||loc2.getBlock().getType()==Material.ENDER_PORTAL){
 						is.teleportOverWord(link.sp.p);
 					} else link.sp.p.sendMessage("§cPortail invalide !");

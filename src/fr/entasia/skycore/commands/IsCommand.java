@@ -7,7 +7,7 @@ import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.invs.IsMenus;
 import fr.entasia.skycore.otherobjs.CodePasser;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -287,7 +287,7 @@ public class IsCommand implements CommandExecutor {
 					case "setowner": {
 						if (args.length < 2) p.sendMessage("§cMet un joueur en argument !");
 						else {
-							if (link.sp.p.getWorld() == Dimension.OVERWORLD.world) {
+							if (link.sp.p.getWorld() == Dimensions.OVERWORLD.world) {
 								BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
 								if (is == null) p.sendMessage("§cTu n'es sur aucune île !");
 								else {
@@ -349,7 +349,7 @@ public class IsCommand implements CommandExecutor {
 
 
 					case "delete": {
-						if (link.sp.p.getWorld() == Dimension.OVERWORLD.world) {
+						if (link.sp.p.getWorld() == Dimensions.OVERWORLD.world) {
 							BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
 							if (is == null) p.sendMessage("§cTu n'es sur aucune île !");
 							else {

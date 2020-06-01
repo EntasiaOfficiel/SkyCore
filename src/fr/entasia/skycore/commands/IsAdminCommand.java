@@ -2,7 +2,7 @@ package fr.entasia.skycore.commands;
 
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.otherobjs.CodePasser;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,7 +42,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "infois": {
 						ISID isid;
 						if (args.length == 1) {
-							if (Dimension.isIslandWorld(p.getWorld())) {
+							if (Dimensions.isIslandWorld(p.getWorld())) {
 								isid = CooManager.getIslandID(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
 							} else{
 								p.sendMessage("§cTu n'es pas dans un monde Skyblock !");

@@ -1,7 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
@@ -19,6 +19,7 @@ public class SkyPlayer {
 	protected ISPLink defaultis;
 	protected long money;
 
+	// online stuff
 	public boolean islandChat = false;
 	public boolean generating = false;
 	public int endPortal=0;
@@ -45,7 +46,7 @@ public class SkyPlayer {
 		if (islands.size() == 1) return islands.get(0);
 
 		if(checkLoc){
-			if(Dimension.isIslandWorld(p.getWorld())){
+			if(Dimensions.isIslandWorld(p.getWorld())){
 				ISID isid = CooManager.getIslandID(p.getLocation());
 				ISPLink link = getIsland(isid);
 				if (link != null) return link;

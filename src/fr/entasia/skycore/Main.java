@@ -11,7 +11,7 @@ import fr.entasia.skycore.events.IslandEvents;
 import fr.entasia.skycore.events.IslandEvents2;
 import fr.entasia.skycore.otherobjs.IslandShematics;
 import fr.entasia.skycore.otherobjs.islevel.BlockType;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -146,15 +146,15 @@ public class Main extends JavaPlugin {
 			it.schems.plans = base;
 			allis.add(it.schems);
 		}
-		Dimension.NETHER.schems = new IslandShematics();
-		Dimension.NETHER.schems.name = "nether";
-		Dimension.NETHER.schems.plans = new String[0];
-		allis.add(Dimension.NETHER.schems);
+		Dimensions.NETHER.schems = new IslandShematics();
+		Dimensions.NETHER.schems.name = "nether";
+		Dimensions.NETHER.schems.plans = new String[0];
+		allis.add(Dimensions.NETHER.schems);
 
-		Dimension.END.schems = new IslandShematics();
-		Dimension.END.schems.name = "end";
-		Dimension.END.schems.plans = new String[0];
-		allis.add(Dimension.END.schems);
+		Dimensions.END.schems = new IslandShematics();
+		Dimensions.END.schems.name = "end";
+		Dimensions.END.schems.plans = new String[0];
+		allis.add(Dimensions.END.schems);
 
 //		DimensionType.CLOUD.schems = new IslandShematics();
 //		DimensionType.CLOUD.schems.name = "clouds";

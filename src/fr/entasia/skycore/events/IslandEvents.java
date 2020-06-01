@@ -4,7 +4,7 @@ import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.apis.ISPLink;
-import fr.entasia.skycore.others.enums.Dimension;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -40,7 +40,7 @@ public class IslandEvents implements Listener {
 	@EventHandler
 	public void interact(PlayerInteractEvent e){
 		Player p = e.getPlayer();
-		if(Dimension.isIslandWorld(p.getWorld())&&e.hasBlock()){
+		if(Dimensions.isIslandWorld(p.getWorld())&&e.hasBlock()){
 			if(p.hasPermission("skyblock.isprotect.bypass")&&p.getGameMode()==GameMode.CREATIVE)return;
 			Block b = e.getClickedBlock();
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
@@ -63,7 +63,7 @@ public class IslandEvents implements Listener {
 	}
 
 	public static boolean blockCheck(Player p, Block b){
-		if(Dimension.isIslandWorld(p.getWorld())){
+		if(Dimensions.isIslandWorld(p.getWorld())){
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
 			if(p.hasPermission("skyblock.isprotect.bypass")&&p.getGameMode()==GameMode.CREATIVE)return false;
 			if(is!=null){
@@ -71,7 +71,7 @@ public class IslandEvents implements Listener {
 				if (link==null) {
 					p.sendMessage("§cTu ne peux pas casser de blocks sur cette ile !");;
 				}else{
-					if(is.hasDimension(Dimension.getDimension(p.getWorld()))) {
+					if(is.hasDimension(Dimensions.getDimension(p.getWorld()))) {
 						int m = is.isid.distanceFromIS(b.getLocation());
 						if ((is.getExtension()+1) * 50 <= m) {
 							p.sendMessage("§cL'extension de ton ile n'est pas suffisante !");
@@ -107,7 +107,7 @@ public class IslandEvents implements Listener {
 	@EventHandler
 	public void onAnyMovement(PlayerMoveEvent e){
 		Player p = e.getPlayer();
-		if(Dimension.isIslandWorld(p.getWorld())){
+		if(Dimensions.isIslandWorld(p.getWorld())){
 			BaseIsland fr = BaseAPI.getIsland(CooManager.getIslandID(e.getFrom()));
 			BaseIsland to = BaseAPI.getIsland(CooManager.getIslandID(e.getTo()));
 			if(fr==to){ // on est sur la même île

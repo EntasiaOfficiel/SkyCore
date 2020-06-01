@@ -4,6 +4,7 @@ import fr.entasia.apis.ServerUtils;
 import fr.entasia.errors.EntasiaException;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
 
@@ -72,8 +73,8 @@ public class InternalAPI {
 
 //					if(rs.getByte("hasNether")==1)is.allowNether();
 //					if(rs.getByte("hasEnd")==1)is.allowEnd();
-			is.allowNether();
-			is.allowEnd();
+			is.allowDimension(Dimensions.NETHER);
+			is.allowDimension(Dimensions.END);
 			Utils.islandCache.add(is);
 		}
 
