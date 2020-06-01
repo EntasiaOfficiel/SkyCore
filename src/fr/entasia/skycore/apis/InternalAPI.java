@@ -17,7 +17,6 @@ public class InternalAPI {
 	public static boolean enableIGSQL=true;
 
 
-
 	public static boolean SQLEnabled(){
 		return InternalAPI.postenable==2&&InternalAPI.enableIGSQL&&Main.sqlConnection!=null;
 	}
@@ -62,6 +61,8 @@ public class InternalAPI {
 
 	public static void loadIslands() throws Throwable{
 		long time = System.currentTimeMillis();
+
+
 		ResultSet rs = Main.sqlConnection.connection.prepareStatement("SELECT * FROM sky_islands").executeQuery();
 		BaseIsland is=null;
 		while(rs.next()){
