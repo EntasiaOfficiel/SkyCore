@@ -1,7 +1,7 @@
 package fr.entasia.skycore.commands;
 
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.otherobjs.CodePasser;
+import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.command.Command;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class IsAdminCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if(!(sender instanceof Player))return false;
+		if(!(sender instanceof Player))return true;
 		if(sender.hasPermission("restricted.isadmin")){
 
 			Player p = ((Player)sender);
@@ -63,6 +63,7 @@ public class IsAdminCommand implements CommandExecutor {
 								for(ISPLink ll : link.is.getSortedMembers()){
 									p.sendMessage("§8- §b"+ll.getName());
 								}
+								p.sendMessage("§7Mineurs : §b"+is.autominers);
 								p.sendMessage("§7Niveau : §b" + is.getLevel());
 								p.sendMessage("§8Dimensions :");
 								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));

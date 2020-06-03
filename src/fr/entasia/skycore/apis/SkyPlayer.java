@@ -101,7 +101,7 @@ public class SkyPlayer {
 		else{
 			defaultis = link;
 			if(InternalAPI.SQLEnabled()){
-				Main.sqlConnection.fastUpdate("update sky_pis set def = IF(x=? and z=?, 1, 0) where uuid=?", link.is.isid.x, link.is.isid.z, uuid);
+				Main.sql.fastUpdate("update sky_pis set def = IF(x=? and z=?, 1, 0) where uuid=?", link.is.isid.x, link.is.isid.z, uuid);
 			}
 			return true;
 		}
@@ -128,7 +128,7 @@ public class SkyPlayer {
 	}
 
 	private void functionA(){
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_players SET money=? WHERE uuid=?", money, uuid);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_players SET money=? WHERE uuid=?", money, uuid);
 	}
 
 	public ArrayList<BaseIsland> getInvites(){

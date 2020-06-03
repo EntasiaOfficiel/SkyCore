@@ -34,6 +34,9 @@ public class BaseEvents implements Listener {
 					Bukkit.broadcastMessage("§6Bienvenue à §e" + e.getPlayer().getDisplayName() + "§6 sur le Skyblock ! Souhaitons-lui la bienvenue !");
 				}
 				sp.p = e.getPlayer();
+				for(ISPLink link : sp.getIslands()){
+					link.is.tryLoad();
+				}
 
 				Utils.onlineSPCache.add(sp);
 

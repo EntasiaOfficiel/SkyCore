@@ -5,14 +5,12 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import fr.entasia.apis.sql.SQLConnection;
 import fr.entasia.skycore.apis.TerrainManager;
 import fr.entasia.skycore.commands.*;
-import fr.entasia.skycore.events.BaseEvents;
-import fr.entasia.skycore.events.ChatEvents;
-import fr.entasia.skycore.events.IslandEvents;
-import fr.entasia.skycore.events.IslandEvents2;
-import fr.entasia.skycore.otherobjs.IslandShematics;
-import fr.entasia.skycore.otherobjs.islevel.BlockType;
+import fr.entasia.skycore.events.*;
+import fr.entasia.skycore.objs.IslandShematics;
+import fr.entasia.skycore.objs.islevel.BlockType;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
+import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,10 +36,10 @@ public class Main extends JavaPlugin {
 	 */
 
 	public static Main main;
-
-	public static SQLConnection sqlConnection;
-
 	public static boolean enableDev;
+
+	public static SQLConnection sql;
+	public static SQLConnection sqlite;
 
 	public static File blockValuesFile;
 	public static FileConfiguration blockValues;
@@ -59,14 +57,18 @@ public class Main extends JavaPlugin {
 
 			if(!enableDev){
 				if(getConfig().getString("sqluser")!=null){
-					sqlConnection = new SQLConnection(main.getConfig().getString("sqluser"), "playerdata");
+					sql = new SQLConnection(main.getConfig().getString("sqluser"), "playerdata");
 				}
 			}
+
+			sqlite = new SQLConnection().sqlite("plugins/"+getName()+"/database.db");
+			sqlite.unsafeConnect();
 
 			getServer().getPluginManager().registerEvents(new BaseEvents(), this);
 			getServer().getPluginManager().registerEvents(new IslandEvents(), this);
 			getServer().getPluginManager().registerEvents(new IslandEvents2(), this);
 			getServer().getPluginManager().registerEvents(new ChatEvents(), this);
+			getServer().getPluginManager().registerEvents(new AMEvents(), this);
 
 			getCommand("skycore").setExecutor(new SkyCoreCommand());
 			getCommand("spawn").setExecutor(new SpawnCommand());
@@ -80,6 +82,9 @@ public class Main extends JavaPlugin {
 			getCommand("eco").setExecutor(new EcoCommand());
 
 			loadIslandStructs();
+
+			new AutoMinerTask().runTaskTimerAsynchronously(this, 0, 20*8); // full cycle
+
 		}catch(Throwable e){
 			e.printStackTrace();
 			if(!enableDev){

@@ -1,7 +1,9 @@
 package fr.entasia.skycore.others.enums;
 
-import fr.entasia.skycore.otherobjs.IslandShematics;
+import fr.entasia.skycore.objs.IslandShematics;
 import org.bukkit.World;
+
+import javax.annotation.Nonnull;
 
 public enum Dimensions {
 	OVERWORLD(0),
@@ -17,6 +19,7 @@ public enum Dimensions {
 		this.id = id;
 	}
 
+	@Nonnull
 	public static Dimensions getDimension(World w){
 		for(Dimensions d : Dimensions.values()){
 			if(d.world==w)return d;

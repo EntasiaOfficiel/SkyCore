@@ -48,7 +48,7 @@ public class PortalHelper {
 											if (in == Dimensions.OVERWORLD) is.OWNetherPortal = finalLoc;
 											else if (in == Dimensions.NETHER) is.netherPortal = finalLoc;
 											else{
-												InternalAPI.warn("Dimension invalide !");
+												InternalAPI.warn("Dimension invalide !", true);
 												return;
 											}
 											p.teleport(finalLoc);
@@ -65,7 +65,7 @@ public class PortalHelper {
 					public void run() {
 						if(in== Dimensions.OVERWORLD)p.teleport(is.getHome());
 						else if(in== Dimensions.NETHER) p.teleport(is.isid.getMiddleLoc(Dimensions.NETHER));
-						else InternalAPI.warn("Dimension invalide !");
+						else InternalAPI.warn("Dimension invalide !", true);
 					}
 				}.runTask(Main.main);
 			}
@@ -104,7 +104,7 @@ public class PortalHelper {
 											if (in == Dimensions.OVERWORLD) is.OWNetherPortal = finalLoc;
 											else if (in == Dimensions.END) is.endPortal = finalLoc;
 											else{
-												InternalAPI.warn("Dimension invalide !");
+												InternalAPI.warn("Dimension invalide !", true);
 												return;
 											}
 											finalLoc.getBlock().setType(Material.END_GATEWAY);
@@ -123,7 +123,7 @@ public class PortalHelper {
 					public void run() {
 						if(in== Dimensions.OVERWORLD)p.teleport(is.getHome());
 						else if(in== Dimensions.END)p.teleport(is.isid.getMiddleLoc(Dimensions.END));
-						else InternalAPI.warn("Dimension invalide ! "+in);
+						else InternalAPI.warn("Dimension invalide ! "+in, true);
 					}
 				}.runTask(Main.main);
 			}

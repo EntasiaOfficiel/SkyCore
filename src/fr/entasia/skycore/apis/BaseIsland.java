@@ -2,16 +2,26 @@ package fr.entasia.skycore.apis;
 
 
 import fr.entasia.apis.ChatComponent;
+import fr.entasia.apis.Serialization;
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.otherobjs.CodePasser;
+import fr.entasia.skycore.objs.AutoMiner;
+import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
+import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,8 +52,10 @@ public class BaseIsland {
 	protected Location netherPortal, endPortal, OWNetherPortal, OWEndPortal;
 
 
-	protected long cooldown=10000;
-
+	// online stuff
+	public boolean loaded = false;
+	protected long lvlCooldown =10000;
+	public byte autominers = 0;
 	public boolean generating = false;
 
 
@@ -91,7 +103,7 @@ public class BaseIsland {
 		if(from==Dimensions.NETHER)return OWNetherPortal;
 		else if(from==Dimensions.END)return OWNetherPortal;
 		else{
-			InternalAPI.warn("Invalid dimension location request");
+			InternalAPI.warn("Invalid dimension location request", true);
 			return null;
 		}
 	}
@@ -142,7 +154,7 @@ public class BaseIsland {
 	}
 
 	public String toString(){
-		return "BaseIsland["+isid+"]";
+		return "BaseIsland["+isid.str()+"]";
 	}
 
 	public int hashCode(){
@@ -155,10 +167,10 @@ public class BaseIsland {
 	private static final int time = 5*60*1000;
 
 	public int updateLvl(CodePasser.Void code){
-		long a = System.currentTimeMillis() - cooldown;
+		long a = System.currentTimeMillis() - lvlCooldown;
 		if(a < time)return (int) (time-a)/1000;
 		else {
-			cooldown = System.currentTimeMillis();
+			lvlCooldown = System.currentTimeMillis();
 			TerrainManager.calcPoints(this, code);
 			return 0;
 		}
@@ -183,7 +195,7 @@ public class BaseIsland {
 
 	public void setMalus(int malus){
 		this.malus = malus;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET malus=? WHERE x=? and z=?", malus, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET malus=? WHERE x=? and z=?", malus, isid.x, isid.z);
 	}
 
 	public int getMalus(){
@@ -202,7 +214,7 @@ public class BaseIsland {
 
 	public void setName(String name){
 		this.name = name;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET name=? WHERE x=? and z=?", name, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET name=? WHERE x=? and z=?", name, isid.x, isid.z);
 	}
 
 
@@ -218,7 +230,7 @@ public class BaseIsland {
 
 	public void setHome(Location home){
 		this.home = home;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET home_w=? and home_x=? and home_y=? and home_z=? where x =? and z=?", Dimensions.getDimension(home.getWorld()).id, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET home_w=? and home_x=? and home_y=? and home_z=? where x =? and z=?", Dimensions.getDimension(home.getWorld()).id, isid.x, isid.z);
 	}
 
 
@@ -244,7 +256,7 @@ public class BaseIsland {
 	}
 
 	public boolean addMember(SkyPlayer sp, MemberRank rank){
-		if(rank==MemberRank.DEFAULT)InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !");
+		if(rank==MemberRank.DEFAULT)InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !", true);
 		else{
 			ISPLink link = getMember(sp.uuid);
 			if(link==null){
@@ -255,9 +267,9 @@ public class BaseIsland {
 				}
 				members.add(link);
 				sp.islands.add(link);
-				if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", rank.id, isid.x, isid.z, sp.uuid);
+				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", rank.id, isid.x, isid.z, sp.uuid);
 				return true;
-			}else InternalAPI.warn("Le joueur est déja sur l'île !");
+			}else InternalAPI.warn("Le joueur est déja sur l'île !", true);
 		}
 		return false;
 	}
@@ -267,23 +279,23 @@ public class BaseIsland {
 			link.setRank(MemberRank.DEFAULT);
 			members.remove(link);
 			link.sp.islands.remove(link);
-			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, link.sp.uuid);
+			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, link.sp.uuid);
 			return true;
-		} else InternalAPI.warn("L'île fournie ne correspond pas");
+		} else InternalAPI.warn("L'île fournie ne correspond pas", true);
 		return false;
 	}
 
 	public boolean reRankMember(ISPLink link, MemberRank rank){
-		if(rank==MemberRank.DEFAULT) InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !");
+		if(rank==MemberRank.DEFAULT) InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !", true);
 		else if(link.is.equals(this)){
 			link.setRank(rank);
 			if(rank==MemberRank.CHEF) {
 				owner.setRank(MemberRank.ADJOINT);
 				owner = link;
 			}
-			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_pis SET rank = ? WHERE uuid=? and x=? and z=?", rank.id, link.sp.uuid, link.is.isid.x, link.is.isid.z);
+			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_pis SET rank = ? WHERE uuid=? and x=? and z=?", rank.id, link.sp.uuid, link.is.isid.x, link.is.isid.z);
 			return true;
-		} else InternalAPI.warn("L'île fournie ne correspond pas");
+		} else InternalAPI.warn("L'île fournie ne correspond pas", true);
 		return false;
 	}
 
@@ -352,16 +364,16 @@ public class BaseIsland {
 		banneds.add(sp);
 		ISPLink link = getMember(sp.uuid);
 		if(link==null){
-			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", 0, isid.x, isid.z, sp.uuid);
+			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", 0, isid.x, isid.z, sp.uuid);
 		}else{
 			removeMember(link);
-			if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_pis SET rank=? where x=? and z=? and uuid=?)", 0, isid.x, isid.z, sp.uuid);
+			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_pis SET rank=? where x=? and z=? and uuid=?)", 0, isid.x, isid.z, sp.uuid);
 		}
 	}
 
 	public void removeBanned(SkyPlayer sp){
 		this.banneds.remove(sp);
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, sp.uuid);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, sp.uuid);
 	}
 
 	public boolean isBanned(SkyPlayer sp){
@@ -384,13 +396,47 @@ public class BaseIsland {
 
 	public void addBank(long m){
 		bank+=m;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET bank+=? WHERE x=?, and z=?", m, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank+=? WHERE x=?, and z=?", m, isid.x, isid.z);
 	}
 
 	public void withdrawBank(long m){
 		bank-=m;
-		if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=?, and z=?", m, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=?, and z=?", m, isid.x, isid.z);
 	}
 
 	// 400 - 799
+
+
+
+	public void tryLoad(){
+		if(!loaded){
+			loaded = true;
+			try{
+				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=? and is_z=? ", isid.x, isid.z);
+				Block b;
+				World w;
+				while(rs.next()){
+					w = Bukkit.getWorld(rs.getString("world"));
+					b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
+					AutoMiner am = new AutoMiner(b, Serialization.deserialiseItem(rs.getString("item")));
+					int i = 0;
+					for(Entity ent : b.getLocation().getNearbyEntitiesByType(ArmorStand.class, 1)){
+						if(i==4)return;
+						am.armorStands[i] = (ArmorStand) ent;
+						i++;
+					}
+					if(i!=4)return;
+					autominers++;
+					AutoMinerTask.miners.add(am);
+
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				Main.sqlite.broadcastError();
+				InternalAPI.warn("Erreur lors du chargement des autominers de l'île "+isid.str()+" !", false);
+			}
+		}
+	}
+
+
 }

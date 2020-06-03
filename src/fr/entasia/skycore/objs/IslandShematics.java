@@ -1,4 +1,4 @@
-package fr.entasia.skycore.otherobjs;
+package fr.entasia.skycore.objs;
 
 import com.boydti.fawe.object.schematic.Schematic;
 

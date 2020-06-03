@@ -18,14 +18,14 @@ public class InternalAPI {
 
 
 	public static boolean SQLEnabled(){
-		return InternalAPI.postenable==2&&InternalAPI.enableIGSQL&&Main.sqlConnection!=null;
+		return InternalAPI.postenable==2&&InternalAPI.enableIGSQL&&Main.sql !=null;
 	}
 	public static boolean isFullyEnabled(){
 		return InternalAPI.postenable==2;
 	}
 
-	public static void warn(String msg) {
-		new EntasiaException("Warning SkyTools").printStackTrace();
+	public static void warn(String msg, boolean stack) {
+		if(stack)new EntasiaException("Warning SkyCore").printStackTrace();
 		Main.main.getLogger().warning(msg);
 		ServerUtils.permMsg("logs.warn", "§6Warning SkyTools : §c"+msg);
 	}
@@ -46,7 +46,7 @@ public class InternalAPI {
 				postenable=1;
 				Main.main.getLogger().info("Activation POST du plugin méga-badass");
 
-				if(Main.sqlConnection!=null)loadIslands();
+				if(Main.sql !=null)loadIslands();
 
 				postenable=2;
 			}
@@ -63,7 +63,7 @@ public class InternalAPI {
 		long time = System.currentTimeMillis();
 
 
-		ResultSet rs = Main.sqlConnection.connection.prepareStatement("SELECT * FROM sky_islands").executeQuery();
+		ResultSet rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_islands").executeQuery();
 		BaseIsland is=null;
 		while(rs.next()){
 			is = new BaseIsland(new ISID(rs.getInt("x"), rs.getInt("z")), IslandType.getType(rs.getInt("type")));
@@ -77,7 +77,7 @@ public class InternalAPI {
 			Utils.islandCache.add(is);
 		}
 
-		rs = Main.sqlConnection.connection.prepareStatement("SELECT global.name, sky_players.* from sky_players INNER JOIN global ON sky_players.uuid = global.uuid").executeQuery();
+		rs = Main.sql.connection.prepareStatement("SELECT global.name, sky_players.* from sky_players INNER JOIN global ON sky_players.uuid = global.uuid").executeQuery();
 		SkyPlayer sp=null;
 		while(rs.next()){
 			sp = new SkyPlayer(UUID.fromString(rs.getString("uuid")), rs.getString("name"));
@@ -89,7 +89,7 @@ public class InternalAPI {
 		if(is==null)checkA("Aucune ile en mémoire !");
 		else if(sp==null)checkA("Aucun joueur en mémoire !");
 		else{
-			rs = Main.sqlConnection.connection.prepareStatement("SELECT * FROM sky_pis").executeQuery();
+			rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_pis").executeQuery();
 			ISID isid;
 			while(rs.next()){
 				i++;
@@ -127,17 +127,17 @@ public class InternalAPI {
 			if(d==Dimensions.NETHER){
 				TerrainManager.genNether(is.isid);
 				is.hasNether = true;
-				if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasNether=1 WHERE x=? and z=?", is.isid.x, is.isid.z);
+				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET hasNether=1 WHERE x=? and z=?", is.isid.x, is.isid.z);
 			}else if(d==Dimensions.END){
 				TerrainManager.genEnd(is.isid);
 				is.hasEnd = true;
-				if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET hasEnd=1 WHERE x=? and z=?", is.isid.x, is.isid.z);
+				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET hasEnd=1 WHERE x=? and z=?", is.isid.x, is.isid.z);
 			}else{
-				InternalAPI.warn("Activation d'une dimension invalide : "+d);
+				InternalAPI.warn("Activation d'une dimension invalide : "+d, true);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			InternalAPI.warn("Erreur d'activation de dimension "+d+" ! "+is.isid);
+			InternalAPI.warn("Erreur d'activation de dimension "+d+" ! "+is.isid, false);
 			return false;
 		}
 		return true;

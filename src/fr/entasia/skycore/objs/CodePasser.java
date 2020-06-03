@@ -1,4 +1,4 @@
-package fr.entasia.skycore.otherobjs;
+package fr.entasia.skycore.objs;
 
 import fr.entasia.skycore.apis.BaseIsland;
 import org.bukkit.Location;

@@ -12,9 +12,9 @@ import com.sk89q.worldedit.world.registry.WorldData;
 import fr.entasia.apis.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.otherobjs.CodePasser;
-import fr.entasia.skycore.otherobjs.IslandShematics;
-import fr.entasia.skycore.otherobjs.islevel.BlockType;
+import fr.entasia.skycore.objs.CodePasser;
+import fr.entasia.skycore.objs.IslandShematics;
+import fr.entasia.skycore.objs.islevel.BlockType;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
@@ -199,7 +199,7 @@ public class TerrainManager {
 				is.rawpoints = points-is.malus;
 				// TODO UPDATE LVL ET REM_POINTS
 				is.lvl = is.rawpoints; // temporaire
-				if(InternalAPI.SQLEnabled())Main.sqlConnection.fastUpdate("UPDATE sky_islands SET rawpoints = ? WHERE x=? and z=?", is.rawpoints, is.isid.x, is.isid.z);
+				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ? WHERE x=? and z=?", is.rawpoints, is.isid.x, is.isid.z);
 				new BukkitRunnable() {
 					@Override
 					public void run() {

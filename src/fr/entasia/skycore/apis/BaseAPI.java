@@ -3,7 +3,7 @@ package fr.entasia.skycore.apis;
 import fr.entasia.apis.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.otherobjs.CodePasser;
+import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.Bukkit;
@@ -81,13 +81,13 @@ public class BaseAPI {
 		SkyPlayer sp = new SkyPlayer(p);
 		playerCache.add(sp);
 		if(InternalAPI.SQLEnabled()){
-			Main.sqlConnection.checkConnect();
-			Main.sqlConnection.fastUpdateUnsafe("INSERT INTO sky_players (uuid) VALUES (?)", p.getUniqueId());
+			Main.sql.checkConnect();
+			Main.sql.fastUpdateUnsafe("INSERT INTO sky_players (uuid) VALUES (?)", p.getUniqueId());
 
 			// A DEL
 
 			try {
-				Main.sqlConnection.fastUpdateUnsafe("INSERT IGNORE INTO global (uuid, name) VALUES (?, ?)", p.getUniqueId().toString(), p.getName());
+				Main.sql.fastUpdateUnsafe("INSERT IGNORE INTO global (uuid, name) VALUES (?, ?)", p.getUniqueId().toString(), p.getName());
 			}catch(SQLException ignore){
 
 			}
@@ -98,8 +98,8 @@ public class BaseAPI {
 
 	public static void registerIsland(BaseIsland is, SkyPlayer sp) throws SQLException {
 		if(InternalAPI.SQLEnabled()){
-			Main.sqlConnection.checkConnect();
-			PreparedStatement ps = Main.sqlConnection.connection.prepareStatement("INSERT INTO sky_islands (x, z, type) VALUES (?, ?, ?)");
+			Main.sql.checkConnect();
+			PreparedStatement ps = Main.sql.connection.prepareStatement("INSERT INTO sky_islands (x, z, type) VALUES (?, ?, ?)");
 			ps.setInt(1, is.isid.x);
 			ps.setInt(2, is.isid.z);
 			ps.setInt(3, is.type.id);
@@ -120,8 +120,8 @@ public class BaseAPI {
 	public static void deleteIsland(BaseIsland is, CodePasser.Bool code){
 		ServerUtils.wantMainThread();
 		if(InternalAPI.SQLEnabled()){
-			if(Main.sqlConnection.fastUpdate("DELETE FROM sky_islands WHERE x=? AND z=?", is.isid.x, is.isid.z)==-1||
-					Main.sqlConnection.fastUpdate("DELETE FROM sky_pis WHERE x=? AND z=?", is.isid.x, is.isid.z)==-1){
+			if(Main.sql.fastUpdate("DELETE FROM sky_islands WHERE x=? AND z=?", is.isid.x, is.isid.z)==-1||
+					Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? AND z=?", is.isid.x, is.isid.z)==-1){
 				code.run(true);
 				return;
 			}
@@ -163,9 +163,9 @@ public class BaseAPI {
 
 	public static boolean deleteSkyPlayer(SkyPlayer sp) {
 
-		int a = Main.sqlConnection.fastUpdate("DELETE FROM sky_players WHERE uuid=?", sp.uuid);
+		int a = Main.sql.fastUpdate("DELETE FROM sky_players WHERE uuid=?", sp.uuid);
 		if(a==-1)return false;
-		a = Main.sqlConnection.fastUpdate("DELETE FROM sky_pis WHERE uuid=?", sp.uuid.toString());
+		a = Main.sql.fastUpdate("DELETE FROM sky_pis WHERE uuid=?", sp.uuid.toString());
 		if(a==-1)return false;
 
 		playerCache.remove(sp);

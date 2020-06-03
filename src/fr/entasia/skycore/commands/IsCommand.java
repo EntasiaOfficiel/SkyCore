@@ -6,7 +6,7 @@ import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.invs.IsMenus;
-import fr.entasia.skycore.otherobjs.CodePasser;
+import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
