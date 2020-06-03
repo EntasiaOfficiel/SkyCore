@@ -414,7 +414,7 @@ public class BaseIsland {
 		if(!loaded){
 			loaded = true;
 			try{
-				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=? and is_z=? ", isid.x, isid.z);
+				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=?+8 and is_z=? ", isid.x, isid.z);
 				Block b;
 				World w;
 				Location loc;
@@ -424,13 +424,10 @@ public class BaseIsland {
 					w = Bukkit.getWorld(rs.getString("world"));
 					if(w!=null){
 						b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
-						System.out.println(1);
 						if(b.getType()!=Material.AIR){
-							System.out.println(2);
 							AutoMiner am = new AutoMiner(b, item);
 							int i = 0;
-							for(Entity ent : b.getLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5)){
-								System.out.println(ent.getCustomName());
+							for(Entity ent : b.getLocation().add(AutoMiner.normaliser).getNearbyEntitiesByType(ArmorStand.class, 0.4)){
 								if("AMPickaxe".equals(ent.getCustomName())){
 									if(i==4){
 										i = 5;
@@ -440,9 +437,7 @@ public class BaseIsland {
 									i++;
 								}
 							}
-							System.out.println("n="+i);
 							if(i==4) {
-							System.out.println(3);
 								am.delete();
 								am.spawn();
 								autominers.add(am);

@@ -2,6 +2,7 @@ package fr.entasia.skycore.objs;
 
 import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
@@ -10,9 +11,19 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+
 public class AutoMiner {
 
 	public static final byte MAX = 10;
+	public static final Vector normaliser = new Vector(0.5, -0.3, 0.5);
+	public static final ArrayList<Material> toMine = new ArrayList<>();
+
+	static{
+		toMine.add(Material.STONE);
+		toMine.add(Material.COBBLESTONE);
+		toMine.add(Material.COAL_ORE);
+	}
 
 	public Block hopper;
 	public Block ore;
@@ -28,8 +39,7 @@ public class AutoMiner {
 
 
 	public static void deleteByBlock(Block b){
-		Location loc = b.getLocation().add(0.5, 0.5, 0.5);
-		System.out.println(loc);
+		Location loc = b.getLocation().add(normaliser);
 		for(Entity ent : loc.getNearbyEntitiesByType(ArmorStand.class, 0.4)) {
 			if ("AMPickaxe".equals(ent.getCustomName())) {
 				ent.remove();
@@ -44,18 +54,25 @@ public class AutoMiner {
 	private static final Vector[] dirs = new Vector[4];
 
 	static{
-		dirs[0] = new Vector(1, 0, 0);
-		dirs[1] = new Vector(0, 0, 1);
-		dirs[2] = new Vector(-1, 0, 0);
-		dirs[3] = new Vector(0, 0, -1);
+		// correction centrer
+		dirs[0] = new Vector(0, 0, 0.05);
+		dirs[1] = new Vector(-0.05, 0, 0);
+		dirs[2] = new Vector(0, 0, -0.05);
+		dirs[3] = new Vector(0.05, 0, 0);
+
+		// correction rapprocher du milieu
+		dirs[0].add(new Vector(0.3, 0, 0));
+		dirs[1].add(new Vector(0, 0, 0.3));
+		dirs[2].add(new Vector(-0.3, 0, 0));
+		dirs[3].add(new Vector(0, 0, -0.3));
 
 	}
 
 	public void spawn(){
-		Location loc = hopper.getLocation().add(0.5, -0.3, 0.5);
+		Location loc = hopper.getLocation().add(normaliser);
 		for(int i=0;i<4;i++){
 			loc.setYaw(i*90);
-			armorStands[i] = (ArmorStand) hopper.getWorld().spawnEntity(loc.clone().add(dirs[i].multiply(0.3)), EntityType.ARMOR_STAND);
+			armorStands[i] = (ArmorStand) hopper.getWorld().spawnEntity(loc.clone().add(dirs[i]), EntityType.ARMOR_STAND);
 
 			armorStands[i].setCustomName("AMPickaxe");
 
