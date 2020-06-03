@@ -83,7 +83,7 @@ public class Main extends JavaPlugin {
 
 			loadIslandStructs();
 
-			new AutoMinerTask().runTaskTimerAsynchronously(this, 0, 20*8); // full cycle
+			new AutoMinerTask().runTaskTimerAsynchronously(this, 0, 20*6); // full cycle
 
 		}catch(Throwable e){
 			e.printStackTrace();

@@ -5,6 +5,7 @@ import fr.entasia.skycore.objs.AutoMiner;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class AutoMinerTask extends BukkitRunnable {
 
-	public static final double adder = Math.PI / 6;
+	public static final double adder = Math.PI / 5;
 	public static final EulerAngle baseAngle = new EulerAngle(Math.toRadians(-32), Math.toRadians(90), Math.toRadians(0));
 	public static ArrayList<AutoMiner> miners = new ArrayList<>();
 
@@ -26,17 +27,20 @@ public class AutoMinerTask extends BukkitRunnable {
 	baissé : -32
 	 */
 
+	ArrayList<AutoMiner> temp = new ArrayList<>();
+
 	@Override
 	public void run() {
 		try{
 
+			temp = new ArrayList<>(miners);
 
 			// montée
 			EulerAngle angle = baseAngle;
-			double f = adder/10;
-			for(int i=0;i<10;i++){
+			double f = adder/15;
+			for(int i=0;i<15;i++){
 				angle = angle.subtract(f, 0, 0);
-				for(AutoMiner am : miners){
+				for(AutoMiner am : temp){
 					for(ArmorStand as : am.armorStands){
 						as.setRightArmPose(angle);
 					}
@@ -44,33 +48,41 @@ public class AutoMinerTask extends BukkitRunnable {
 				Thread.sleep(60);
 			}
 
+			if(!Main.main.isEnabled()){
+				cancel();
+				return;
+			}
 			new BukkitRunnable(){
 
 				@Override
 				public void run() {
-					short dura;
-					for(AutoMiner am : miners){
+					temp.removeIf((am)->{ // boucle
 						// TODO ADD DIRECT AU HOPPER
-						am.center.getDrops(am.pickaxe);
-						dura = (short) (am.pickaxe.getDurability()+15);
+						// TODO BLOCK TYPE CHECK
+						for(ItemStack drop : am.ore.getDrops(am.pickaxe)){
+							am.ore.getWorld().dropItem(am.ore.getLocation(), drop);
+						}
+						am.ore.setType(Material.AIR);
+
+						short dura;
+						dura = (short) (am.pickaxe.getDurability()+2);
 						if(dura>am.pickaxe.getType().getMaxDurability()){
-							am.center.setType(Material.AIR);
-							am.delete(false);
+							am.hopper.setType(Material.AIR);
+							am.delete();
+							return true;
 						}else am.pickaxe.setDurability(dura);
-					}
+						return false;
+					});
 				}
 			}.runTask(Main.main);
 
-			Bukkit.broadcastMessage("montée finie");
-			Thread.sleep(500);
-			Bukkit.broadcastMessage("descente");
+			Thread.sleep(1000);
 
 			// Descente
-			angle = baseAngle;
-			f = adder/10;
-			for(int i=0;i<10;i++){
+			f = adder/15;
+			for(int i=0;i<15;i++){
 				angle = angle.add(f, 0, 0);
-				for(AutoMiner am : miners){
+				for(AutoMiner am : temp){
 					for(ArmorStand as : am.armorStands){
 						as.setRightArmPose(angle);
 					}

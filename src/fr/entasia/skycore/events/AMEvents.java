@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -35,26 +36,47 @@ public class AMEvents implements Listener {
 		if(e.getAction()== Action.RIGHT_CLICK_BLOCK&&e.getClickedBlock().getType()== Material.HOPPER&&e.getPlayer().isSneaking()){
 			ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
 			if(pickaxes.contains(item.getType())){
-				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getClickedBlock().getLocation()));
-				if(is==null){
-					e.getPlayer().sendMessage("§cCette île est invalide !");
-				}else{
-					if(is.getMember(e.getPlayer().getUniqueId())==null){
-						e.getPlayer().sendMessage("§cTu n'es pas membre de cette île !");
-					}else if (is.autominers>=AutoMiner.MAX) {
-						e.getPlayer().sendMessage("§cCette île à déja atteint son maximum de mineur automatiques ! (" + AutoMiner.MAX + ")");
-					}else{
-						e.setCancelled(true);
-						e.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-						AutoMiner am = new AutoMiner(e.getClickedBlock(), item);
-						am.spawn();
-						AutoMinerTask.miners.add(am);
-						Location loc = e.getClickedBlock().getLocation();
-						Main.sqlite.fastUpdate("INSERT INTO autominers (is_x, is_z, x, y, z, world, item) VALUES (?, ?, ?, ?, ?, ?, ?)",
-								is.isid.x, is.isid.z, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName(), Serialization.serialiseItem(item));
-					}
-				}
 
+				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getClickedBlock().getLocation()));
+				if(is==null)return;
+				if(is.getMember(e.getPlayer().getUniqueId())==null){
+					e.getPlayer().sendMessage("§cTu n'es pas membre de cette île !");
+				}else if (is.autominers.size()>=AutoMiner.MAX) {
+					e.getPlayer().sendMessage("§cCette île à déja atteint son maximum de mineur automatiques ! (" + AutoMiner.MAX + ")");
+				}else{
+					e.setCancelled(true);
+					for(AutoMiner am : is.autominers){
+						if(e.getClickedBlock()==am.hopper){
+							e.getPlayer().getInventory().setItemInMainHand(am.pickaxe);
+							am.pickaxe = item;
+							return;
+						}
+					}
+
+					e.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+					AutoMiner am = new AutoMiner(e.getClickedBlock(), item);
+					am.spawn();
+
+					AutoMinerTask.miners.add(am);
+					is.autominers.add(am);
+					Location loc = am.hopper.getLocation();
+					Main.sqlite.fastUpdate("INSERT INTO autominers (is_x, is_z, x, y, z, world, item) VALUES (?, ?, ?, ?, ?, ?, ?)",
+							is.isid.x, is.isid.z, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName(), Serialization.serialiseItem(item));
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void a(BlockBreakEvent e){
+		if(e.getBlock().getType()==Material.HOPPER){
+			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getBlock().getLocation()));
+			if(is==null)return;
+			for(AutoMiner am : is.autominers){
+				if(e.getBlock()==am.hopper){
+					am.delete();
+					am.ore.getWorld().dropItem(am.ore.getLocation(), am.pickaxe);
+				}
 			}
 		}
 	}

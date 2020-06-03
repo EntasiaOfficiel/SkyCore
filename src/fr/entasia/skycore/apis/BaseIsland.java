@@ -1,6 +1,7 @@
 package fr.entasia.skycore.apis;
 
 
+import com.mysql.fabric.xmlrpc.base.Array;
 import fr.entasia.apis.ChatComponent;
 import fr.entasia.apis.Serialization;
 import fr.entasia.skycore.Main;
@@ -19,6 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,7 +57,7 @@ public class BaseIsland {
 	// online stuff
 	public boolean loaded = false;
 	protected long lvlCooldown =10000;
-	public byte autominers = 0;
+	public ArrayList<AutoMiner> autominers = new ArrayList<>();
 	public boolean generating = false;
 
 
@@ -415,19 +417,37 @@ public class BaseIsland {
 				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=? and is_z=? ", isid.x, isid.z);
 				Block b;
 				World w;
+				Location loc;
+				ItemStack item;
 				while(rs.next()){
+					item = Serialization.deserialiseItem(rs.getString("item"));
 					w = Bukkit.getWorld(rs.getString("world"));
-					b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
-					AutoMiner am = new AutoMiner(b, Serialization.deserialiseItem(rs.getString("item")));
-					int i = 0;
-					for(Entity ent : b.getLocation().getNearbyEntitiesByType(ArmorStand.class, 1)){
-						if(i==4)return;
-						am.armorStands[i] = (ArmorStand) ent;
-						i++;
+					if(w!=null){
+						b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
+						if(b.getType()!=Material.AIR){
+							AutoMiner am = new AutoMiner(b, item);
+							int i = 0;
+							for(Entity ent : b.getLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5)){
+								if("AMPickaxe".equals(ent.getCustomName())){
+									if(i==4){
+										i = 5;
+										break;
+									}
+									am.armorStands[i] = (ArmorStand) ent;
+									i++;
+								}
+							}
+							if(i==4) {
+								am.delete();
+								am.spawn();
+								autominers.add(am);
+								AutoMinerTask.miners.add(am);
+								continue;
+							}else if(i==5)am.delete();
+						}
+						w.dropItem(b.getLocation(), item);
 					}
-					if(i!=4)return;
-					autominers++;
-					AutoMinerTask.miners.add(am);
+					Main.sqlite.fastUpdate("DELETE FROM autominers WHERE x=? and y=? and z=?", rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
 
 				}
 			}catch(SQLException e){
