@@ -430,6 +430,7 @@ public class BaseIsland {
 							AutoMiner am = new AutoMiner(b, item);
 							int i = 0;
 							for(Entity ent : b.getLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5)){
+								System.out.println(ent.getCustomName());
 								if("AMPickaxe".equals(ent.getCustomName())){
 									if(i==4){
 										i = 5;
