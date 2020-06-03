@@ -424,7 +424,9 @@ public class BaseIsland {
 					w = Bukkit.getWorld(rs.getString("world"));
 					if(w!=null){
 						b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
+						System.out.println(1);
 						if(b.getType()!=Material.AIR){
+							System.out.println(2);
 							AutoMiner am = new AutoMiner(b, item);
 							int i = 0;
 							for(Entity ent : b.getLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5)){
@@ -437,14 +439,17 @@ public class BaseIsland {
 									i++;
 								}
 							}
+							System.out.println("n="+i);
 							if(i==4) {
+							System.out.println(3);
 								am.delete();
 								am.spawn();
 								autominers.add(am);
 								AutoMinerTask.miners.add(am);
 								continue;
-							}else if(i==5)am.delete();
+							}
 						}
+						AutoMiner.deleteByBlock(b);
 						w.dropItem(b.getLocation(), item);
 					}
 					Main.sqlite.fastUpdate("DELETE FROM autominers WHERE x=? and y=? and z=?", rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));

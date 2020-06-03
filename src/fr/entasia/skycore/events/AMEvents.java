@@ -55,6 +55,7 @@ public class AMEvents implements Listener {
 
 					e.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 					AutoMiner am = new AutoMiner(e.getClickedBlock(), item);
+					AutoMiner.deleteByBlock(e.getClickedBlock());
 					am.spawn();
 
 					AutoMinerTask.miners.add(am);

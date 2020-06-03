@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -26,10 +27,18 @@ public class AutoMiner {
 	}
 
 
-	public void delete(){
-		for(ArmorStand as : armorStands){
-			as.remove();
+	public static void deleteByBlock(Block b){
+		Location loc = b.getLocation().add(0.5, 0.5, 0.5);
+		System.out.println(loc);
+		for(Entity ent : loc.getNearbyEntitiesByType(ArmorStand.class, 0.4)) {
+			if ("AMPickaxe".equals(ent.getCustomName())) {
+				ent.remove();
+			}
 		}
+	}
+
+	public void delete(){
+		deleteByBlock(hopper);
 	}
 
 	private static final Vector[] dirs = new Vector[4];
