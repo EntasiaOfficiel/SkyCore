@@ -414,7 +414,7 @@ public class BaseIsland {
 		if(!loaded){
 			loaded = true;
 			try{
-				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=?+8 and is_z=? ", isid.x, isid.z);
+				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=? and is_z=? ", isid.x, isid.z);
 				Block b;
 				World w;
 				Location loc;
@@ -425,7 +425,8 @@ public class BaseIsland {
 					if(w!=null){
 						b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
 						if(b.getType()!=Material.AIR){
-							AutoMiner am = new AutoMiner(b, item);
+							AutoMiner am = new AutoMiner();
+							am.init(b, item);
 							int i = 0;
 							for(Entity ent : b.getLocation().add(AutoMiner.normaliser).getNearbyEntitiesByType(ArmorStand.class, 0.4)){
 								if("AMPickaxe".equals(ent.getCustomName())){

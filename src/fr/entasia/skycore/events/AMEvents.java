@@ -48,7 +48,6 @@ public class AMEvents implements Listener {
 					e.getPlayer().sendMessage("§cCette île à déja atteint son maximum de mineur automatiques ! (" + AutoMiner.MAX + ")");
 				}else{
 					e.setCancelled(true);
-					System.out.println("cancelled");
 					for(AutoMiner am : is.autominers){
 						if(e.getClickedBlock().equals(am.hopper)){
 							e.getPlayer().getInventory().setItemInMainHand(am.pickaxe);
@@ -64,13 +63,15 @@ public class AMEvents implements Listener {
 						@Override
 						public void run() {
 							if(pickaxes.contains(item.getType())) {
-								e.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-								AutoMiner am = new AutoMiner(e.getClickedBlock(), item);
+								AutoMiner am = new AutoMiner();
 								AutoMiner.deleteByBlock(e.getClickedBlock());
-								am.spawn();
 
 								AutoMinerTask.miners.add(am);
 								is.autominers.add(am);
+								am.init(e.getClickedBlock(), item);
+								e.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+								am.spawn();
+
 								Location loc = am.hopper.getLocation();
 								Main.sqlite.fastUpdate("INSERT INTO autominers (is_x, is_z, x, y, z, world, item) VALUES (?, ?, ?, ?, ?, ?, ?)",
 										is.isid.x, is.isid.z, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName(), Serialization.serialiseItem(item));
@@ -85,14 +86,17 @@ public class AMEvents implements Listener {
 	@EventHandler
 	public void a(BlockBreakEvent e){
 		if(e.getBlock().getType()==Material.HOPPER){
+			AutoMiner.deleteByBlock(e.getBlock());
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getBlock().getLocation()));
 			if(is==null)return;
-			for(AutoMiner am : is.autominers){
+			is.autominers.removeIf(am -> {
 				if(e.getBlock().equals(am.hopper)){
-					am.delete();
-					am.ore.getWorld().dropItem(am.ore.getLocation(), am.pickaxe);
-				}
-			}
+					am.toBreak.getWorld().dropItem(am.toBreak.getLocation(), am.pickaxe);
+					am.pickaxe = null;
+					AutoMinerTask.miners.remove(am);
+					return true;
+				}else return false;
+			});
 		}
 	}
 

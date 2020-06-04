@@ -2,7 +2,6 @@ package fr.entasia.skycore.others.tasks;
 
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.objs.AutoMiner;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +15,23 @@ public class AutoMinerTask extends BukkitRunnable {
 	public static final double adder = Math.PI / 5;
 	public static final EulerAngle baseAngle = new EulerAngle(Math.toRadians(-32), Math.toRadians(90), Math.toRadians(0));
 	public static ArrayList<AutoMiner> miners = new ArrayList<>();
+
+	public static final ArrayList<Material> toMine = new ArrayList<>();
+
+	static{
+		toMine.add(Material.STONE);
+		toMine.add(Material.COBBLESTONE);
+		toMine.add(Material.COAL_ORE);
+		toMine.add(Material.IRON_ORE);
+		toMine.add(Material.GOLD_ORE);
+		toMine.add(Material.LAPIS_ORE);
+		toMine.add(Material.REDSTONE_ORE);
+		toMine.add(Material.DIAMOND_ORE);
+		toMine.add(Material.EMERALD_ORE);
+		toMine.add(Material.QUARTZ_ORE);
+		toMine.add(Material.NETHERRACK);
+	}
+
 
 	/*
 	0 = reloading
@@ -33,7 +49,12 @@ public class AutoMinerTask extends BukkitRunnable {
 	public void run() {
 		try{
 
-			temp = new ArrayList<>(miners);
+			temp = new ArrayList<>();
+			for(AutoMiner am : miners){
+				if(toMine.contains(am.toBreak.getType())){
+					temp.add(am);
+				}
+			}
 
 			// montée
 			EulerAngle angle = baseAngle;
@@ -58,20 +79,21 @@ public class AutoMinerTask extends BukkitRunnable {
 				public void run() {
 					temp.removeIf((am)->{ // boucle
 						// TODO ADD DIRECT AU HOPPER
-						// TODO BLOCK TYPE CHECK
-						for(ItemStack drop : am.ore.getDrops(am.pickaxe)){
-							am.ore.getWorld().dropItem(am.ore.getLocation(), drop);
-						}
-						am.ore.setType(Material.AIR);
 
-						short dura;
-						dura = (short) (am.pickaxe.getDurability()+2);
-						if(dura>am.pickaxe.getType().getMaxDurability()){
-							am.hopper.setType(Material.AIR);
-							am.delete();
-							return true;
-						}else am.pickaxe.setDurability(dura);
-						return false;
+						if(toMine.contains(am.toBreak.getType())){
+							for(ItemStack drop : am.toBreak.getDrops(am.pickaxe)){
+								am.toBreak.getWorld().dropItem(am.toBreak.getLocation(), drop);
+							}
+							am.toBreak.setType(Material.AIR);
+
+							short dura = (short) (am.pickaxe.getDurability()+2);
+							if(dura>am.pickaxe.getType().getMaxDurability()){
+								am.hopper.setType(Material.AIR);
+								am.delete();
+								return true;
+							}else am.pickaxe.setDurability(dura);
+							return false;
+						}else return false;
 					});
 				}
 			}.runTask(Main.main);

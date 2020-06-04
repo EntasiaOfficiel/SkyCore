@@ -2,7 +2,6 @@ package fr.entasia.skycore.objs;
 
 import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
@@ -11,29 +10,23 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-
 public class AutoMiner {
 
 	public static final byte MAX = 10;
 	public static final Vector normaliser = new Vector(0.5, -0.3, 0.5);
-	public static final ArrayList<Material> toMine = new ArrayList<>();
-
-	static{
-		toMine.add(Material.STONE);
-		toMine.add(Material.COBBLESTONE);
-		toMine.add(Material.COAL_ORE);
-	}
 
 	public Block hopper;
-	public Block ore;
+	public Block toBreak;
 	public ItemStack pickaxe;
 
 	public ArmorStand[] armorStands = new ArmorStand[4];
 
-	public AutoMiner(Block hopper, ItemStack pickaxe){
+	public AutoMiner(){
+	}
+
+	public void init(Block hopper, ItemStack pickaxe){
 		this.hopper = hopper;
-		this.ore = hopper.getRelative(BlockFace.UP);
+		this.toBreak = hopper.getRelative(BlockFace.UP);
 		this.pickaxe = pickaxe;
 	}
 
