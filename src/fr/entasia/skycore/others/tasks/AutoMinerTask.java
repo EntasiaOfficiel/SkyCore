@@ -80,6 +80,7 @@ public class AutoMinerTask extends BukkitRunnable {
 					temp.removeIf((am)->{ // boucle
 						// TODO ADD DIRECT AU HOPPER
 
+						if(am.pickaxe==null)return true;
 						if(toMine.contains(am.toBreak.getType())){
 							for(ItemStack drop : am.toBreak.getDrops(am.pickaxe)){
 								am.toBreak.getWorld().dropItem(am.toBreak.getLocation(), drop);
