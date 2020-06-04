@@ -1,5 +1,5 @@
 name: SkyCore
-depend: [Libraries, CorePlugin]
+depend: [Libraries]
 loadbefore: [Multiverse-Core] # il a besoin de charger le VoidGenerator
 version: '1.0'
 main: fr.entasia.skycore.Main
