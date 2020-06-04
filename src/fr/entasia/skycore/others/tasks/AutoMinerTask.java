@@ -82,10 +82,7 @@ public class AutoMinerTask extends BukkitRunnable {
 
 						if(am.pickaxe==null)return true;
 						if(toMine.contains(am.toBreak.getType())){
-							for(ItemStack drop : am.toBreak.getDrops(am.pickaxe)){
-								am.toBreak.getWorld().dropItem(am.toBreak.getLocation(), drop);
-							}
-							am.toBreak.setType(Material.AIR);
+							am.toBreak.breakNaturally(am.pickaxe);
 
 							short dura = (short) (am.pickaxe.getDurability()+2);
 							if(dura>am.pickaxe.getType().getMaxDurability()){
