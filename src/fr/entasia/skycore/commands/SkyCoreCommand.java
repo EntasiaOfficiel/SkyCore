@@ -11,7 +11,7 @@ public class SkyCoreCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if(!(sender instanceof Player))return false;
+		if(!(sender instanceof Player))return true;
 		if(sender.hasPermission("plugin.skytools")){
 			Player p = (Player)sender;
 			if(args.length==0)p.sendMessage("§cMet un argument !");

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class BinCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if(!(sender instanceof Player))return false;
+		if(!(sender instanceof Player))return true;
 		((Player)sender).openInventory(Bukkit.createInventory(null, 54, "§8Poubelle"));
 		return true;
 	}

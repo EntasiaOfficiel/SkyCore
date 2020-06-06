@@ -1,17 +1,27 @@
 package fr.entasia.skycore.events;
 
 import fr.entasia.apis.Serialization;
+import fr.entasia.apis.other.Randomiser;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.objs.AutoMiner;
+import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.tasks.AutoMinerTask;
+import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlockState;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -20,7 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
-public class AMEvents implements Listener {
+public class MiningEvents implements Listener {
 
 
 	public static ArrayList<Material> pickaxes = new ArrayList<>();
@@ -105,5 +115,55 @@ public class AMEvents implements Listener {
 		if("AMPickaxe".equals(e.getRightClicked().getCustomName())){
 			e.setCancelled(true);
 		}
+	}
+
+	public static final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP};
+
+	@EventHandler
+	public void a(BlockFromToEvent e) {
+		if (Dimensions.isIslandWorld(e.getBlock().getWorld())) {
+//			Bukkit.broadcastMessage(String.valueOf(MinecraftServer.currentTick));
+			if (e.getBlock().getType() == Material.STATIONARY_LAVA) {
+				if (e.getToBlock().getType() == Material.AIR) { // cobblestone - a verif
+					boolean nop = true;
+					Material m;
+					for (BlockFace bf : directions) {
+						m = e.getToBlock().getRelative(bf).getType();
+						if (m == Material.WATER || m == Material.STATIONARY_WATER) {
+							nop = false;
+							break;
+						}
+					}
+					if (nop) return;
+					e.setCancelled(true);
+					e.getToBlock().setType(genBlock(Material.COBBLESTONE));
+					// TODO SET BLOCK
+				} else if (e.getToBlock().getType() == Material.STATIONARY_WATER) { // stone
+					e.setCancelled(true);
+					e.getToBlock().setType(genBlock(Material.STONE));
+					// TODO SET BLOCK
+				}
+			}
+		}
+	}
+
+	public static Material genBlock(Material def){
+		Randomiser r = new Randomiser();
+		if(r.isInNext(6.2)){
+			return Material.COAL_ORE;
+		}else if(r.isInNext(5.2)){
+			return Material.IRON_ORE;
+		}else if(r.isInNext(0.4)){
+			return Material.GOLD_ORE;
+		}else if(r.isInNext(1)){
+			return Material.LAPIS_ORE;
+		}else if(r.isInNext(1.5)){
+			return Material.REDSTONE_ORE;
+		}else if(r.isInNext(0.25)){
+			return Material.DIAMOND_ORE;
+		}else if(r.isInNext(0.1)){
+			return Material.EMERALD_ORE ;
+		}
+		return def;
 	}
 }

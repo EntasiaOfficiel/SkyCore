@@ -68,7 +68,7 @@ public class Main extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new IslandEvents(), this);
 			getServer().getPluginManager().registerEvents(new IslandEvents2(), this);
 			getServer().getPluginManager().registerEvents(new ChatEvents(), this);
-			getServer().getPluginManager().registerEvents(new AMEvents(), this);
+			getServer().getPluginManager().registerEvents(new MiningEvents(), this);
 
 			getCommand("skycore").setExecutor(new SkyCoreCommand());
 			getCommand("spawn").setExecutor(new SpawnCommand());
@@ -80,6 +80,8 @@ public class Main extends JavaPlugin {
 			getCommand("baltop").setExecutor(new BaltopCommand());
 			getCommand("money").setExecutor(new MoneyCommand());
 			getCommand("eco").setExecutor(new EcoCommand());
+
+			getCommand("test").setExecutor(new TestCommand());
 
 			loadIslandStructs();
 

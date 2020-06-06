@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class SpawnCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if(!(sender instanceof Player))return false;
+		if(!(sender instanceof Player))return true;
 
 		((Player) sender).teleport(Utils.spawn);
 		sender.sendMessage("§6Tu as été téléporté au Spawn !");

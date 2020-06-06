@@ -6,7 +6,6 @@ main: fr.entasia.skycore.Main
 commands:
   skycore:
 
-
   spawn:
 
   setspawn:
@@ -30,4 +29,7 @@ commands:
     aliases: [economy, economie]
 
   baltop:
+
+
+  test:
 

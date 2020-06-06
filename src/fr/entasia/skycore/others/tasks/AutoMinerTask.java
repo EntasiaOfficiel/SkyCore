@@ -3,6 +3,7 @@ package fr.entasia.skycore.others.tasks;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.objs.AutoMiner;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -83,6 +84,8 @@ public class AutoMinerTask extends BukkitRunnable {
 						if(am.pickaxe==null)return true;
 						if(toMine.contains(am.toBreak.getType())){
 							am.toBreak.breakNaturally(am.pickaxe);
+//							CraftBlock b;
+//							b.setType();
 
 							short dura = (short) (am.pickaxe.getDurability()+2);
 							if(dura>am.pickaxe.getType().getMaxDurability()){

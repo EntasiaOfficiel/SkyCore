@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class BaltopCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if(!(sender instanceof Player))return false;
+		if(!(sender instanceof Player))return true;
 		sender.sendMessage("§cA venir !");
 		return true;
 	}
