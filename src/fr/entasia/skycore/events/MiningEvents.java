@@ -54,8 +54,6 @@ public class MiningEvents implements Listener {
 				if(is==null)return;
 				if(is.getMember(e.getPlayer().getUniqueId())==null){
 					e.getPlayer().sendMessage("§cTu n'es pas membre de cette île !");
-				}else if (is.autominers.size()>=AutoMiner.MAX) {
-					e.getPlayer().sendMessage("§cCette île à déja atteint son maximum de mineur automatiques ! (" + AutoMiner.MAX + ")");
 				}else{
 					e.setCancelled(true);
 					for(AutoMiner am : is.autominers){
@@ -68,6 +66,11 @@ public class MiningEvents implements Listener {
 							return;
 						}
 					}
+					if (is.autominers.size()>=AutoMiner.MAX) {
+						e.getPlayer().sendMessage("§cCette île à déja atteint son maximum de mineur automatiques ! (" + AutoMiner.MAX + ")");
+						return;
+					}
+
 
 					new BukkitRunnable() {
 						@Override

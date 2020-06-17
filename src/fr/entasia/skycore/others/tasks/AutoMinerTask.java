@@ -50,7 +50,7 @@ public class AutoMinerTask extends BukkitRunnable {
 	public void run() {
 		try{
 
-			temp = new ArrayList<>();
+			temp.clear();
 			for(AutoMiner am : miners){
 				if(toMine.contains(am.toBreak.getType())){
 					temp.add(am);
@@ -78,23 +78,32 @@ public class AutoMinerTask extends BukkitRunnable {
 
 				@Override
 				public void run() {
-					temp.removeIf((am)->{ // boucle
+					temp.removeIf((am) -> { // boucle
 						// TODO ADD DIRECT AU HOPPER
 
-						if(am.pickaxe==null)return true;
-						if(toMine.contains(am.toBreak.getType())){
-							am.toBreak.breakNaturally(am.pickaxe);
-//							CraftBlock b;
-//							b.setType();
+						if (am.pickaxe == null) return true;
+						else if (am.hopper.getType() == Material.HOPPER) {
+							if (toMine.contains(am.toBreak.getType())) {
+								am.toBreak.breakNaturally(am.pickaxe);
+								//							CraftBlock b;
+								//							b.setType();
 
-							short dura = (short) (am.pickaxe.getDurability()+2);
-							if(dura>am.pickaxe.getType().getMaxDurability()){
-								am.hopper.setType(Material.AIR);
-								am.delete();
-								return true;
-							}else am.pickaxe.setDurability(dura);
-							return false;
-						}else return false;
+								short dura = (short) (am.pickaxe.getDurability() + 2);
+								if (dura > am.pickaxe.getType().getMaxDurability()) {
+									am.hopper.setType(Material.AIR);
+									am.delete();
+									AutoMinerTask.miners.remove(am);
+									return true;
+								} else am.pickaxe.setDurability(dura);
+								return false;
+							} else return false;
+						} else {
+							am.hopper.getWorld().dropItem(am.hopper.getLocation(), am.pickaxe);
+							am.pickaxe = null;
+							am.delete();
+							AutoMinerTask.miners.remove(am);
+							return true;
+						}
 					});
 				}
 			}.runTask(Main.main);
