@@ -405,7 +405,7 @@ public class BaseIsland {
 		bank-=m;
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=?, and z=?", m, isid.x, isid.z);
 	}
-	
+
 	public void tryLoad(){
 		if(!loaded){
 			loaded = true;
@@ -423,10 +423,8 @@ public class BaseIsland {
 							AutoMiner am = new AutoMiner();
 							am.init(b, item);
 							int i = 0;
-							System.out.println("checking");
 							for(Entity ent : b.getLocation().add(AutoMiner.normaliser).getNearbyEntitiesByType(ArmorStand.class, 0.4)){
 								if("AMPickaxe".equals(ent.getCustomName())){
-									System.out.println("a");
 									if(i==4){
 										i = 5;
 										break;

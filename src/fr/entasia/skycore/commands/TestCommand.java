@@ -65,7 +65,7 @@ public class TestCommand implements CommandExecutor {
 //
 ////		NMSWorld.capturedBlockStates.add(state);
 //		IBlockData data2 = NMSChunk.a(pos, data);
-////		System.out.println("null="+(data2==null));
+////		if(!(sender instanceof Player))return true;System.out.println("null="+(data2==null));
 //
 ////		if (data.c() != data2.c() || data.d() != data2.d()) {
 ////			NMSWorld.methodProfiler.a("checkLight");
