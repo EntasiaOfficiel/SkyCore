@@ -337,14 +337,14 @@ public class BaseIsland {
 	}
 
 	public void islandChat(ISPLink link, BaseComponent... msg){
-		sendTeamMsg(ChatComponent.create(b1, ChatComponent.create(link.getName()), b2, msg));
+		sendTeamMsg(new ChatComponent().append(b1).append(link.getName()).append(b2).append(msg).create());
 	}
 
 	public void sendTeamMsg(String msg){
 		sendTeamMsg(ChatComponent.create(msg));
 	}
 
-	public void sendTeamMsg(BaseComponent[] msg){
+	public void sendTeamMsg(BaseComponent... msg){
 		for(ISPLink link : members){
 			if(link.sp.p!=null){
 				link.sp.p.sendMessage(msg);
@@ -405,11 +405,7 @@ public class BaseIsland {
 		bank-=m;
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=?, and z=?", m, isid.x, isid.z);
 	}
-
-	// 400 - 799
-
-
-
+	
 	public void tryLoad(){
 		if(!loaded){
 			loaded = true;
@@ -417,7 +413,6 @@ public class BaseIsland {
 				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=? and is_z=? ", isid.x, isid.z);
 				Block b;
 				World w;
-				Location loc;
 				ItemStack item;
 				while(rs.next()){
 					item = Serialization.deserialiseItem(rs.getString("item"));
@@ -428,8 +423,10 @@ public class BaseIsland {
 							AutoMiner am = new AutoMiner();
 							am.init(b, item);
 							int i = 0;
+							System.out.println("checking");
 							for(Entity ent : b.getLocation().add(AutoMiner.normaliser).getNearbyEntitiesByType(ArmorStand.class, 0.4)){
 								if("AMPickaxe".equals(ent.getCustomName())){
+									System.out.println("a");
 									if(i==4){
 										i = 5;
 										break;

@@ -32,13 +32,15 @@ public class InternalAPI {
 
 
 
-	public static void checkA(String a) {
-		if(Main.enableDev){
-			Main.main.getLogger().info(a);
-			Main.main.getLogger().info("Une erreur à été rencontrée, mais le mode développement est actif");
-		}else throw new RuntimeException(a);
-	}
+	public static void a(String a) {
+		Main.main.getLogger().warning(a);
 
+
+//		if(Main.enableDev){
+//			Main.main.getLogger().warning(a);
+//			Main.main.getLogger().warning("Une erreur à été rencontrée, mais le mode développement est actif");
+//		}else throw new RuntimeException(a);
+	}
 
 	public static void onPostEnable(){ // besoin que les mondes soient chargés, voir BaseEvents
 		try{
@@ -86,8 +88,8 @@ public class InternalAPI {
 			Utils.playerCache.add(sp);
 		}
 		int i = 0;
-		if(is==null)checkA("Aucune ile en mémoire !");
-		else if(sp==null)checkA("Aucun joueur en mémoire !");
+		if(is==null) a("Aucune ile en mémoire !");
+		else if(sp==null) a("Aucun joueur en mémoire !");
 		else{
 			rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_pis").executeQuery();
 			ISID isid;
