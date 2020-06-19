@@ -22,7 +22,7 @@ public class IsCmdUtils {
 		deny.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/is deny "+is.isid.str()));
 		deny.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ChatComponent.create("§cClique pour refuser l'invitation !")));
 
-		sender.sendMessage(ChatComponent.create(accept.create(), ChatComponent.create("   "), deny.create()));
+		sender.sendMessage(accept.append("   ").append(deny).create());
 	}
 
 	public static class WaitConfirm extends BukkitRunnable {

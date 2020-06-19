@@ -1,6 +1,7 @@
 package fr.entasia.skycore.commands;
 
 import fr.entasia.skycore.Main;
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.InternalAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,8 +15,10 @@ public class SkyCoreCommand implements CommandExecutor {
 		if(!(sender instanceof Player))return true;
 		if(sender.hasPermission("plugin.skytools")){
 			Player p = (Player)sender;
-			if(args.length==0)p.sendMessage("§cMet un argument !");
-			else{
+			if(args.length==0){
+				p.sendMessage("§cMet un argument !");
+				showArgs(sender);
+			}else{
 				if(args[0].equalsIgnoreCase("reload")) {
 					try {
 						Main.loadConfigs();
@@ -35,13 +38,25 @@ public class SkyCoreCommand implements CommandExecutor {
 						p.sendMessage("§cSauvegardes SQL désactivées !");
 
 					}else p.sendMessage("§cArgument invalide !");
-				}else{
+				}else if(args[0].equalsIgnoreCase("masteredit")){
+					if(Utils.masterEditors.remove(p)){
+						p.sendMessage("§eMaster editor §cDésactivé §e!");
+					}else{
+						Utils.masterEditors.add(p);
+						p.sendMessage("§eMaster editor §aActivé §e!");
+					}
+				}else {
 					p.sendMessage("§cArgument invalide ! Arguments disponibles :");
-					p.sendMessage("§c- reload");
-					p.sendMessage("§c- sql");
+					showArgs(sender);
 				}
 			}
 		}else sender.sendMessage("§cTu n'as pas accès à cette commande !");
 		return true;
+	}
+
+	private static void showArgs(CommandSender sender){
+		sender.sendMessage("§c- reload");
+		sender.sendMessage("§c- sql");
+		sender.sendMessage("§c- masteredit");
 	}
 }

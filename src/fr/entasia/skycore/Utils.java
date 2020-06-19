@@ -5,8 +5,10 @@ import fr.entasia.skycore.apis.SkyPlayer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Utils {
 	public static final int ISSIZE = 400;
@@ -14,6 +16,8 @@ public class Utils {
 
 	public static World spawnWorld;
 	public static Location spawn;
+
+	public static ArrayList<Player> masterEditors = new ArrayList<>();
 
 	public static ArrayList<BaseIsland> islandCache = new ArrayList<>();
 	public static ArrayList<SkyPlayer> playerCache = new ArrayList<>();

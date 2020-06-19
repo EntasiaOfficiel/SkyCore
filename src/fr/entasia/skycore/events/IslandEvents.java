@@ -1,5 +1,6 @@
 package fr.entasia.skycore.events;
 
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.CooManager;
@@ -59,26 +60,29 @@ public class IslandEvents implements Listener {
 					}
 				}
 			}
-		}
+		} // on bloque pas les interactions dans les autres mondes (pour le moment ?)
 	}
 
-	public static boolean blockCheck(Player p, Block b){
-		if(Dimensions.isIslandWorld(p.getWorld())){
+	public static boolean isBlockDenied(Player p, Block b){
+		if(Utils.masterEditors.contains(p))return false;
+		if(Dimensions.isIslandWorld(p.getWorld())) {
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
-			if(p.hasPermission("skyblock.isprotect.bypass")&&p.getGameMode()==GameMode.CREATIVE)return false;
-			if(is!=null){
+			if (p.hasPermission("skyblock.isprotect.bypass") && p.getGameMode() == GameMode.CREATIVE) return false;
+			if (is != null) {
 				ISPLink link = is.getMember(p.getUniqueId());
-				if (link==null) {
-					p.sendMessage("§cTu ne peux pas casser de blocks sur cette ile !");;
-				}else{
-					if(is.hasDimension(Dimensions.getDimension(p.getWorld()))) {
+				if (link == null) {
+					p.sendMessage("§cTu ne peux pas casser de blocks sur cette ile !");
+					;
+				} else {
+					if (is.hasDimension(Dimensions.getDimension(p.getWorld()))) {
 						int m = is.isid.distanceFromIS(b.getLocation());
-						if ((is.getExtension()+1) * 50 <= m) {
+						if ((is.getExtension() + 1) * 50 <= m) {
 							p.sendMessage("§cL'extension de ton ile n'est pas suffisante !");
 						} else if (link.getRank() == MemberRank.RECRUE && containers.contains(b.getType())) {
 							p.sendMessage("§cTu es seulement une recrue sur cette ile ! Tu ne peux pas intéragir avec les containers");
-						}else return false;
-					}else p.sendMessage("§Ton île n'a pas encore débloqué cette dimension ! Utilise un portail pour la débloquer");
+						} else return false;
+					} else
+						p.sendMessage("§Ton île n'a pas encore débloqué cette dimension ! Utilise un portail pour la débloquer");
 				}
 			}
 		}
@@ -87,16 +91,16 @@ public class IslandEvents implements Listener {
 
 	@EventHandler
 	public void blockBreak(BlockBreakEvent e){
-		e.setCancelled(blockCheck(e.getPlayer(), e.getBlock()));
+		e.setCancelled(isBlockDenied(e.getPlayer(), e.getBlock()));
 	}
 
 	@EventHandler
-	public void blockBreak(BlockPlaceEvent e){
-		e.setCancelled(blockCheck(e.getPlayer(), e.getBlock()));
+	public void blockPlace(BlockPlaceEvent e){
+		e.setCancelled(isBlockDenied(e.getPlayer(), e.getBlock()));
 	}
 
 
-	public static String checkIle(BaseIsland is, Player p){
+	private static String checkIs(BaseIsland is, Player p){ // temporaire ?
 		if(is.getMember(p.getUniqueId())==null){
 			return "l'ile de §6"+is.getOwner().sp.name+"§f";
 		}else{
@@ -117,17 +121,17 @@ public class IslandEvents implements Listener {
 					int m2 = fr.isid.distanceFromIS(e.getTo());
 					if(m1<ext){
 						if(m2>=ext){
-							e.getPlayer().sendActionBar("§fTu es sorti de la zone de "+checkIle(fr, p)+" !");
+							e.getPlayer().sendActionBar("§fTu es sorti de la zone de "+ checkIs(fr, p)+" !");
 						}
 					}else if (m2<ext){
-						e.getPlayer().sendActionBar("§fTu es rentré dans la zone de "+checkIle(fr, e.getPlayer())+" !");
+						e.getPlayer().sendActionBar("§fTu es rentré dans la zone de "+ checkIs(fr, e.getPlayer())+" !");
 					}
 				}
 			}else{
 				if (to == null) {
-					e.getPlayer().sendActionBar("§fTu es sorti de "+checkIle(fr, p)+" !");
+					e.getPlayer().sendActionBar("§fTu es sorti de "+ checkIs(fr, p)+" !");
 				} else {
-					e.getPlayer().sendActionBar("§fTu es rentré sur "+checkIle(to, p)+" !");
+					e.getPlayer().sendActionBar("§fTu es rentré sur "+ checkIs(to, p)+" !");
 				}
 			}
 		}
