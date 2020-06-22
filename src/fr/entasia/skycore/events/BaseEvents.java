@@ -64,12 +64,15 @@ public class BaseEvents implements Listener {
 	}
 
 	@EventHandler
-	public static void onDamage(EntityDamageByEntityEvent e){
-		if(!(e.getEntity() instanceof Player))return;
-		Player p = (Player)e.getEntity();
-		if(!Dimensions.isIslandWorld(p.getWorld()))return;
-		if(e.getDamager() instanceof Firework) e.setCancelled(true);
-		else if(e.getDamager() instanceof Player)e.setCancelled(true);
+	public static void onDamage(EntityDamageByEntityEvent e) {
+		if (!(e.getEntity() instanceof Player)) return;
+		Player p = (Player) e.getEntity();
+		if (e.getDamager() instanceof Player) {
+			e.setCancelled(true);
+			return;
+		}
+		if (!Dimensions.isIslandWorld(p.getWorld())) return;
+		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 		else{
 			if (e.getCause() == EntityDamageEvent.DamageCause.FALL)
 				e.setDamage(e.getDamage() / 2);
