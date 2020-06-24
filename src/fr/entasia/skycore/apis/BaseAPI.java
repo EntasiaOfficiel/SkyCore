@@ -1,6 +1,6 @@
 package fr.entasia.skycore.apis;
 
-import fr.entasia.apis.ServerUtils;
+import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.objs.CodePasser;

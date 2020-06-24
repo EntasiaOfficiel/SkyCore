@@ -1,6 +1,6 @@
 package fr.entasia.skycore.apis;
 
-import fr.entasia.apis.ServerUtils;
+import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
@@ -25,9 +25,9 @@ public class InternalAPI {
 	}
 
 	public static void warn(String msg, boolean stack) {
-		if(stack)new EntasiaException("Warning SkyCore").printStackTrace();
+		if(stack)new EntasiaException("Warning Skyblock").printStackTrace();
 		Main.main.getLogger().warning(msg);
-		ServerUtils.permMsg("logs.warn", "§6Warning SkyTools : §c"+msg);
+		ServerUtils.permMsg("logs.warn", "§6Warning Skyblock : §c"+msg);
 	}
 
 

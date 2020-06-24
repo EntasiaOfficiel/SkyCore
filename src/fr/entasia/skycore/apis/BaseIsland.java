@@ -1,9 +1,8 @@
 package fr.entasia.skycore.apis;
 
 
-import com.mysql.fabric.xmlrpc.base.Array;
-import fr.entasia.apis.ChatComponent;
-import fr.entasia.apis.Serialization;
+import fr.entasia.apis.other.ChatComponent;
+import fr.entasia.apis.utils.Serialization;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.objs.AutoMiner;
 import fr.entasia.skycore.objs.CodePasser;

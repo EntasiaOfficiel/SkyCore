@@ -1,6 +1,6 @@
 package fr.entasia.skycore.events;
 
-import fr.entasia.apis.Serialization;
+import fr.entasia.apis.utils.Serialization;
 import fr.entasia.apis.other.Randomiser;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.*;

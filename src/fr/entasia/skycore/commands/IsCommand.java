@@ -1,7 +1,7 @@
 package fr.entasia.skycore.commands;
 
-import fr.entasia.apis.ChatComponent;
-import fr.entasia.apis.TextUtils;
+import fr.entasia.apis.other.ChatComponent;
+import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;

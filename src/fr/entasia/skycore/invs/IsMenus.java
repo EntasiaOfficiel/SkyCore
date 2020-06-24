@@ -1,7 +1,7 @@
 package fr.entasia.skycore.invs;
 
-import fr.entasia.apis.ItemUtils;
-import fr.entasia.apis.TextUtils;
+import fr.entasia.apis.utils.ItemUtils;
+import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.apis.menus.MenuClickEvent;
 import fr.entasia.apis.menus.MenuCreator;
 import fr.entasia.skycore.Main;
