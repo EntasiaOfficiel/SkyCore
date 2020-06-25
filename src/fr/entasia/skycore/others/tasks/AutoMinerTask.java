@@ -1,8 +1,14 @@
 package fr.entasia.skycore.others.tasks;
 
+import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;
+import fr.entasia.skycore.apis.BaseAPI;
+import fr.entasia.skycore.apis.BaseIsland;
+import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.objs.AutoMiner;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
@@ -83,6 +89,21 @@ public class AutoMinerTask extends BukkitRunnable {
 
 						if (am.pickaxe == null) return true;
 						else if (am.hopper.getType() == Material.HOPPER) {
+
+
+							if(am.hopper.getRelative(BlockFace.DOWN).getType().isTransparent()){
+								Location loc = am.hopper.getLocation();
+								BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(loc));
+								String sloc = "§cxyz : §6"+loc.getBlockX()+"§c;§6"+loc.getBlockY()+"§c;§6"+loc.getBlockZ();
+								if(is==null){
+									ServerUtils.permMsg("log.autominer", "§cUn Autominer à un block transparent au dessous de lui !"+
+											"(Cela cause du lag)\n"+ sloc+"§c. Monde "+loc.getWorld().getName());
+								}else{
+									is.sendTeamMsg("§cUn Autominer à un block transparent au dessous de lui !"+
+											"(Cela cause du lag)\n"+ sloc+"§c. Dimension : §6"+loc.getWorld().getEnvironment().name());
+								}
+							}
+
 							if (toMine.contains(am.toBreak.getType())) {
 								am.toBreak.breakNaturally(am.pickaxe);
 								//							CraftBlock b;
