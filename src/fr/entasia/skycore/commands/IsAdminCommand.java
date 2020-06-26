@@ -27,7 +27,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "infop": {
 						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
 						else {
-							SkyPlayer target = BaseAPI.getAutomatedSP(p, args[1]);
+							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
 							if(target!=null){
 								p.sendMessage("Joueur : " + target.p.getName());
 								p.sendMessage("îles :");
@@ -78,7 +78,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "deletep":{
 						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
 						else{
-							SkyPlayer target = BaseAPI.getAutomatedSP(p, args[1]);
+							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
 							if(target!=null){
 								if(BaseAPI.deleteSkyPlayer(target))p.sendMessage("§cJoueur supprimé avec succès !");
 								else p.sendMessage("§4Erreur lors de la suppression du joueur !");
@@ -121,7 +121,7 @@ public class IsAdminCommand implements CommandExecutor {
 								else {
 									if(args.length==2)p.sendMessage("§cMet un joueur !");
 									else{
-										SkyPlayer target = BaseAPI.getAutomatedSP(sender, args[1]);
+										SkyPlayer target = BaseAPI.getArgSP(sender, args[1], false);
 										if(target!=null){
 											ISPLink newLink = target.getIsland(is.isid);
 											switch(args[0]){

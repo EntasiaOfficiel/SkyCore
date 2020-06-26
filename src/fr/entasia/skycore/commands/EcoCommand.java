@@ -23,7 +23,7 @@ public class EcoCommand implements CommandExecutor {
 				SkyPlayer sp;
 				boolean tierce=false;
 				if(args.length >= 3){
-					sp = BaseAPI.getAutomatedSP(sender, args[2]);
+					sp = BaseAPI.getArgSP(sender, args[2], true);
 					if(sp==null)return true;
 
 					tierce = true;

@@ -16,7 +16,7 @@ public class MoneyCommand implements CommandExecutor {
 				sender.sendMessage("§aTa monnaie : §2"+sp.getMoney());
 			}else sender.sendMessage("§cTu es la console ! Met un nom de joueur");
 		}else{
-			sp = BaseAPI.getAutomatedSP(sender, args[0]);
+			sp = BaseAPI.getArgSP(sender, args[0], false);
 			if(sp==null)sender.sendMessage("§cCe joueur n'existe pas !");
 			else sender.sendMessage("§aMonnaie de "+sp.name+" : "+sp.getMoney());
 		}

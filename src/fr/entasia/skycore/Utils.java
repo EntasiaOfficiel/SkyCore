@@ -4,11 +4,9 @@ import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.SkyPlayer;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Utils {
 	public static final int ISSIZE = 400;

@@ -113,20 +113,21 @@ public class SkyPlayer {
 
 	public void setMoney(long m){
 		money=m;
-		functionA();
+		internalA();
 	}
 
 	public void addMoney(long m){
 		money+=m;
-		functionA();
+		internalA();
 	}
+
 
 	public void withdrawMoney(long m){
 		money-=m;
-		functionA();
+		internalA();
 	}
 
-	private void functionA(){
+	private void internalA(){
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_players SET money=? WHERE uuid=?", money, uuid);
 	}
 

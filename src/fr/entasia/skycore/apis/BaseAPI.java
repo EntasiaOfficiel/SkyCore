@@ -1,5 +1,6 @@
 package fr.entasia.skycore.apis;
 
+import fr.entasia.apis.utils.PlayerUtils;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
@@ -9,7 +10,9 @@ import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -23,22 +26,22 @@ public class BaseAPI {
 
 	// BORDEL
 
-	public static UUID parseArg(String str) {
+	private static UUID parseArg(String str, boolean exact) {
 		try{
 			return UUID.fromString(str);
 		}catch(IllegalArgumentException ignore){
-			OfflinePlayer p = Bukkit.getPlayer(str);
-			if(p==null){
-				p = Bukkit.getOfflinePlayer(str);
-				if(p==null)return null;
+			if(exact)return PlayerUtils.getUUID(str);
+			else{
+				OfflinePlayer p = Bukkit.getPlayer(str);
+				if(p==null) return PlayerUtils.getUUID(str);
 				else return p.getUniqueId();
-			}else return p.getUniqueId();
+			}
 		}
 	}
 
 
-	public static SkyPlayer getAutomatedSP(CommandSender p, String str) {
-		UUID uuid = parseArg(str);
+	public static SkyPlayer getArgSP(CommandSender p, String str, boolean exact) {
+		UUID uuid = parseArg(str, exact);
 		if(uuid==null)p.sendMessage("§cCe joueur n'existe pas ou n'est pas inscrit en Skyblock !");
 		else{
 			SkyPlayer sp = getSkyPlayer(uuid);

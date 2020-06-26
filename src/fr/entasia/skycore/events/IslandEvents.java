@@ -91,12 +91,12 @@ public class IslandEvents implements Listener {
 
 	@EventHandler
 	public void blockBreak(BlockBreakEvent e){
-		e.setCancelled(isBlockDenied(e.getPlayer(), e.getBlock()));
+		if(isBlockDenied(e.getPlayer(), e.getBlock())) e.setCancelled(true);
 	}
 
 	@EventHandler
 	public void blockPlace(BlockPlaceEvent e){
-		e.setCancelled(isBlockDenied(e.getPlayer(), e.getBlock()));
+		if(isBlockDenied(e.getPlayer(), e.getBlock())) e.setCancelled(true);
 	}
 
 

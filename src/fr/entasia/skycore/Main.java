@@ -60,7 +60,6 @@ public class Main extends JavaPlugin {
 					sql = new SQLConnection(main.getConfig().getString("sqluser"), "playerdata");
 				}
 			}
-
 			sqlite = new SQLConnection().sqlite("plugins/"+getName()+"/database.db");
 			sqlite.unsafeConnect();
 
@@ -79,9 +78,8 @@ public class Main extends JavaPlugin {
 
 			getCommand("baltop").setExecutor(new BaltopCommand());
 			getCommand("money").setExecutor(new MoneyCommand());
+			getCommand("pay").setExecutor(new PayCommand());
 			getCommand("eco").setExecutor(new EcoCommand());
-
-			getCommand("test").setExecutor(new TestCommand());
 
 			loadIslandStructs();
 
