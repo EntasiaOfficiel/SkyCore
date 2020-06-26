@@ -18,10 +18,7 @@ import fr.entasia.skycore.objs.islevel.BlockType;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
-import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -38,7 +35,7 @@ public class TerrainManager {
 	private static final BaseBlock bedrockBlock = FaweCache.getBlock(7, 0);
 	private static final BaseBlock airBlock = FaweCache.getBlock(0, 0);
 	public static HashMap<Material, BlockType> blockValues = new HashMap<>();
-	private static Random r = new Random();
+	private static final Random r = new Random();
 
 	private static int getRandom() {
 		int possibilities = Utils.ISSIZE - 30 - 20;
@@ -152,6 +149,7 @@ public class TerrainManager {
 				loc.mutZ(loc.getZ() + Utils.ISSIZE - 50);
 				break;
 		}
+		Bukkit.broadcastMessage("pasting at "+loc);
 		type.schems.structures[0].paste(session, loc, false);
 
 	}
@@ -175,11 +173,9 @@ public class TerrainManager {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				int internal=0;
 				Material m;
 				long points = 0;
 				for (ChunkSnapshot cs : chunks) {
-					internal++;
 					for (int x = 0; x <= 16; x++) {
 						for (int y = 0; y < 256; y++) {
 							for (int z = 0; z <= 16; z++) {

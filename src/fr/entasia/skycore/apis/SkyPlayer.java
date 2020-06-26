@@ -22,7 +22,6 @@ public class SkyPlayer {
 	// online stuff
 	public boolean islandChat = false;
 	public boolean generating = false;
-	public int endPortal=0;
 
 
 	// CONSTRUCTEURS

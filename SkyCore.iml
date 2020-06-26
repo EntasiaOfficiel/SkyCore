@@ -10,5 +10,6 @@
     <orderEntry type="library" name="spigot-1.12.2-2" level="project" />
     <orderEntry type="library" name="FAWE" level="project" />
     <orderEntry type="library" name="Libraries" level="project" />
+    <orderEntry type="library" name="WorldEdit" level="project" />
   </component>
 </module>
