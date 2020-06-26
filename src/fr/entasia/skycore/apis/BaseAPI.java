@@ -127,10 +127,10 @@ public class BaseAPI {
 			}
 		}
 
-		int minx = is.getMinXBuild();
-		int maxx = is.getMaxXBuild();
-		int minz = is.getMinZBuild();
-		int maxz = is.getMaxZBuild();
+		int minx = is.isid.getMinXTotal();
+		int maxx = is.isid.getMaxXTotal();
+		int minz = is.isid.getMinZTotal();
+		int maxz = is.isid.getMaxZTotal();
 
 		for (ISPLink link : is.getMembers()) {
 			link.setRank(MemberRank.DEFAULT);

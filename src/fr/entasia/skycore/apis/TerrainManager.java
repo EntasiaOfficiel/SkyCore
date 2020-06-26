@@ -151,6 +151,7 @@ public class TerrainManager {
 		}
 		Bukkit.broadcastMessage("pasting at "+loc);
 		type.schems.structures[0].paste(session, loc, false);
+		session.flushQueue();
 
 	}
 
