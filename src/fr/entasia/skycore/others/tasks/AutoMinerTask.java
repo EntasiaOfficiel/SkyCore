@@ -58,8 +58,10 @@ public class AutoMinerTask extends BukkitRunnable {
 
 			temp.clear();
 			for(AutoMiner am : miners){
-				if(toMine.contains(am.toBreak.getType())){
-					temp.add(am);
+				if(am.toBreak.getChunk().isLoaded()){
+					if(toMine.contains(am.toBreak.getType())){
+						temp.add(am);
+					}
 				}
 			}
 
