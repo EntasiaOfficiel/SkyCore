@@ -265,7 +265,7 @@ public class TerrainManager {
 		int j = 0;
 		WorldData wd = FaweAPI.getWorld(w.getName()).getWorldData();
 		AffineTransform transform = new AffineTransform();
-		for (int i = 0; i < 70; i++) {
+		for (int i = 0; i < 50; i++) {
 			loc.mutX(bloc.getX() + getRandom());
 			loc.mutZ(bloc.getZ() + getRandom());
 

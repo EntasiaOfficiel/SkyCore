@@ -205,8 +205,7 @@ public class IsCommand implements CommandExecutor {
 					case "kick":
 					case "demote":
 					case "promote": {
-						if (link.getRank().id < MemberRank.ADJOINT.id)
-							p.sendMessage("§cTu dois être au minimum adjoint pour gérer l'équipe de cette île !");
+						if (link.getRank().id < MemberRank.ADJOINT.id) p.sendMessage("§cTu dois être au minimum adjoint pour gérer l'équipe de cette île !");
 						else {
 							if (args.length < 2) p.sendMessage("§cMet un joueur en argument !");
 							else {
@@ -218,7 +217,7 @@ public class IsCommand implements CommandExecutor {
 										if (args[0].equals("invite")) {
 											if (targetLink == null) {
 												if (link.is.invitePlayer(target)) {
-													link.is.sendTeamMsg("§3" + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
+													link.is.sendTeamMsg(MemberRank.DEFAULT.getName()+ "§3" + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
 													if (target.p != null) {
 														target.p.sendMessage("§eTu as été invité sur l'île " + link.is.getNameOrID() + " par " + link.sp.name + " !");
 														sendInviteMsg(target.p, link.is);
@@ -240,10 +239,14 @@ public class IsCommand implements CommandExecutor {
 											switch (args[0]) {
 												case "kick": {
 													if (targetLink.getRank().id < link.getRank().id) {
-														if (link.is.removeMember(targetLink))
-															link.is.sendTeamMsg("§7" + targetLink.getName() + "§e à été expulsé de l'île par " + link.getName() + "§e !");
-															if(target.p!=null)target.p.sendMessage("§cTu as été exclu de l'île par §3"+link.sp.name+"§c !");
-														if(targetLink.sp.p!=null) targetLink.sp.p.teleport(Utils.spawn);
+														String n = targetLink.getName();
+														if (link.is.removeMember(targetLink)){
+															link.is.sendTeamMsg("§7" + n + "§e à été expulsé de l'île par " + link.getName() + "§e !");
+															if(target.isOnline()){
+																target.p.sendMessage("§cTu as été exclu de l'île par §3"+link.sp.name+"§c !");
+																target.p.teleport(Utils.spawn);
+															}
+														}
 														else p.sendMessage("§cUne erreur s'est produite !");
 													} else p.sendMessage("§cCette personne est trop haut gradée !");
 													break;
@@ -256,8 +259,7 @@ public class IsCommand implements CommandExecutor {
 															link.is.sendTeamMsg(targetLink.getName() + "§e à été promote par " + link.getName() + "§e !");
 														else p.sendMessage("§cUne erreur s'est produite !");
 													} else {
-														if (link.getRank() == MemberRank.CHEF)
-															p.sendMessage("§cCette personne est trop haut gradée !");
+														p.sendMessage("§cCette personne est trop haut gradée !");
 													}
 													break;
 												}

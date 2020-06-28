@@ -111,7 +111,6 @@ public class AutoMinerTask extends BukkitRunnable {
 
 								short dura = (short) (am.pickaxe.getDurability() + 2);
 								if (dura > am.pickaxe.getType().getMaxDurability()) {
-									am.hopper.setType(Material.AIR);
 									am.delete();
 									AutoMinerTask.miners.remove(am);
 									return true;
