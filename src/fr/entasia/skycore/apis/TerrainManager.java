@@ -149,7 +149,6 @@ public class TerrainManager {
 				loc.mutZ(loc.getZ() + Utils.ISSIZE - 50);
 				break;
 		}
-		Bukkit.broadcastMessage("pasting at "+loc);
 		type.schems.structures[0].paste(session, loc, false);
 		session.flushQueue();
 

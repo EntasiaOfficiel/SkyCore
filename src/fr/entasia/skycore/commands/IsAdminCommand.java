@@ -11,6 +11,36 @@ import org.bukkit.entity.Player;
 
 public class IsAdminCommand implements CommandExecutor {
 
+	private static void args(CommandSender sender){
+		sender.sendMessage("§cArguments disponibles : ");
+		sender.sendMessage("§4Joueurs :");
+		sender.sendMessage("§c- infop");
+		sender.sendMessage("§c- deletep");
+		sender.sendMessage("§4ïles :");
+		sender.sendMessage("§c- infois");
+		sender.sendMessage("§c- deleteis");
+		sender.sendMessage("§c- join");
+		sender.sendMessage("§c- quit");
+		sender.sendMessage("§c- setowner");
+		sender.sendMessage("§4Autres :");
+		sender.sendMessage("§c- help");
+	}
+
+
+	private static BaseIsland getIS(CommandSender sender, String[] args) {
+		if (args.length == 1) sender.sendMessage("§cMet un ID d'île !");
+		else {
+			ISID isid = ISID.parse(args[1]);
+			if (isid == null) sender.sendMessage("§cID d'ile invalide !");
+			else {
+				BaseIsland is = BaseAPI.getIsland(isid);
+				if (is == null) sender.sendMessage("§cIle non existante !");
+				else return is;
+			}
+		}
+		return null;
+	}
+
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 		if(!(sender instanceof Player))return true;
 		if(sender.hasPermission("restricted.isadmin")){
@@ -84,6 +114,7 @@ public class IsAdminCommand implements CommandExecutor {
 								else p.sendMessage("§4Erreur lors de la suppression du joueur !");
 							}
 						}
+						break;
 					}
 
 					case "deleteis":{
@@ -110,45 +141,57 @@ public class IsAdminCommand implements CommandExecutor {
 
 					// TEAM UTILS
 
-					case "join":case "kick":case "setowner":{
-						if(args.length==1)p.sendMessage("§cMet un ID d'île !");
-						else {
-							ISID isid = ISID.parse(args[1]);
-							if (isid == null) p.sendMessage("§cID d'ile invalide !");
+					case "setrange":{
+						BaseIsland is = getIS(sender, args);
+						if(is!=null){
+							byte range;
+							try{
+								if(args.length==2)throw new NumberFormatException();
+								range = Byte.parseByte(args[2]);
+								if(range<0||range>3)throw new NumberFormatException();
+							}catch(NumberFormatException ignore){
+								p.sendMessage("§cMet un nombre entre 0 et 3 !");
+								return true;
+							}
+							is.setExtension(range);
+							p.sendMessage("§aNouvelle extension de l'île définie à "+range+" !");
+						}
+					}
+					case "join":{
+					}
+					case "kick":{
+					}
+					case "setowner":{
+						BaseIsland is = getIS(sender, args);
+						if(is!=null){
+							if(args.length==2)p.sendMessage("§cMet un joueur !");
 							else{
-								BaseIsland is = BaseAPI.getIsland(isid);
-								if (is == null) p.sendMessage("§cIle non existante !");
-								else {
-									if(args.length==2)p.sendMessage("§cMet un joueur !");
-									else{
-										SkyPlayer target = BaseAPI.getArgSP(sender, args[1], false);
-										if(target!=null){
-											ISPLink newLink = target.getIsland(is.isid);
-											switch(args[0]){
-												case "join":{
-													if(newLink==null){
-														if(is.addMember(target, MemberRank.RECRUE))p.sendMessage("§aSuccès !");
-														else p.sendMessage("§cUne erreur est survenue !");
-													}else p.sendMessage("§cCe joueur est déja membre sur cette île !");
-													break;
-												}
-												case "kick":{
-													if(newLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-													else{
-														if(is.removeMember(newLink))p.sendMessage("§aSuccès !");
-														else p.sendMessage("§cUne erreur est survenue !");
-													}
-													break;
-												}
-												case "setowner":{
-													if(newLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-													else {
-														if (is.reRankMember(newLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
-														else p.sendMessage("§cUne erreur est survenue !");
-													}
-													break;
-												}
+								SkyPlayer target = BaseAPI.getArgSP(sender, args[1], false);
+								if(target!=null){
+									ISPLink newLink = target.getIsland(is.isid);
+									switch(args[0]){
+										case "join":{
+											if(newLink==null){
+												if(is.addMember(target, MemberRank.RECRUE))p.sendMessage("§aSuccès !");
+												else p.sendMessage("§cUne erreur est survenue !");
+											}else p.sendMessage("§cCe joueur est déja membre sur cette île !");
+											break;
+										}
+										case "kick":{
+											if(newLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+											else{
+												if(is.removeMember(newLink))p.sendMessage("§aSuccès !");
+												else p.sendMessage("§cUne erreur est survenue !");
 											}
+											break;
+										}
+										case "setowner":{
+											if(newLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+											else {
+												if (is.reRankMember(newLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
+												else p.sendMessage("§cUne erreur est survenue !");
+											}
+											break;
 										}
 									}
 								}
@@ -159,17 +202,14 @@ public class IsAdminCommand implements CommandExecutor {
 
 
 					// AUTRES
-
-
 					case "help": {
-						p.sendMessage("§cArguments disponibles : " +
-							"\n- help" +
-							"\n- infop <joueur>" +
-							"\n- infois <ile>");
+						args(sender);
+
 						break;
 					}
 					default:{
 						p.sendMessage("§cL'argument "+args[0]+" n'existe pas !");
+						args(sender);
 						break;
 					}
 				}
