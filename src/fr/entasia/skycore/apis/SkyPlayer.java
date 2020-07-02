@@ -1,6 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
+import fr.entasia.skycore.others.SkyblockException;
 import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.entity.Player;
 
@@ -112,23 +113,18 @@ public class SkyPlayer {
 	}
 
 	public void setMoney(long m){
+		if(m<0) throw new SkyblockException("tried to set negative money");
 		money=m;
-		internalA();
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_players SET money=? WHERE uuid=?", money, uuid);
 	}
 
 	public void addMoney(long m){
-		money+=m;
-		internalA();
+		setMoney(money+m);
 	}
 
 
 	public void withdrawMoney(long m){
-		money-=m;
-		internalA();
-	}
-
-	private void internalA(){
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_players SET money=? WHERE uuid=?", money, uuid);
+		setMoney(money-m);
 	}
 
 	public ArrayList<BaseIsland> getInvites(){
