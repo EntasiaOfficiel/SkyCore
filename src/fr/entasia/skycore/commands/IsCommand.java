@@ -217,7 +217,7 @@ public class IsCommand implements CommandExecutor {
 										if (args[0].equals("invite")) {
 											if (targetLink == null) {
 												if (link.is.invitePlayer(target)) {
-													link.is.sendTeamMsg(MemberRank.DEFAULT.getName()+ "§3" + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
+													link.is.sendTeamMsg(MemberRank.DEFAULT.getName()+ "§3 " + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
 													if (target.p != null) {
 														target.p.sendMessage("§eTu as été invité sur l'île " + link.is.getNameOrID() + " par " + link.sp.name + " !");
 														sendInviteMsg(target.p, link.is);

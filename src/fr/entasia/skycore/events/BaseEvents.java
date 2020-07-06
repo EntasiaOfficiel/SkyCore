@@ -74,12 +74,17 @@ public class BaseEvents implements Listener {
 		if (!Dimensions.isIslandWorld(p.getWorld())) return;
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 		else{
-			if (e.getCause() == EntityDamageEvent.DamageCause.FALL)
-				e.setDamage(e.getDamage() / 2);
+			if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
+		}
+	}
+
+	public static void onDamage(EntityDamageEvent e){
+		if(e.getEntity() instanceof Player){
+			Player p = (Player) e.getEntity();
 			if (e.getFinalDamage() >= p.getHealth()) {
 				e.setCancelled(true);
 				p.sendMessage("§c§kn§cTu es mort !§kn");
-				for(PotionEffect pe : p.getActivePotionEffects()){
+				for (PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());
 				}
 				p.setMaxHealth(20);

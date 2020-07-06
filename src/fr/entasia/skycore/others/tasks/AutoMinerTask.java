@@ -91,7 +91,7 @@ public class AutoMinerTask extends BukkitRunnable {
 						else if (am.hopper.getType() == Material.HOPPER) {
 
 
-							if(am.hopper.getRelative(BlockFace.DOWN).getType().isTransparent()){
+							if(am.hopper.getRelative(BlockFace.DOWN).getType().isSolid()){
 								Location loc = am.hopper.getLocation();
 								BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(loc));
 								String sloc = "§cxyz : §6"+loc.getBlockX()+"§c;§6"+loc.getBlockY()+"§c;§6"+loc.getBlockZ();
