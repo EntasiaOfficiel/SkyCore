@@ -16,8 +16,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.*;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -98,6 +99,31 @@ public class IslandEvents implements Listener {
 	public void blockPlace(BlockPlaceEvent e){
 		if(isBlockDenied(e.getPlayer(), e.getBlock())) e.setCancelled(true);
 	}
+
+	@EventHandler
+	public void damageEvent(EntityDamageEvent e){
+		if(e.getEntity() instanceof Player){
+			if(e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Utils.spawnWorld.getName())) e.setCancelled(true);
+		}
+
+	}
+
+	@EventHandler
+	public void InteractEvent(PlayerInteractEvent e){
+		if(e.getAction() != Action.PHYSICAL ){
+			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+				if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.BOW){
+					e.setCancelled(false);
+					return;
+				}
+			}
+
+
+			if(e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Utils.spawnWorld.getName())) e.setCancelled(true);
+		}
+	}
+
+
 
 
 	private static String checkIs(BaseIsland is, Player p){ // temporaire ?
