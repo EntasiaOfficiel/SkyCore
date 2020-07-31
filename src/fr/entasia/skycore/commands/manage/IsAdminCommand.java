@@ -49,7 +49,7 @@ public class IsAdminCommand implements CommandExecutor {
 
 			Player p = ((Player)sender);
 			SkyPlayer sp = BaseAPI.getSkyPlayer(p.getUniqueId());
-			if (args.length==0)p.sendMessage("§cFait /isadmin help pour voir la liste des commandes !");
+			if (args.length==0)p.sendMessage("§cFait /isadmin help pour voir la liste des arguments !");
 			else{
 				args[0] = args[0].toLowerCase();
 				switch (args[0]) {
@@ -100,7 +100,7 @@ public class IsAdminCommand implements CommandExecutor {
 								p.sendMessage("§8Dimensions :");
 								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));
 								p.sendMessage("§7End : §b"+is.hasDimension(Dimensions.END));
-								p.sendMessage("§8Autres");
+								p.sendMessage("§8Autres :");
 								p.sendMessage("§7Mineurs : §b"+is.autominers.size());
 							}
 						}
