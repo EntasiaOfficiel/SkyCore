@@ -91,21 +91,20 @@ public class AutoMinerTask extends BukkitRunnable {
 						else if (am.hopper.getType() == Material.HOPPER) {
 
 
-							if(am.hopper.getRelative(BlockFace.DOWN).getType().isSolid()){
+							if(!am.hopper.getRelative(BlockFace.DOWN).getType().isSolid()){
 								Location loc = am.hopper.getLocation();
 								BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(loc));
 								String sloc = "§cxyz : §6"+loc.getBlockX()+"§c;§6"+loc.getBlockY()+"§c;§6"+loc.getBlockZ();
 								if(is==null){
 									ServerUtils.permMsg("log.autominer", "§cUn Autominer à un block transparent au dessous de lui !"+
-											"(Cela cause du lag)\n"+ sloc+"§c. Monde "+loc.getWorld().getName());
+											" (Cela cause du lag)\n"+ sloc+"§c. Monde "+loc.getWorld().getName());
 								}else{
 									is.sendTeamMsg("§cUn Autominer à un block transparent au dessous de lui !"+
-											"(Cela cause du lag)\n"+ sloc+"§c. Dimension : §6"+loc.getWorld().getEnvironment().name());
+											" (Cela cause du lag)\n"+ sloc+"§c. Dimension : §6"+loc.getWorld().getEnvironment().name());
 								}
 							}
 
 							if (toMine.contains(am.toBreak.getType())) {
-								System.out.println("broken "+am.toBreak.getType());
 								am.toBreak.breakNaturally(am.pickaxe);
 								//							CraftBlock b;
 								//							b.setType();
