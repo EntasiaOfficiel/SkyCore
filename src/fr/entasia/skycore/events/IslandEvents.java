@@ -43,38 +43,23 @@ public class IslandEvents implements Listener {
 	public void interact(PlayerInteractEvent e){
 		Player p = e.getPlayer();
 		if(Dimensions.isIslandWorld(p.getWorld())&&e.hasBlock()){
-			if(p.hasPermission("skyblock.isprotect.bypass")&&p.getGameMode()==GameMode.CREATIVE)return;
 			Block b = e.getClickedBlock();
-			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
 			if(e.getAction()==Action.RIGHT_CLICK_BLOCK){
 				if(containers.contains(b.getType())){
-					if(is==null)e.setCancelled(true);
-					else{
-						ISPLink link = is.getMember(p.getUniqueId());
-						if(link==null) {
-							p.sendMessage("§cTu ne peux pas ouvrir les containers sur cette ile !");
-							e.setCancelled(true);
-						}else if(link.getRank() == MemberRank.RECRUE) {
-							p.sendMessage("§cTu es seulement une recrue sur cette ile ! Tu ne peux pas interagir avec les containers");
-							e.setCancelled(true);
-						}
-					}
+					if(isBlockDenied(p, b))e.setCancelled(true);
 				}
 			}
 		} // on bloque pas les interactions dans les autres mondes (pour le moment ?)
 	}
 
 	public static boolean isBlockDenied(Player p, Block b){
-		if(Utils.masterEditors.contains(p))return false;
+		if(Utils.masterEditors.contains(p)&&p.getGameMode()==GameMode.CREATIVE)return false;
 		if(Dimensions.isIslandWorld(p.getWorld())) {
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
-			if (p.hasPermission("skyblock.isprotect.bypass") && p.getGameMode() == GameMode.CREATIVE) return false;
 			if (is != null) {
 				ISPLink link = is.getMember(p.getUniqueId());
-				if (link == null) {
-					p.sendMessage("§cTu ne peux pas casser de blocks sur cette ile !");
-					;
-				} else {
+				if (link == null) p.sendMessage("§cTu ne peux pas casser de blocks sur cette ile !");
+				else {
 					if (is.hasDimension(Dimensions.getDimension(p.getWorld()))) {
 						int m = is.isid.distanceFromIS(b.getLocation());
 						if ((is.getExtension() + 1) * 50 <= m) {
@@ -82,8 +67,7 @@ public class IslandEvents implements Listener {
 						} else if (link.getRank() == MemberRank.RECRUE && containers.contains(b.getType())) {
 							p.sendMessage("§cTu es seulement une recrue sur cette ile ! Tu ne peux pas intéragir avec les containers");
 						} else return false;
-					} else
-						p.sendMessage("§Ton île n'a pas encore débloqué cette dimension ! Utilise un portail pour la débloquer");
+					} else p.sendMessage("§Ton île n'a pas encore débloqué cette dimension ! Utilise un portail pour la débloquer");
 				}
 			}
 		}

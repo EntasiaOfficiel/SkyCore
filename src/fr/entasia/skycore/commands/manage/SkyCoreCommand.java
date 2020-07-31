@@ -1,4 +1,4 @@
-package fr.entasia.skycore.commands;
+package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
@@ -13,7 +13,7 @@ public class SkyCoreCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 		if(!(sender instanceof Player))return true;
-		if(sender.hasPermission("plugin.skytools")){
+		if(sender.hasPermission("plugin.skycore")){
 			Player p = (Player)sender;
 			if(args.length==0){
 				p.sendMessage("§cMet un argument !");
@@ -38,13 +38,6 @@ public class SkyCoreCommand implements CommandExecutor {
 						p.sendMessage("§cSauvegardes SQL désactivées !");
 
 					}else p.sendMessage("§cArgument invalide !");
-				}else if(args[0].equalsIgnoreCase("masteredit")){
-					if(Utils.masterEditors.remove(p)){
-						p.sendMessage("§eMaster editor §cDésactivé §e!");
-					}else{
-						Utils.masterEditors.add(p);
-						p.sendMessage("§eMaster editor §aActivé §e!");
-					}
 				}else {
 					p.sendMessage("§cArgument invalide ! Arguments disponibles :");
 					showArgs(sender);
@@ -57,6 +50,5 @@ public class SkyCoreCommand implements CommandExecutor {
 	private static void showArgs(CommandSender sender){
 		sender.sendMessage("§c- reload");
 		sender.sendMessage("§c- sql");
-		sender.sendMessage("§c- masteredit");
 	}
 }

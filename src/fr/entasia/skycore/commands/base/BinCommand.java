@@ -1,4 +1,4 @@
-package fr.entasia.skycore.commands;
+package fr.entasia.skycore.commands.base;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

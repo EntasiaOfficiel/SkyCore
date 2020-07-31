@@ -1,4 +1,4 @@
-package fr.entasia.skycore.commands;
+package fr.entasia.skycore.commands.base;
 
 import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.utils.TextUtils;
@@ -19,8 +19,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static fr.entasia.skycore.commands.IsCmdUtils.*;
-//import static fr.entasia.skycore.commands.IsCmdUtils.*;
+import static fr.entasia.skycore.commands.base.IsCmdUtils.*;
+//import static fr.entasia.skycore.commands.base.IsCmdUtils.*;
 
 public class IsCommand implements CommandExecutor {
 

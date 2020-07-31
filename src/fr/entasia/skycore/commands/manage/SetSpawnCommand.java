@@ -1,4 +1,4 @@
-package fr.entasia.skycore.commands;
+package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;

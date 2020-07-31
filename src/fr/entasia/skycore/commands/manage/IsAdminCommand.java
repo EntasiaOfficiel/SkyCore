@@ -1,4 +1,4 @@
-package fr.entasia.skycore.commands;
+package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.objs.CodePasser;

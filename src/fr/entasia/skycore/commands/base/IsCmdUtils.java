@@ -1,4 +1,4 @@
-package fr.entasia.skycore.commands;
+package fr.entasia.skycore.commands.base;
 
 import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.skycore.apis.BaseIsland;
