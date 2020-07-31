@@ -4,7 +4,6 @@ import fr.entasia.apis.other.CodePasser;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

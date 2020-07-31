@@ -106,7 +106,7 @@ public class IsMenus {
 	// MENU CHOISIR IS PAR DEFAUT
 
 
-	private static final MenuCreator chooseDefaultIsland = new MenuCreator(null, null) {
+	private static final MenuCreator islandsListMenu = new MenuCreator(null, null) {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -120,9 +120,10 @@ public class IsMenus {
 		}
 	};
 
-	public static void chooseDefaultIslandOpen(SkyPlayer sp){
+	public static void openIslandsList(SkyPlayer sp, String name){
 		HashMap<Integer, ISPLink> tracker = new HashMap<>();
-		Inventory inv = chooseDefaultIsland.createInv(3, "§6Quelle île ?", tracker);
+		if(name==null)name = "§6Liste de tes îles :";
+		Inventory inv = islandsListMenu.createInv(3, name, tracker);
 
 		int j = 10;
 		ArrayList<String> list;

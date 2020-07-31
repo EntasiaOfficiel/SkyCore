@@ -1,6 +1,5 @@
 package fr.entasia.skycore.commands.base;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.TextUtils;
@@ -38,7 +37,7 @@ public class IsCommand implements CommandExecutor {
 			if (sp.getIslands().size()==0) IsMenus.startIslandChooseOpen(sp);
 			else if(link==null) {
 				p.sendMessage("§cTu dois d'abord choisir une île préférée pouvoir choisir ces options ! (On ne sait pas de laquelle tu parles !)");
-				IsMenus.chooseDefaultIslandOpen(sp);
+				IsMenus.openIslandsList(sp, "§6Quelle île ?");
 			}else IsMenus.baseIslandOpen(link);
 			return true;
 		}
@@ -46,7 +45,7 @@ public class IsCommand implements CommandExecutor {
 		switch (args[0]) {
 			case "dis":
 			case "defaultis":{
-				IsMenus.chooseDefaultIslandOpen(sp);
+				IsMenus.openIslandsList(sp, null);
 				break;
 			}
 
@@ -404,10 +403,10 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage("§e- help §6Pour voir cette liste. Très surprenant.");
 						p.sendMessage("§bCommandes d'équipe :");
 						p.sendMessage("§e- team §6pour voir l'équipe de ton île");
-						p.sendMessage("  §e- invite §6pour inviter un joueur sur l'île");
-						p.sendMessage("  §e- kick §6pour exclure un membre de l'île");
-						p.sendMessage("  §e- promote §6pour augmenter le grade d'un membre");
-						p.sendMessage("  §e- demote §6pour diminuer le grade d'un membre");
+						p.sendMessage("§e- invite §6pour inviter un joueur sur l'île");
+						p.sendMessage("§e- kick §6pour exclure un membre de l'île");
+						p.sendMessage("§e- promote §6pour augmenter le grade d'un membre");
+						p.sendMessage("§e- demote §6pour diminuer le grade d'un membre");
 						p.sendMessage("§cCommandes dangereuses :");
 						p.sendMessage("§e- setowner §6pour changer la propriété de l'île");
 						p.sendMessage("§e- delete §6pour supprimer l'île");
