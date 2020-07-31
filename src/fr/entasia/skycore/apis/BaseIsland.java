@@ -2,10 +2,10 @@ package fr.entasia.skycore.apis;
 
 
 import fr.entasia.apis.other.ChatComponent;
+import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.Serialization;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.objs.AutoMiner;
-import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
@@ -167,7 +167,7 @@ public class BaseIsland {
 
 	private static final int time = 5*60*1000;
 
-	public int updateLvl(CodePasser.Void code){
+	public int updateLvl(CodePasser.None code){
 		long a = System.currentTimeMillis() - lvlCooldown;
 		if(a < time)return (int) (time-a)/1000;
 		else {
@@ -388,6 +388,7 @@ public class BaseIsland {
 
 	public void setExtension(byte extension){
 		this.extension = extension;
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET extension=? WHERE x=? and z=?", extension, isid.x, isid.z);
 	}
 
 
@@ -397,12 +398,12 @@ public class BaseIsland {
 
 	public void addBank(long m){
 		bank+=m;
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank+=? WHERE x=?, and z=?", m, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank+=? WHERE x=? and z=?", m, isid.x, isid.z);
 	}
 
 	public void withdrawBank(long m){
 		bank-=m;
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=?, and z=?", m, isid.x, isid.z);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=? and z=?", m, isid.x, isid.z);
 	}
 
 	public void tryLoad(){

@@ -2,13 +2,18 @@ package fr.entasia.skycore.invs;
 
 import fr.entasia.apis.menus.MenuClickEvent;
 import fr.entasia.apis.menus.MenuCreator;
+import fr.entasia.apis.other.InstantFirework;
+import fr.entasia.apis.other.ItemBuilder;
 import fr.entasia.apis.utils.ItemUtils;
 import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.SkyPlayer;
 import fr.entasia.skycore.apis.TerrainManager;
+import fr.entasia.skycore.objs.isutils.Extensions;
 import fr.entasia.skycore.others.enums.IslandType;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -105,7 +110,7 @@ public class IsMenus {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
-			ISPLink chosen = (ISPLink) ((HashMap)e.data).get(e.slot);
+			ISPLink chosen = ((HashMap<Integer, ISPLink>)e.data).get(e.slot); // laisse
 			if(chosen==null)e.player.sendMessage("§cUne erreur est survenue lors du choix de l'île par défaut !");
 			else{
 				chosen.sp.setDefaultIS(chosen.is.isid);
@@ -152,8 +157,8 @@ public class IsMenus {
 					manageTeamOpen(link);
 					break;
 				}
-				case BOOK:{
-					e.player.sendMessage("§cCette option n'est pas encore prête !");
+				case REDSTONE_BLOCK:{
+					upgradeOpen(link);
 					// A FAIRE
 					break;
 				}
@@ -161,7 +166,7 @@ public class IsMenus {
 					if(e.item.getType()==link.is.type.door){
 						e.player.teleport(link.is.getHome());
 						e.player.sendMessage("§eTu as été téléporté à ton île !");
-					}
+					}else e.player.sendMessage("§cCette option n'est pas encore prête !");
 					break;
 				}
 			}
@@ -216,6 +221,12 @@ public class IsMenus {
 		item.setItemMeta(meta);
 		inv.setItem(33, item);
 
+		item = new ItemStack(Material.REDSTONE_BLOCK);
+		meta = item.getItemMeta();
+		meta.setDisplayName("§6Améliorations de l'île");
+		item.setItemMeta(meta);
+		inv.setItem(34, item);
+
 		link.sp.p.openInventory(inv);
 	}
 
@@ -248,11 +259,68 @@ public class IsMenus {
 			i++;
 		}
 
-		ItemStack item = new ItemStack(Material.BOOK_AND_QUILL);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName("§cRetour au menu précédent");
-		item.setItemMeta(meta);
-		inv.setItem(26, item);
+		ItemBuilder item = new ItemBuilder(Material.BOOK_AND_QUILL).name("§cRetour au menu précédent");
+		inv.setItem(26, item.build());
+
+		link.sp.p.openInventory(inv);
+	}
+
+	private static final MenuCreator upgradeMenu = new MenuCreator(null, null) {
+
+		@Override
+		public void onMenuClick(MenuClickEvent e) {
+			ISPLink link = (ISPLink)e.data;
+			if(e.item.getType()==Material.BOOK_AND_QUILL) baseIslandOpen(link);
+			else{
+				e.player.closeInventory();
+				Extensions[] list = Extensions.values();
+				Extensions u;
+				for(int i=0;i<list.length;i++){
+					u = list[i];
+					if(e.item.getType() == u.type){
+						if(link.is.getExtension()>=i){
+							e.player.sendMessage("§cTu as déja acquis cette extension !");
+							return;
+						}
+						if(link.is.getLevel()<u.minlvl){
+							e.player.sendMessage("§cLe niveau de ton île est insuffisant ! Niveau demandé : §4"+u.minlvl+"§c. Niveau de ton île : §4"+link.is.getLevel());
+							return;
+						}
+						if(link.sp.getMoney()>=u.price)link.sp.withdrawMoney(u.price);
+						else if(link.is.getBank()>=u.price)link.is.withdrawBank(u.price);
+						else{
+							e.player.sendMessage("§cTu n'as pas assez de monnaie ! Monnaie demandée pour l'amélioration : §4"+u.price+"§c$");
+							return;
+						}
+						link.is.setExtension((byte) (link.is.getExtension()+1));
+						InstantFirework.explode(e.player.getLocation(), FireworkEffect.builder().withColor(Color.BLUE, Color.GREEN).withFade(Color.MAROON, Color.RED).flicker(true).build());
+						e.player.sendMessage("§aTon île à été améliorée avec succès ! :D");
+						return;
+					}
+				}
+			}
+		}
+	};
+
+	public static void upgradeOpen(ISPLink link){
+		Inventory inv = upgradeMenu.createInv(4, "§6Amélioration de l'île :", link);
+
+
+		ItemBuilder item = new ItemBuilder(Material.PAPER).name("§cKeskecé ?").lore("§3Ceci te sert à améliorer la zone de construction de ton île.",
+				"§3Regarde les descriptions des 4 blocks ci dessous pour avoir les prix/prérequis pour les améliorations :)");
+		inv.setItem(13, item.build());
+
+		Extensions[] list = Extensions.values();
+		for(int i=0;i<list.length;i++){
+			item = new ItemBuilder(list[i].type).name(list[i].name).lore(list[i].lore);
+			if(link.is.getExtension()>=i){
+				item.fakeEnchant();
+			}
+			inv.setItem(list[i].slot, item.build());
+		}
+
+		item = new ItemBuilder(Material.BOOK_AND_QUILL).name("§cRetour au menu précédent");
+		inv.setItem(35, item.build());
 
 		link.sp.p.openInventory(inv);
 	}

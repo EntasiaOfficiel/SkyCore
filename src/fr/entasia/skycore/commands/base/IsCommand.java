@@ -1,12 +1,13 @@
 package fr.entasia.skycore.commands.base;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import fr.entasia.apis.other.ChatComponent;
+import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.invs.IsMenus;
-import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -179,7 +180,7 @@ public class IsCommand implements CommandExecutor {
 					case "level":
 					case "lvl":{
 
-						int a = link.is.updateLvl( new CodePasser.Void() {
+						int a = link.is.updateLvl( new CodePasser.None() {
 							@Override
 							public void run() {
 								p.sendMessage("§aNiveau de l'île : "+link.is.getLevel());
@@ -365,9 +366,9 @@ public class IsCommand implements CommandExecutor {
 											confirmDelete.remove(p);
 											if (co.is.isid.equals(is.isid)) {
 												p.sendMessage("§cSuppression de l'île " + is.isid.x + ";" + is.isid.z + " en cours...");
-												BaseAPI.deleteIsland(is, new CodePasser.Bool() {
+												BaseAPI.deleteIsland(is, new CodePasser.Arg<Boolean>() {
 													@Override
-													public void run(boolean err) {
+													public void run(Boolean err) {
 														if(err)p.sendMessage("§cîle supprimée avec succès !");
 														else p.sendMessage("§cUne erreur est survenue !");
 													}

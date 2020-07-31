@@ -1,9 +1,10 @@
 package fr.entasia.skycore.commands.manage;
 
+import fr.entasia.apis.other.CodePasser;
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,12 +17,13 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§4Joueurs :");
 		sender.sendMessage("§c- infop");
 		sender.sendMessage("§c- deletep");
-		sender.sendMessage("§4ïles :");
+		sender.sendMessage("§4Îles :");
 		sender.sendMessage("§c- infois");
 		sender.sendMessage("§c- deleteis");
 		sender.sendMessage("§c- join");
-		sender.sendMessage("§c- quit");
+		sender.sendMessage("§c- kick");
 		sender.sendMessage("§c- setowner");
+		sender.sendMessage("§c- setrange");
 		sender.sendMessage("§4Autres :");
 		sender.sendMessage("§c- help");
 	}
@@ -93,11 +95,13 @@ public class IsAdminCommand implements CommandExecutor {
 								for(ISPLink ll : link.is.getSortedMembers()){
 									p.sendMessage("§8- §b"+ll.getName());
 								}
-								p.sendMessage("§7Mineurs : §b"+is.autominers.size());
+								p.sendMessage("§7Extension : §bNiveau "+is.getExtension()+1+" §7("+is.getExtension()+"/3)");
 								p.sendMessage("§7Niveau : §b" + is.getLevel());
 								p.sendMessage("§8Dimensions :");
 								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));
 								p.sendMessage("§7End : §b"+is.hasDimension(Dimensions.END));
+								p.sendMessage("§8Autres");
+								p.sendMessage("§7Mineurs : §b"+is.autominers.size());
 							}
 						}
 						break;
@@ -126,9 +130,9 @@ public class IsAdminCommand implements CommandExecutor {
 								BaseIsland is = BaseAPI.getIsland(isid);
 								if (is == null) p.sendMessage("§cIle non existante !");
 								else {
-									BaseAPI.deleteIsland(is, new CodePasser.Bool() {
+									BaseAPI.deleteIsland(is, new CodePasser.Arg<Boolean>() {
 										@Override
-										public void run(boolean err) {
+										public void run(Boolean err) {
 											if(err)p.sendMessage("§cUne erreur s'est produite lors de la suppression de l'île !");
 											else p.sendMessage("§cîle supprimé avec succès !");
 										}
@@ -156,11 +160,10 @@ public class IsAdminCommand implements CommandExecutor {
 							is.setExtension(range);
 							p.sendMessage("§aNouvelle extension de l'île définie à "+range+" !");
 						}
+						break;
 					}
-					case "join":{
-					}
-					case "kick":{
-					}
+					case "join":
+					case "kick":
 					case "setowner":{
 						BaseIsland is = getIS(sender, args);
 						if(is!=null){

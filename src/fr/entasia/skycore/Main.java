@@ -10,7 +10,7 @@ import fr.entasia.skycore.commands.manage.SetSpawnCommand;
 import fr.entasia.skycore.commands.manage.SkyCoreCommand;
 import fr.entasia.skycore.events.*;
 import fr.entasia.skycore.objs.IslandShematics;
-import fr.entasia.skycore.objs.islevel.BlockType;
+import fr.entasia.skycore.objs.isutils.BlockType;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.tasks.AutoMinerTask;

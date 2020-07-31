@@ -9,16 +9,19 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.registry.WorldData;
+import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.objs.IslandShematics;
-import fr.entasia.skycore.objs.islevel.BlockType;
+import fr.entasia.skycore.objs.isutils.BlockType;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
-import org.bukkit.*;
+import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -103,7 +106,7 @@ public class TerrainManager {
 					new BukkitRunnable() {
 						@Override
 						public void run() {
-							calcPoints(link.is, new CodePasser.Void() {
+							calcPoints(link.is, new CodePasser.None() {
 								@Override
 								public void run() {
 									link.is.setMalus((int) link.is.rawpoints);
@@ -166,7 +169,7 @@ public class TerrainManager {
 		genBaseDimension(isid, session, Dimensions.END.world, Dimensions.END.schems);
 	}
 
-	protected static void calcPoints(BaseIsland is, CodePasser.Void code){
+	protected static void calcPoints(BaseIsland is, CodePasser.None code){
 		ServerUtils.wantMainThread();
 		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimensions.OVERWORLD);
 

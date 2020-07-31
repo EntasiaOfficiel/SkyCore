@@ -1,4 +1,4 @@
-package fr.entasia.skycore.objs.islevel;
+package fr.entasia.skycore.objs.isutils;
 
 import java.util.HashMap;
 

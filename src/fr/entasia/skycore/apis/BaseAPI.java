@@ -1,18 +1,16 @@
 package fr.entasia.skycore.apis;
 
+import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.PlayerUtils;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.objs.CodePasser;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -121,7 +119,7 @@ public class BaseAPI {
 	}
 	// DELETE
 
-	public static void deleteIsland(BaseIsland is, CodePasser.Bool code){
+	public static void deleteIsland(BaseIsland is, CodePasser.Arg<Boolean> code){
 		ServerUtils.wantMainThread();
 		if(InternalAPI.SQLEnabled()){
 			if(Main.sql.fastUpdate("DELETE FROM sky_islands WHERE x=? AND z=?", is.isid.x, is.isid.z)==-1||
