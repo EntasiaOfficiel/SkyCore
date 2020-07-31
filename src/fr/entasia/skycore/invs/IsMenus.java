@@ -115,7 +115,7 @@ public class IsMenus {
 			else{
 				chosen.sp.setDefaultIS(chosen.is.isid);
 				e.player.closeInventory();
-				e.player.sendMessage("§aIle choisie avec succès !");
+				e.player.sendMessage("§aÎle par défaut choisie avec succès !");
 			}
 		}
 	};
@@ -135,6 +135,12 @@ public class IsMenus {
 			list.add("§eID: "+link.is.isid.str());
 			if(link.is.getName()!=null)list.add("§eNom : "+link.is.getName());
 			list.add("§eRang: "+link.getName());
+			list.add("");
+			if(link.sp.getDefaultIS()==link){
+				list.add("§2île par défaut actuelle !");
+			}else{
+				list.add("§aClique pour définir en île par défaut !");
+			}
 			meta.setLore(list);
 			item.setItemMeta(meta);
 			inv.setItem(j, item);

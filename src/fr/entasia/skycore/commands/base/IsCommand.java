@@ -44,7 +44,7 @@ public class IsCommand implements CommandExecutor {
 		args[0] = args[0].toLowerCase();
 		switch (args[0]) {
 			case "dis":
-			case "defaultis":{
+			case "list":{
 				IsMenus.openIslandsList(sp, null);
 				break;
 			}
@@ -399,7 +399,7 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage("§bCommandes de bases :");
 						p.sendMessage("§e- go/home [numero] §6pour te téléporter à ton île");
 						p.sendMessage("§e- chat §6pour parler avec les membres de l'île");
-						p.sendMessage("§e- defaultis §6choisit l'île par défaut pour tes commandes");
+						p.sendMessage("§e- list §6Voir tes îles, et choisir l'île par défaut");
 						p.sendMessage("§e- help §6Pour voir cette liste. Très surprenant.");
 						p.sendMessage("§bCommandes d'équipe :");
 						p.sendMessage("§e- team §6pour voir l'équipe de ton île");
