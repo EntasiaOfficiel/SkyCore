@@ -23,7 +23,4 @@ public class Utils {
 	public static ArrayList<SkyPlayer> onlineSPCache = new ArrayList<>();
 
 
-	public static boolean isMasterEdit(Player p){
-		return p.getGameMode()== GameMode.CREATIVE&&masterEditors.contains(p);
-	}
 }

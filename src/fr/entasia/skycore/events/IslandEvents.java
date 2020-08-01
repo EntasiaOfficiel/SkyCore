@@ -1,10 +1,7 @@
 package fr.entasia.skycore.events;
 
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.apis.BaseAPI;
-import fr.entasia.skycore.apis.BaseIsland;
-import fr.entasia.skycore.apis.CooManager;
-import fr.entasia.skycore.apis.ISPLink;
+import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import org.bukkit.GameMode;
@@ -102,7 +99,7 @@ public class IslandEvents implements Listener {
 					return;
 				}
 			}
-			if(!Utils.isMasterEdit(e.getPlayer())){
+			if(!OthersAPI.isMasterEdit(e.getPlayer())){
 				e.setCancelled(true);
 			}
 		}
