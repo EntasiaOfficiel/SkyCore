@@ -143,7 +143,6 @@ public class IsCommand implements CommandExecutor {
 										ISPLink newLink = list.get(index-1);
 										p.setFallDistance(0);
 										p.teleport(newLink.is.getHome());
-										p.setFallDistance(0);
 										p.sendMessage("§6Tu as été téléporté à ton île n° "+index+" !");
 									}
 								}
@@ -151,6 +150,7 @@ public class IsCommand implements CommandExecutor {
 								p.sendMessage("§cCe numéro d'île est invalide !");
 							}
 						}else{
+							p.setFallDistance(0);
 							p.teleport(link.is.getHome());
 							p.sendMessage("§6Tu as été téléporté à ton île !");
 						}
