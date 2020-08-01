@@ -32,7 +32,7 @@ public class IsCommand implements CommandExecutor {
 			p.sendMessage("§cTon profil est mal chargé ! Contacte un Membre du Staff");
 			return true;
 		}
-		final ISPLink link = sp.referentIsland(true);
+		ISPLink link = sp.referentIsland(true);
 		if (args.length == 0) {
 			if (sp.getIslands().size()==0) IsMenus.startIslandChooseOpen(sp);
 			else if(link==null) {
