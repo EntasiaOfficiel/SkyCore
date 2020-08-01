@@ -15,7 +15,7 @@ public class ChatEvents implements Listener {
 	public void onChat(AsyncPlayerChatEvent e){
 		SkyPlayer sp  = BaseAPI.getOnlineSP(e.getPlayer().getUniqueId());
 		assert sp != null;
-		ISPLink link = sp.getDefaultIS();
+		ISPLink link = sp.referentIsland(false);
 		if(link!=null){
 			if(sp.islandChat){
 				e.setCancelled(true);
