@@ -36,6 +36,7 @@ public class SkyPlayer {
 	public SkyPlayer(Player p){
 		this.uuid = p.getUniqueId();
 		this.name = p.getDisplayName();
+		this.money = 100;
 	}
 
 

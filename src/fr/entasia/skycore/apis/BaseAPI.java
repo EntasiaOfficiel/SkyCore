@@ -83,7 +83,6 @@ public class BaseAPI {
 		SkyPlayer sp = new SkyPlayer(p);
 		playerCache.add(sp);
 		if(InternalAPI.SQLEnabled()){
-			Main.sql.checkConnect();
 			Main.sql.fastUpdateUnsafe("INSERT INTO sky_players (uuid) VALUES (?)", p.getUniqueId());
 
 			// A DEL
