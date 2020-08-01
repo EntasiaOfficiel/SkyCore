@@ -77,6 +77,7 @@ public class BaseEvents implements Listener {
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 	}
 
+	@EventHandler
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player) e.getEntity();
