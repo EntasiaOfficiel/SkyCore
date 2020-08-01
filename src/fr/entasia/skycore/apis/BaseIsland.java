@@ -9,7 +9,6 @@ import fr.entasia.skycore.objs.AutoMiner;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
-import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -421,7 +420,6 @@ public class BaseIsland {
 						b = w.getBlockAt(rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
 						if(b.getType()!=Material.AIR){
 							AutoMiner am = new AutoMiner();
-							am.init(b, item);
 							int i = 0;
 							for(Entity ent : b.getLocation().add(AutoMiner.normaliser).getNearbyEntitiesByType(ArmorStand.class, 0.4)){
 								if("AMPickaxe".equals(ent.getCustomName())){
@@ -434,14 +432,13 @@ public class BaseIsland {
 								}
 							}
 							if(i==4) {
-								am.delete();
+								am.init(this, b, item);
+								am.deleteAM();
 								am.spawn();
-								autominers.add(am);
-								AutoMinerTask.miners.add(am);
 								continue;
 							}
 						}
-						AutoMiner.deleteByBlock(b);
+						AutoMiner.deleteAMByBlock(b);
 						w.dropItem(b.getLocation(), item);
 					}
 					Main.sqlite.fastUpdate("DELETE FROM autominers WHERE x=? and y=? and z=?", rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));

@@ -6,6 +6,7 @@ import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.objs.AutoMiner;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -111,17 +112,14 @@ public class AutoMinerTask extends BukkitRunnable {
 
 								short dura = (short) (am.pickaxe.getDurability() + 2);
 								if (dura > am.pickaxe.getType().getMaxDurability()) {
-									am.delete();
-									AutoMinerTask.miners.remove(am);
+									am.fullDelete();
 									return true;
 								} else am.pickaxe.setDurability(dura);
 								return false;
 							} else return false;
 						} else {
 							am.hopper.getWorld().dropItem(am.hopper.getLocation(), am.pickaxe);
-							am.pickaxe = null;
-							am.delete();
-							AutoMinerTask.miners.remove(am);
+							am.fullDelete();
 							return true;
 						}
 					});

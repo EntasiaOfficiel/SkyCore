@@ -67,17 +67,14 @@ public class MiningEvents implements Listener {
 						return;
 					}
 
-
 					new BukkitRunnable() {
 						@Override
 						public void run() {
 							if(pickaxes.contains(item.getType())) {
 								AutoMiner am = new AutoMiner();
-								AutoMiner.deleteByBlock(e.getClickedBlock());
+								AutoMiner.deleteAMByBlock(e.getClickedBlock());
 
-								AutoMinerTask.miners.add(am);
-								is.autominers.add(am);
-								am.init(e.getClickedBlock(), item);
+								am.init(is, e.getClickedBlock(), item);
 								e.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 								am.spawn();
 
@@ -95,14 +92,13 @@ public class MiningEvents implements Listener {
 	@EventHandler
 	public void a(BlockBreakEvent e){
 		if(e.getBlock().getType()==Material.HOPPER){
-			AutoMiner.deleteByBlock(e.getBlock());
+			AutoMiner.deleteAMByBlock(e.getBlock());
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getBlock().getLocation()));
 			if(is==null)return;
 			is.autominers.removeIf(am -> {
 				if(e.getBlock().equals(am.hopper)){
 					am.toBreak.getWorld().dropItem(am.toBreak.getLocation(), am.pickaxe);
-					am.pickaxe = null;
-					AutoMinerTask.miners.remove(am);
+					am.fullDelete();
 					return true;
 				}else return false;
 			});

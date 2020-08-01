@@ -1,5 +1,6 @@
 package fr.entasia.skycore.objs;
 
+import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -18,30 +19,43 @@ public class AutoMiner {
 	public Block hopper;
 	public Block toBreak;
 	public ItemStack pickaxe;
+	public BaseIsland is;
 
 	public ArmorStand[] armorStands = new ArmorStand[4];
 
 	public AutoMiner(){
 	}
 
-	public void init(Block hopper, ItemStack pickaxe){
+	public void init(BaseIsland is, Block hopper, ItemStack pickaxe){ // Armor stands not spawned here
+		this.is = is;
 		this.hopper = hopper;
 		this.toBreak = hopper.getRelative(BlockFace.UP);
 		this.pickaxe = pickaxe;
+		is.autominers.add(this);
+		AutoMinerTask.miners.add(this);
 	}
 
 
-	public static void deleteByBlock(Block b){
+	public void fullDelete(){
+		AutoMinerTask.miners.remove(this);
+		is.autominers.remove(this);
+		deleteAM();
+		pickaxe = null;
+		toBreak = null;
+		hopper = null;
+	}
+
+	public void deleteAM(){
+		deleteAMByBlock(hopper);
+	}
+
+	public static void deleteAMByBlock(Block b){
 		Location loc = b.getLocation().add(normaliser);
 		for(Entity ent : loc.getNearbyEntitiesByType(ArmorStand.class, 0.4)) {
 			if ("AMPickaxe".equals(ent.getCustomName())) {
 				ent.remove();
 			}
 		}
-	}
-
-	public void delete(){
-		deleteByBlock(hopper);
 	}
 
 	private static final Vector[] dirs = new Vector[4];

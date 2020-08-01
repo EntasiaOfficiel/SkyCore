@@ -93,7 +93,7 @@ public class IsAdminCommand implements CommandExecutor {
 								for(ISPLink ll : link.is.getSortedMembers()){
 									p.sendMessage("§8- §b"+ll.getName());
 								}
-								p.sendMessage("§7Extension : §bNiveau "+is.getExtension()+1+" §7("+is.getExtension()+"/3)");
+								p.sendMessage("§7Extension : §bNiveau "+(is.getExtension()+1)+" §7("+is.getExtension()+"/3)");
 								p.sendMessage("§7Niveau : §b" + is.getLevel());
 								p.sendMessage("§8Dimensions :");
 								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));
