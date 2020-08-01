@@ -78,7 +78,9 @@ public class IslandEvents implements Listener {
 
 	@EventHandler
 	public void blockPlace(BlockPlaceEvent e){
-		if(isBlockDenied(e.getPlayer(), e.getBlock())) e.setCancelled(true);
+		if(isBlockDenied(e.getPlayer(), e.getBlock())){
+			e.setCancelled(true);
+		}
 	}
 
 	@EventHandler

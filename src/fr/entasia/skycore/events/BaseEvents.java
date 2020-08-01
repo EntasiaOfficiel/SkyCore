@@ -6,6 +6,7 @@ import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +19,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.potion.PotionEffect;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.util.ArrayList;
 
@@ -73,14 +75,12 @@ public class BaseEvents implements Listener {
 		}
 		if (!Dimensions.isIslandWorld(p.getWorld())) return;
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
-		else{
-			if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
-		}
 	}
 
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player) e.getEntity();
+			if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
 			if (e.getFinalDamage() >= p.getHealth()) {
 				e.setCancelled(true);
 				p.sendMessage("§c§kn§cTu es mort !§kn");
@@ -111,6 +111,10 @@ public class BaseEvents implements Listener {
 					}
 				}
 				p.teleport(is.getHome());
+			}
+		}else if(e.getEntity() instanceof Snowman){
+			if(e.getCause()==EntityDamageEvent.DamageCause.MELTING){
+				e.setCancelled(true);
 			}
 		}
 	}

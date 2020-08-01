@@ -6,6 +6,7 @@ import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.CooManager;
+import fr.entasia.skycore.apis.OthersAPI;
 import fr.entasia.skycore.objs.AutoMiner;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.tasks.AutoMinerTask;
@@ -48,7 +49,7 @@ public class MiningEvents implements Listener {
 
 				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getClickedBlock().getLocation()));
 				if(is==null)return;
-				if(is.getMember(e.getPlayer().getUniqueId())==null){
+				if(is.getMember(e.getPlayer().getUniqueId())==null&&!OthersAPI.isMasterEdit(e.getPlayer())){
 					e.getPlayer().sendMessage("§cTu n'es pas membre de cette île !");
 				}else{
 					e.setCancelled(true);
@@ -117,7 +118,6 @@ public class MiningEvents implements Listener {
 	@EventHandler
 	public void a(BlockFromToEvent e) {
 		if (Dimensions.isIslandWorld(e.getBlock().getWorld())) {
-//			Bukkit.broadcastMessage(String.valueOf(MinecraftServer.currentTick));
 			if (e.getBlock().getType() == Material.STATIONARY_LAVA) {
 				if (e.getToBlock().getType() == Material.AIR) { // cobblestone - a verif
 					boolean nop = true;
