@@ -102,7 +102,9 @@ public class IslandEvents implements Listener {
 					return;
 				}
 			}
-			e.setCancelled(Utils.isMasterEdit(e.getPlayer()));
+			if(!Utils.isMasterEdit(e.getPlayer())){
+				e.setCancelled(true);
+			}
 		}
 	}
 
