@@ -2,6 +2,7 @@ package fr.entasia.skycore;
 
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.SkyPlayer;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -20,4 +21,9 @@ public class Utils {
 	public static ArrayList<BaseIsland> islandCache = new ArrayList<>();
 	public static ArrayList<SkyPlayer> playerCache = new ArrayList<>();
 	public static ArrayList<SkyPlayer> onlineSPCache = new ArrayList<>();
+
+
+	public static boolean isMasterEdit(Player p){
+		return p.getGameMode()== GameMode.CREATIVE&&masterEditors.contains(p);
+	}
 }

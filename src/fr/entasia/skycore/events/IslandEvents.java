@@ -94,16 +94,15 @@ public class IslandEvents implements Listener {
 
 	@EventHandler
 	public void InteractEvent(PlayerInteractEvent e){
-		if(e.getAction() != Action.PHYSICAL ){
-			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+		if(e.getPlayer().getLocation().getWorld()==Utils.spawnWorld){
+			if(e.getAction()==Action.PHYSICAL)return;
+
+			if((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)){
 				if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.BOW){
-					e.setCancelled(false);
 					return;
 				}
 			}
-
-
-			if(e.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase(Utils.spawnWorld.getName())) e.setCancelled(true);
+			e.setCancelled(Utils.isMasterEdit(e.getPlayer()));
 		}
 	}
 
