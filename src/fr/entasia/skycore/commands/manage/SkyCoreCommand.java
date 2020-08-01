@@ -1,6 +1,7 @@
 package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.skycore.Main;
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.InternalAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,6 +38,14 @@ public class SkyCoreCommand implements CommandExecutor {
 						p.sendMessage("§cSauvegardes SQL désactivées !");
 
 					}else p.sendMessage("§cArgument invalide !");
+				}else if(args[0].equalsIgnoreCase("masteredit")){
+					if(Utils.masterEditors.remove(p)) {
+						p.sendMessage("§6Master Editor §cDésactivé §6!");
+					}else{
+						Utils.masterEditors.add(p);
+						p.sendMessage("§6Master Editor §aActivé §6!");
+					}
+
 				}else {
 					p.sendMessage("§cArgument invalide ! Arguments disponibles :");
 					showArgs(sender);
@@ -49,5 +58,6 @@ public class SkyCoreCommand implements CommandExecutor {
 	private static void showArgs(CommandSender sender){
 		sender.sendMessage("§c- reload");
 		sender.sendMessage("§c- sql");
+		sender.sendMessage("§c- masteredit");
 	}
 }

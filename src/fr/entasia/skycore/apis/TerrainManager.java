@@ -169,7 +169,8 @@ public class TerrainManager {
 		genBaseDimension(isid, session, Dimensions.END.world, Dimensions.END.schems);
 	}
 
-	protected static void calcPoints(BaseIsland is, CodePasser.None code){
+	protected static void calcPoints(BaseIsland is, CodePasser.None
+			code){
 		ServerUtils.wantMainThread();
 		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimensions.OVERWORLD);
 
