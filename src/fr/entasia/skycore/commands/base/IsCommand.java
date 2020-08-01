@@ -256,7 +256,7 @@ public class IsCommand implements CommandExecutor {
 													if (targetLink.getRank().id + 1 < link.getRank().id) {
 														MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
 														if (link.is.reRankMember(targetLink, nrank))
-															link.is.sendTeamMsg(targetLink.getName() + "§e à été promote par " + link.getName() + "§e !");
+															link.is.sendTeamMsg(targetLink.getName() + "§e à été promu par " + link.getName() + "§e !");
 														else p.sendMessage("§cUne erreur s'est produite !");
 													} else {
 														p.sendMessage("§cCette personne est trop haut gradée !");

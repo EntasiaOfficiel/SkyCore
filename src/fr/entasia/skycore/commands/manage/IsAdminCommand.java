@@ -47,7 +47,6 @@ public class IsAdminCommand implements CommandExecutor {
 		if(sender.hasPermission("restricted.isadmin")){
 
 			Player p = ((Player)sender);
-			SkyPlayer sp = BaseAPI.getSkyPlayer(p.getUniqueId());
 			if (args.length==0)p.sendMessage("§cFait /isadmin help pour voir la liste des arguments !");
 			else{
 				args[0] = args[0].toLowerCase();
@@ -168,7 +167,7 @@ public class IsAdminCommand implements CommandExecutor {
 						if(is!=null){
 							if(args.length==2)p.sendMessage("§cMet un joueur !");
 							else{
-								SkyPlayer target = BaseAPI.getArgSP(sender, args[1], false);
+								SkyPlayer target = BaseAPI.getArgSP(sender, args[2], false);
 								if(target!=null){
 									ISPLink newLink = target.getIsland(is.isid);
 									switch(args[0]){
