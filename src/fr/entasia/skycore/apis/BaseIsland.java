@@ -360,7 +360,8 @@ public class BaseIsland {
 		return new ArrayList<>(banneds);
 	}
 
-	public void addBanned(SkyPlayer sp){
+	public boolean addBanned(SkyPlayer sp){
+		if(banneds.contains(sp))return false;
 		banneds.add(sp);
 		ISPLink link = getMember(sp.uuid);
 		if(link==null){
@@ -369,11 +370,15 @@ public class BaseIsland {
 			removeMember(link);
 			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_pis SET rank=? where x=? and z=? and uuid=?)", 0, isid.x, isid.z, sp.uuid);
 		}
+		return true;
 	}
 
-	public void removeBanned(SkyPlayer sp){
-		this.banneds.remove(sp);
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, sp.uuid);
+	public boolean removeBanned(SkyPlayer sp){
+		if(banneds.contains(sp)){
+			this.banneds.remove(sp);
+			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, sp.uuid);
+			return true;
+		}else return false;
 	}
 
 	public boolean isBanned(SkyPlayer sp){

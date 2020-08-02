@@ -132,24 +132,25 @@ public class IsCommand implements CommandExecutor {
 					case "go":
 					case "h":
 					case "home": {
-						if(args.length>1){
-							try{
+						if (args.length > 1) {
+							try {
 								int index = Integer.parseInt(args[1]);
-								if(index<=0)p.sendMessage("§cCe numéro d'île est invalide ! (0/Négatif)");
-								else{
+								if (index <= 0) p.sendMessage("§cCe numéro d'île est invalide ! (0/Négatif)");
+								else {
 									ArrayList<ISPLink> list = link.sp.getIslands();
-									if(list.size()<index)p.sendMessage("§cAucune île ne correspond à ce numéro d'île !");
-									else{
-										ISPLink newLink = list.get(index-1);
+									if (list.size() < index)
+										p.sendMessage("§cAucune île ne correspond à ce numéro d'île !");
+									else {
+										ISPLink newLink = list.get(index - 1);
 										p.setFallDistance(0);
 										p.teleport(newLink.is.getHome());
-										p.sendMessage("§6Tu as été téléporté à ton île n° "+index+" !");
+										p.sendMessage("§6Tu as été téléporté à ton île n° " + index + " !");
 									}
 								}
-							}catch(NumberFormatException e){
+							} catch (NumberFormatException e) {
 								p.sendMessage("§cCe numéro d'île est invalide !");
 							}
-						}else{
+						} else {
 							p.setFallDistance(0);
 							p.teleport(link.is.getHome());
 							p.sendMessage("§6Tu as été téléporté à ton île !");
@@ -178,110 +179,130 @@ public class IsCommand implements CommandExecutor {
 
 					case "calc":
 					case "level":
-					case "lvl":{
+					case "lvl": {
 
-						int a = link.is.updateLvl( new CodePasser.None() {
+						int a = link.is.updateLvl(new CodePasser.None() {
 							@Override
 							public void run() {
-								p.sendMessage("§aNiveau de l'île : "+link.is.getLevel());
-								p.sendMessage("§aPoints demandés pour le niveau suivant : "+link.is.getRemPoints());
+								p.sendMessage("§aNiveau de l'île : " + link.is.getLevel());
+								p.sendMessage("§aPoints demandés pour le niveau suivant : " + link.is.getRemPoints());
 							}
 						});
-						if(a==0) p.sendMessage("§aCalcul du niveau de l'île en cours...");
-						else p.sendMessage("§cTu dois encore attendre "+TextUtils.secondsToTime(a)+" avant de recalculer le niveau de l'île !");
+						if (a == 0) p.sendMessage("§aCalcul du niveau de l'île en cours...");
+						else
+							p.sendMessage("§cTu dois encore attendre " + TextUtils.secondsToTime(a) + " avant de recalculer le niveau de l'île !");
 
 						break;
 					}
 
-					case "leave": case "quit":{
-						if(link.is.removeMember(link)){
-							link.is.sendTeamMsg(link.getName()+"§e à quitté l'île !");
+					case "leave":
+					case "quit": {
+						if (link.is.removeMember(link)) {
+							link.is.sendTeamMsg(link.getName() + "§e à quitté l'île !");
 							p.sendMessage("§cTu as quitté l'île !");
-						}else p.sendMessage("§cUne erreur s'est produite !");
+						} else p.sendMessage("§cUne erreur s'est produite !");
+						break;
+					}
+
+					case "ban":
+					case "unban":{
+						SkyPlayer target = IsCmdUtils.teamCheck(link, args);
+						if (target == null) return true;
+						if (args[0].equals("ban")) {
+							if (link.is.addBanned(target)) {
+								p.sendMessage("§cTu as banni " + target.name + " !");
+								link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§c à été bannu de l'île par " + link.getName() + "§c !");
+							} else {
+								p.sendMessage("§cCe joueur est déja banni !");
+							}
+						} else if (args[0].equals("unban")) {
+							if (link.is.removeBanned(target)) {
+								p.sendMessage("§cTu as débanni " + target.name + " !");
+								link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été débanni de l'île par " + link.getName() + "§e !");
+							} else {
+								p.sendMessage("§cCe joueur n'est pas banni !");
+							}
+						}
 						break;
 					}
 
 					case "invite":
-					case "uninvite":
+					case "uninvite": {
+						SkyPlayer target = IsCmdUtils.teamCheck(link, args);
+						if (target == null) return true;
+						ISPLink targetLink = link.is.getMember(target.uuid);
+						if (args[0].equals("invite")) {
+							if (targetLink == null) {
+								if (link.is.invitePlayer(target)) {
+									link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
+									if (target.p != null) {
+										target.p.sendMessage("§eTu as été invité sur l'île " + link.is.getNameOrID() + " par " + link.sp.name + " !");
+										sendInviteMsg(target.p, link.is);
+										target.p.sendMessage("§eTu peux à tout moment regarder tes invitations avec la commande §6/is invites");
+									}
+								} else p.sendMessage("§cCe joueur à déja été invité !");
+							} else p.sendMessage("§cCe joueur est déja membre sur cette île !");
+						} else if (args[0].equals("uninvite")) {
+							if (targetLink == null) {
+								if (link.is.cancelInvite(target)) {
+									link.is.sendTeamMsg("§3L'invitation de " + target.name + "§e à été annulée par " + link.getName() + "§e !");
+									if (target.p != null)
+										target.p.sendMessage("§cL'invitation de l'île §4" + link.is.getNameOrID() + "§c à été annulée !");
+								} else p.sendMessage("§cCe joueur n'est pas invité !");
+							} else p.sendMessage("§cCe joueur est un membre de l'île ! Utilise §4/is kick");
+						}
+						break;
+					}
+
 					case "kick":
 					case "demote":
 					case "promote": {
-						if (link.getRank().id < MemberRank.ADJOINT.id) p.sendMessage("§cTu dois être au minimum adjoint pour gérer l'équipe de cette île !");
-						else {
-							if (args.length < 2) p.sendMessage("§cMet un joueur en argument !");
-							else {
-								SkyPlayer target = BaseAPI.getArgSP(sender, args[1], false);
-								if (target != null) {
-									if (target.equals(link.sp)) p.sendMessage("§cCe joueur est.. toi même ?");
-									else {
-										ISPLink targetLink = link.is.getMember(target.uuid);
-										if (args[0].equals("invite")) {
-											if (targetLink == null) {
-												if (link.is.invitePlayer(target)) {
-													link.is.sendTeamMsg(MemberRank.DEFAULT.getName()+ "§3 " + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
-													if (target.p != null) {
-														target.p.sendMessage("§eTu as été invité sur l'île " + link.is.getNameOrID() + " par " + link.sp.name + " !");
-														sendInviteMsg(target.p, link.is);
-														target.p.sendMessage("§eTu peux à tout moment regarder tes invitations avec la commande §6/is invites");
-													}
-												} else p.sendMessage("§cCe joueur à déja été invité !");
-											} else p.sendMessage("§cCe joueur est déja membre sur cette île !");
-										} else if (args[0].equals("uninvite")) {
-											if (targetLink == null) {
-												if (link.is.cancelInvite(target)) {
-													link.is.sendTeamMsg("§3L'invitation de " + target.name + "§e à été annulée par " + link.getName() + "§e !");
-													if (target.p != null) target.p.sendMessage("§cL'invitation de l'île §4" + link.is.getNameOrID() + "§c à été annulée !");
-												} else p.sendMessage("§cCe joueur n'est pas invité !");
-											} else
-												p.sendMessage("§cCe joueur est un membre de l'île ! Utilise §4/is kick");
-										} else if (targetLink == null)
-											p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-										else {
-											switch (args[0]) {
-												case "kick": {
-													if (targetLink.getRank().id < link.getRank().id) {
-														String n = targetLink.getName();
-														if (link.is.removeMember(targetLink)){
-															link.is.sendTeamMsg("§7" + n + "§e à été expulsé de l'île par " + link.getName() + "§e !");
-															if(target.isOnline()){
-																target.p.sendMessage("§cTu as été exclu de l'île par §3"+link.sp.name+"§c !");
-																target.p.teleport(Utils.spawn);
-															}
-														}
-														else p.sendMessage("§cUne erreur s'est produite !");
-													} else p.sendMessage("§cCette personne est trop haut gradée !");
-													break;
-												}
-
-												case "promote": {
-													if (targetLink.getRank().id + 1 < link.getRank().id) {
-														MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
-														if (link.is.reRankMember(targetLink, nrank))
-															link.is.sendTeamMsg(targetLink.getName() + "§e à été promu par " + link.getName() + "§e !");
-														else p.sendMessage("§cUne erreur s'est produite !");
-													} else {
-														p.sendMessage("§cCette personne est trop haut gradée !");
-													}
-													break;
-												}
-
-												case "demote": {
-													if (targetLink.getRank().id < link.getRank().id) {
-														if (targetLink.getRank().id <= MemberRank.RECRUE.id)
-															p.sendMessage("§cCette personne à déjà le rôle minimum ! Utilise §4/is kick§c pour l'exclure ");
-														else {
-															MemberRank nrank = MemberRank.getType(targetLink.getRank().id - 1);
-															if (link.is.reRankMember(targetLink, nrank))
-																link.is.sendTeamMsg(targetLink.getName() + "§e à été demote par " + link.getName() + "§e !");
-															else p.sendMessage("§cUne erreur s'est produite !");
-														}
-													} else p.sendMessage("§cCette personne est trop haut gradée !");
-												}
-												break;
-											}
+						SkyPlayer target = IsCmdUtils.teamCheck(link, args);
+						if (target == null) return true;
+						ISPLink targetLink = link.is.getMember(target.uuid);
+						if (targetLink == null) {
+							p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+							return true;
+						}
+						switch (args[0]) {
+							case "kick": {
+								if (targetLink.getRank().id < link.getRank().id) {
+									String n = targetLink.getName();
+									if (link.is.removeMember(targetLink)) {
+										link.is.sendTeamMsg("§7" + n + "§e à été expulsé de l'île par " + link.getName() + "§e !");
+										if (target.isOnline()) {
+											target.p.sendMessage("§cTu as été exclu de l'île par §3" + link.sp.name + "§c !");
+											target.p.teleport(Utils.spawn);
 										}
-									}
+									} else p.sendMessage("§cUne erreur s'est produite !");
+								} else p.sendMessage("§cCette personne est trop haut gradée !");
+								break;
+							}
+
+							case "promote": {
+								if (targetLink.getRank().id + 1 < link.getRank().id) {
+									MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
+									if (link.is.reRankMember(targetLink, nrank))
+										link.is.sendTeamMsg(targetLink.getName() + "§e à été promu par " + link.getName() + "§e !");
+									else p.sendMessage("§cUne erreur s'est produite !");
+								} else {
+									p.sendMessage("§cCette personne est trop haut gradée !");
 								}
+								break;
+							}
+
+							case "demote": {
+								if (targetLink.getRank().id < link.getRank().id) {
+									if (targetLink.getRank().id <= MemberRank.RECRUE.id)
+										p.sendMessage("§cCette personne à déjà le rôle minimum ! Utilise §4/is kick§c pour l'exclure ");
+									else {
+										MemberRank nrank = MemberRank.getType(targetLink.getRank().id - 1);
+										if (link.is.reRankMember(targetLink, nrank))
+											link.is.sendTeamMsg(targetLink.getName() + "§e à été demote par " + link.getName() + "§e !");
+										else p.sendMessage("§cUne erreur s'est produite !");
+									}
+								} else p.sendMessage("§cCette personne est trop haut gradée !");
+								break;
 							}
 						}
 						break;
