@@ -288,8 +288,10 @@ public class IsMenus {
 						if(link.is.getExtension()>=i){
 							e.player.sendMessage("§cTu as déja acquis cette extension !");
 							return;
-						}
-						if(link.is.getLevel()<u.minlvl){
+						}else if((link.is.getExtension()+1)!=i) {
+							e.player.sendMessage("§cTu dois d'abord acheter les autres extensions !");
+							return;
+						}else if(link.is.getLevel()<u.minlvl){
 							e.player.sendMessage("§cLe niveau de ton île est insuffisant ! Niveau demandé : §4"+u.minlvl+"§c. Niveau de ton île : §4"+link.is.getLevel());
 							return;
 						}
