@@ -467,7 +467,7 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage(new ChatComponent("§e- ban").setTextHover("§6pour bannir quelqu'un de île").create());
 						p.sendMessage(new ChatComponent("§e- unban").setTextHover("§6pour débannir quelqu'un de l'île").create());
 						p.sendMessage("§bBanque d'île :");
-						p.sendMessage(new ChatComponent("§e- money").setTextHover("bank §6pour voir la valeur de la banque d'île").create());
+						p.sendMessage(new ChatComponent("§e- money/bank").setTextHover("§6pour voir la valeur de la banque d'île").create());
 						p.sendMessage(new ChatComponent("§e- deposit").setTextHover("§6pour poser de l'argent bien au chaud dans la banque d'île").create());
 						p.sendMessage(new ChatComponent("§e- withdraw").setTextHover("§6pour récupérer de l'argent de la banque d'île").create());
 						p.sendMessage("§cCommandes dangereuses :");
