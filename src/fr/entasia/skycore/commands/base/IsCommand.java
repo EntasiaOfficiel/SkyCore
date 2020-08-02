@@ -437,7 +437,7 @@ public class IsCommand implements CommandExecutor {
 						break;
 					}
 					default: {
-						p.sendMessage("§cL'argument " + args[0] + " n'existe pas !");
+						p.sendMessage("§cL'argument §4" + args[0] + "§c n'existe pas ! Fait /is help pour voir la liste des commandes");
 						break;
 					}
 				}
