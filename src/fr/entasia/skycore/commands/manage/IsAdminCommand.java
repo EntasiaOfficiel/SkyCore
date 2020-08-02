@@ -59,14 +59,13 @@ public class IsAdminCommand implements CommandExecutor {
 						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
 						else {
 							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
-							if(target!=null){
-								p.sendMessage("Joueur : " + target.p.getName());
-								p.sendMessage("îles :");
-								for(ISPLink ll : target.getIslands()){
-									p.sendMessage("- île "+ll.is.isid.str()+" ("+ll.getRank().color+ll.getRank().name+"§f)");
-								}
-								p.sendMessage("Monnaie : " + target.getMoney());
+							if(target==null)return true;
+							p.sendMessage("Joueur : " + target.name);
+							p.sendMessage("îles :");
+							for(ISPLink ll : target.getIslands()){
+								p.sendMessage("- île "+ll.is.isid.str()+" ("+ll.getRank().color+ll.getRank().name+"§f)");
 							}
+							p.sendMessage("Monnaie : " + target.getMoney());
 						}
 						break;
 					}
