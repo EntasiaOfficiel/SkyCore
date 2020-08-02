@@ -68,7 +68,7 @@ public class Main extends JavaPlugin {
 
 			getServer().getPluginManager().registerEvents(new BaseEvents(), this);
 			getServer().getPluginManager().registerEvents(new IslandEvents(), this);
-			getServer().getPluginManager().registerEvents(new IslandEvents2(), this);
+			getServer().getPluginManager().registerEvents(new DimensionEvents(), this);
 			getServer().getPluginManager().registerEvents(new ChatEvents(), this);
 			getServer().getPluginManager().registerEvents(new MiningEvents(), this);
 

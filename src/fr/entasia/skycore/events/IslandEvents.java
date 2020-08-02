@@ -1,5 +1,6 @@
 package fr.entasia.skycore.events;
 
+import fr.entasia.apis.other.CodePasser;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.others.enums.Dimensions;
@@ -8,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -96,13 +98,8 @@ public class IslandEvents implements Listener {
 		if(e.getPlayer().getLocation().getWorld()==Utils.spawnWorld){
 			if(e.getAction()==Action.PHYSICAL)return;
 
-			if((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)){
-				if(e.getPlayer().getInventory().getItemInMainHand().getType() == Material.BOW){
-					return;
-				}
-			}
 			if(!OthersAPI.isMasterEdit(e.getPlayer())){
-				e.setCancelled(true);
+				e.setUseInteractedBlock(Event.Result.DENY);
 			}
 		}
 	}

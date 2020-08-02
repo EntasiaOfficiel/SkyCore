@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class IslandEvents2 implements Listener {
+public class DimensionEvents implements Listener {
 
 	@EventHandler
 	public void test(EntityTeleportEndGatewayEvent e) { // gl
