@@ -282,7 +282,7 @@ public class IsCommand implements CommandExecutor {
 							case "promote": {
 								if (targetLink.getRank().id + 1 < link.getRank().id) {
 									MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
-									if (link.is.reRankMember(targetLink, nrank))
+									if (targetLink.setRank(nrank))
 										link.is.sendTeamMsg(targetLink.getName() + "§e à été promu par " + link.getName() + "§e !");
 									else p.sendMessage("§cUne erreur s'est produite !");
 								} else {
@@ -297,7 +297,7 @@ public class IsCommand implements CommandExecutor {
 										p.sendMessage("§cCette personne à déjà le rôle minimum ! Utilise §4/is kick§c pour l'exclure ");
 									else {
 										MemberRank nrank = MemberRank.getType(targetLink.getRank().id - 1);
-										if (link.is.reRankMember(targetLink, nrank))
+										if (targetLink.setRank(nrank))
 											link.is.sendTeamMsg(targetLink.getName() + "§e à été demote par " + link.getName() + "§e !");
 										else p.sendMessage("§cUne erreur s'est produite !");
 									}
@@ -368,7 +368,7 @@ public class IsCommand implements CommandExecutor {
 																p.sendMessage("§cCe joueur n'est plus membre sur cette île !");
 															else {
 																is.sendTeamMsg("§3Passage du chef sur cette île à §c" + link.sp.p + " §3!");
-																is.reRankMember(newLink, MemberRank.CHEF);
+																newLink.setRank(MemberRank.CHEF);
 															}
 														}
 													}

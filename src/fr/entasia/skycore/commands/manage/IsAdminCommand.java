@@ -215,10 +215,10 @@ public class IsAdminCommand implements CommandExecutor {
 											else{
 												try{
 													MemberRank r = MemberRank.valueOf(args[3]);
-													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exlure un membre de l'île !");
+													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exclure un membre de l'île !");
 													else{
 														targetLink.setRank(r);
-														p.sendMessage();
+														p.sendMessage("§aSuccès !");
 													}
 												}catch(IllegalArgumentException ignore){
 													p.sendMessage("§cCe rôle n'existe pas ! Liste des rôles :");
