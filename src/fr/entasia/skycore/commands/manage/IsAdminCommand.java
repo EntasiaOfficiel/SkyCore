@@ -24,6 +24,7 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§c- kick");
 		sender.sendMessage("§c- setowner");
 		sender.sendMessage("§c- setrange");
+		sender.sendMessage("§c- setrole");
 		sender.sendMessage("§4Autres :");
 		sender.sendMessage("§c- help");
 	}
@@ -174,6 +175,7 @@ public class IsAdminCommand implements CommandExecutor {
 						}
 						break;
 					}
+					case "setrole":
 					case "join":
 					case "kick":
 					case "setowner":{
@@ -183,27 +185,52 @@ public class IsAdminCommand implements CommandExecutor {
 							else{
 								SkyPlayer target = BaseAPI.getArgSP(sender, args[2], false);
 								if(target!=null){
-									ISPLink newLink = target.getIsland(is.isid);
+									ISPLink targetLink = target.getIsland(is.isid);
 									switch(args[0]){
 										case "join":{
-											if(newLink==null){
+											if(targetLink==null){
 												if(is.addMember(target, MemberRank.RECRUE))p.sendMessage("§aSuccès !");
 												else p.sendMessage("§cUne erreur est survenue !");
 											}else p.sendMessage("§cCe joueur est déja membre sur cette île !");
 											break;
 										}
 										case "kick":{
-											if(newLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
 											else{
-												if(is.removeMember(newLink))p.sendMessage("§aSuccès !");
+												if(is.removeMember(targetLink))p.sendMessage("§aSuccès !");
 												else p.sendMessage("§cUne erreur est survenue !");
 											}
 											break;
 										}
 										case "setowner":{
-											if(newLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
 											else {
-												if (is.reRankMember(newLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
+												if (is.reRankMember(targetLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
+												else p.sendMessage("§cUne erreur est survenue !");
+											}
+											break;
+										}
+										case "setrank":{
+											if(args.length==3)p.sendMessage("§cMet un rôle !");
+											else{
+												try{
+													MemberRank r = MemberRank.valueOf(args[3]);
+													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exlure un membre de l'île !");
+													else{
+														targetLink.is.reRankMember(targetLink.sp, r);
+														p.sendMessage();
+													}
+												}catch(IllegalArgumentException ignore){
+													p.sendMessage("§cCe rôle n'existe pas ! Liste des rôles :");
+													for(MemberRank rank : MemberRank.values()){
+														if(rank==MemberRank.DEFAULT)continue;
+														p.sendMessage("§c- "+rank.name+" ("+rank.getName()+"§c)");
+													}
+												}
+											}
+											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+											else {
+												if (is.reRankMember(targetLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
 												else p.sendMessage("§cUne erreur est survenue !");
 											}
 											break;
