@@ -454,25 +454,25 @@ public class IsCommand implements CommandExecutor {
 					case "help": {
 						p.sendMessage("§6Liste des sous-commandes :");
 						p.sendMessage("§bCommandes de bases :");
-						p.sendMessage("§e- go/home [numero] §6pour te téléporter à ton île");
-						p.sendMessage("§e- chat §6pour parler avec les membres de l'île");
-						p.sendMessage("§e- list §6Voir tes îles, et choisir l'île par défaut");
-						p.sendMessage("§e- help §6Pour voir cette liste. Très surprenant.");
+						p.sendMessage(new ChatComponent("§e- go/home [numero]").setTextHover("§6pour te téléporter à ton île").create());
+						p.sendMessage(new ChatComponent("§e- chat").setTextHover("§6pour parler avec les membres de l'île").create());
+						p.sendMessage(new ChatComponent("§e- list").setTextHover("§6Voir tes îles, et choisir l'île par défaut").create());
+						p.sendMessage(new ChatComponent("§e- help").setTextHover("§6Pour voir cette liste. Très surprenant.").create());
 						p.sendMessage("§bCommandes d'équipe :");
-						p.sendMessage("§e- team §6pour voir l'équipe de ton île");
-						p.sendMessage("§e- invite §6pour inviter un joueur sur l'île");
-						p.sendMessage("§e- kick §6pour exclure un membre de l'île");
-						p.sendMessage("§e- promote §6pour augmenter le grade d'un membre");
-						p.sendMessage("§e- demote §6pour diminuer le grade d'un membre");
-						p.sendMessage("§e- ban §6pour bannir quelqu'un de île");
-						p.sendMessage("§e- unban §6pour débannir quelqu'un de l'île");
+						p.sendMessage(new ChatComponent("§e- team").setTextHover("§6pour voir l'équipe de ton île").create());
+						p.sendMessage(new ChatComponent("§e- invite").setTextHover("§6pour inviter un joueur sur l'île").create());
+						p.sendMessage(new ChatComponent("§e- kick").setTextHover("§6pour exclure un membre de l'île").create());
+						p.sendMessage(new ChatComponent("§e- promote").setTextHover("§6pour augmenter le grade d'un membre").create());
+						p.sendMessage(new ChatComponent("§e- demote").setTextHover("§6pour diminuer le grade d'un membre").create());
+						p.sendMessage(new ChatComponent("§e- ban").setTextHover("§6pour bannir quelqu'un de île").create());
+						p.sendMessage(new ChatComponent("§e- unban").setTextHover("§6pour débannir quelqu'un de l'île").create());
 						p.sendMessage("§bBanque d'île :");
-						p.sendMessage("§e- deposit §6pour poser de l'argent bien au chaud dans la banque d'île");
-						p.sendMessage("§e- withdraw §6pour récupérer de l'argent de la banque d'île");
-						p.sendMessage("§e- money/bank §6pour voir la valeur de la banque d'île");
+						p.sendMessage(new ChatComponent("§e- money").setTextHover("bank §6pour voir la valeur de la banque d'île").create());
+						p.sendMessage(new ChatComponent("§e- deposit").setTextHover("§6pour poser de l'argent bien au chaud dans la banque d'île").create());
+						p.sendMessage(new ChatComponent("§e- withdraw").setTextHover("§6pour récupérer de l'argent de la banque d'île").create());
 						p.sendMessage("§cCommandes dangereuses :");
-						p.sendMessage("§e- setowner §6pour changer la propriété de l'île");
-						p.sendMessage("§e- delete §6pour supprimer l'île");
+						p.sendMessage(new ChatComponent("§e- setowner").setTextHover("§6pour changer la propriété de l'île").create());
+						p.sendMessage(new ChatComponent("§e- delete").setTextHover("§6pour supprimer l'île").create());
 						break;
 					}
 					default: {
