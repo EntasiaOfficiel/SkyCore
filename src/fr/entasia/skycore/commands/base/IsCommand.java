@@ -37,7 +37,7 @@ public class IsCommand implements CommandExecutor {
 			if (sp.getIslands().size()==0) IsMenus.startIslandChooseOpen(sp);
 			else if(link==null) {
 				p.sendMessage("§cTu dois d'abord choisir une île préférée pouvoir choisir ces options ! (On ne sait pas de laquelle tu parles !)");
-				IsMenus.openIslandsList(sp, "§6Quelle île ?");
+				IsMenus.islandsListOpen(sp, true);
 			}else IsMenus.baseIslandOpen(link);
 			return true;
 		}
@@ -45,7 +45,7 @@ public class IsCommand implements CommandExecutor {
 		switch (args[0]) {
 			case "dis":
 			case "list":{
-				IsMenus.openIslandsList(sp, null);
+				IsMenus.islandsListOpen(sp, false);
 				break;
 			}
 

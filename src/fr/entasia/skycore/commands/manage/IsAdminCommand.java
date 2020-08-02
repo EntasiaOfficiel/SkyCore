@@ -24,7 +24,7 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§c- kick");
 		sender.sendMessage("§c- setowner");
 		sender.sendMessage("§c- setrange");
-		sender.sendMessage("§c- setrole");
+		sender.sendMessage("§c- setrank");
 		sender.sendMessage("§4Autres :");
 		sender.sendMessage("§c- help");
 	}
@@ -175,7 +175,7 @@ public class IsAdminCommand implements CommandExecutor {
 						}
 						break;
 					}
-					case "setrole":
+					case "setrank":
 					case "join":
 					case "kick":
 					case "setowner":{

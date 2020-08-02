@@ -110,20 +110,36 @@ public class IsMenus {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
-			ISPLink chosen = ((HashMap<Integer, ISPLink>)e.data).get(e.slot); // laisse
-			if(chosen==null)e.player.sendMessage("§cUne erreur est survenue lors du choix de l'île par défaut !");
+			A a = ((A)e.data); // laisse
+			ISPLink chosen = a.tracker.get(e.slot);
+			if(chosen==null)e.player.sendMessage("§cUne erreur est survenue lors du choix de l'île !");
 			else{
-				chosen.sp.setDefaultIS(chosen.is.isid);
-				e.player.closeInventory();
-				e.player.sendMessage("§aÎle par défaut choisie avec succès !");
+				if(!a.force&&e.click==MenuClickEvent.ClickType.LEFT){
+					baseIslandOpen(chosen);
+				}else{
+					chosen.sp.setDefaultIS(chosen.is.isid);
+					e.player.closeInventory();
+					e.player.sendMessage("§aÎle par défaut choisie avec succès !");
+				}
 			}
 		}
 	};
 
-	public static void openIslandsList(SkyPlayer sp, String name){
-		HashMap<Integer, ISPLink> tracker = new HashMap<>();
-		if(name==null)name = "§6Liste de tes îles :";
-		Inventory inv = islandsListMenu.createInv(3, name, tracker);
+	private static class A{
+		public HashMap<Integer, ISPLink> tracker = new HashMap<>();
+		public boolean force;
+	}
+
+	public static void islandsListOpen(SkyPlayer sp, boolean force){
+		A a = new A();
+		a.force = force;
+		String name;
+		if(force){
+			name = "§6Quelle île ?";
+			a.tracker.put(-1, null);
+		}
+		else name = "§6Liste de tes îles :";
+		Inventory inv = islandsListMenu.createInv(3, name, a);
 
 		int j = 10;
 		ArrayList<String> list;
@@ -136,15 +152,17 @@ public class IsMenus {
 			if(link.is.getName()!=null)list.add("§eNom : "+link.is.getName());
 			list.add("§eRang: "+link.getName());
 			list.add("");
+			if(!force)list.add("§aClick gauche pour voir les informations de l'île !");
 			if(link.sp.getDefaultIS()==link){
 				list.add("§2île par défaut actuelle !");
 			}else{
-				list.add("§aClique pour définir en île par défaut !");
+				if(force)list.add("§aClique pour définir en île par défaut !");
+				else list.add("§aClick droit pour définir en île par défaut !");
 			}
 			meta.setLore(list);
 			item.setItemMeta(meta);
 			inv.setItem(j, item);
-			tracker.put(j, link);
+			a.tracker.put(j, link);
 			j+=2;
 		}
 
