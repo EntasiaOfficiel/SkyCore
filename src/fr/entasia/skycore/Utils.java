@@ -2,7 +2,6 @@ package fr.entasia.skycore;
 
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.SkyPlayer;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

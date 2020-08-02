@@ -9,7 +9,6 @@ import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.apis.OthersAPI;
 import fr.entasia.skycore.objs.AutoMiner;
 import fr.entasia.skycore.others.enums.Dimensions;
-import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;

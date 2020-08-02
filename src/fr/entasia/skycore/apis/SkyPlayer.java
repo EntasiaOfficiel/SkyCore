@@ -1,7 +1,6 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.others.SkyblockException;
 import fr.entasia.skycore.others.enums.Dimensions;
 import org.bukkit.entity.Player;
 
@@ -124,11 +123,11 @@ public class SkyPlayer {
 		setMoney(money+m);
 	}
 
-
 	public boolean withdrawMoney(long m){
 		return setMoney(money-m);
 	}
 
+	
 	public ArrayList<BaseIsland> getInvites(){
 		return new ArrayList<>(invites);
 	}
