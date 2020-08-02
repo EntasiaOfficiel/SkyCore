@@ -429,6 +429,8 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage("§e- kick §6pour exclure un membre de l'île");
 						p.sendMessage("§e- promote §6pour augmenter le grade d'un membre");
 						p.sendMessage("§e- demote §6pour diminuer le grade d'un membre");
+						p.sendMessage("§e- ban §6pour bannir quelqu'un de île");
+						p.sendMessage("§e- unban §6pour débannir quelqu'un de l'île");
 						p.sendMessage("§cCommandes dangereuses :");
 						p.sendMessage("§e- setowner §6pour changer la propriété de l'île");
 						p.sendMessage("§e- delete §6pour supprimer l'île");
