@@ -401,13 +401,18 @@ public class BaseIsland {
 	}
 
 	public void addBank(long m){
-		bank+=m;
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank+=? WHERE x=? and z=?", m, isid.x, isid.z);
+		setBank(bank+m);
 	}
 
-	public void withdrawBank(long m){
-		bank-=m;
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank-=? WHERE x=? and z=?", m, isid.x, isid.z);
+	public boolean withdrawBank(long m){
+		return setBank(bank-m);
+	}
+
+	public boolean setBank(long m){
+		if(m<0)return false;
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank=? WHERE x=? and z=?", m, isid.x, isid.z);
+		return true;
+
 	}
 
 	public void tryLoad(){

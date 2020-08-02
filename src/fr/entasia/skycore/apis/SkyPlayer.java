@@ -113,10 +113,11 @@ public class SkyPlayer {
 		return money;
 	}
 
-	public void setMoney(long m){
-		if(m<0) throw new SkyblockException("tried to set negative money");
+	public boolean setMoney(long m){
+		if(m<0) return false;
 		money=m;
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_players SET money=? WHERE uuid=?", money, uuid);
+		return true;
 	}
 
 	public void addMoney(long m){
@@ -124,8 +125,8 @@ public class SkyPlayer {
 	}
 
 
-	public void withdrawMoney(long m){
-		setMoney(money-m);
+	public boolean withdrawMoney(long m){
+		return setMoney(money-m);
 	}
 
 	public ArrayList<BaseIsland> getInvites(){

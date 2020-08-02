@@ -88,6 +88,7 @@ public class InternalAPI {
 			Utils.playerCache.add(sp);
 		}
 		int i = 0;
+		int rID;
 		if(is==null) a("Aucune ile en mémoire !");
 		else if(sp==null) a("Aucun joueur en mémoire !");
 		else{
@@ -104,7 +105,9 @@ public class InternalAPI {
 				assert sp != null;
 
 
-				is.addMember(sp, MemberRank.getType(rs.getInt("rank")));
+				rID = rs.getInt("rank");
+				if(rID==0)is.addBanned(sp);
+				else is.addMember(sp, MemberRank.getType(rID));
 				if(rs.getByte("def")==1){
 					if(sp.getDefaultIS()!=null){
 						Main.main.getLogger().warning("Redéfinition de île par défaut pour "+sp.name+" !");

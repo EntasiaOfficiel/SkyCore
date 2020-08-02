@@ -11,6 +11,7 @@ import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -308,6 +309,40 @@ public class IsCommand implements CommandExecutor {
 						break;
 					}
 
+
+					case "deposit":
+					case "withdraw":{
+						if(args.length==1)p.sendMessage("§cMet un chiffre !");
+						else{
+							try{
+								int n = Integer.parseInt(args[1]);
+								if(args[0].equals("withdraw")){
+									if(link.is.withdrawBank(n)){
+										sp.addMoney(n);
+										p.sendMessage("§aTu as retiré §2"+n+"§a$ de la banque d'île !");
+									}else{
+										p.sendMessage("§cIl n'y a pas assez d'argent dans la banque d'île !");
+									}
+								}else{
+									if(sp.withdrawMoney(n)){
+										link.is.addBank(n);
+										p.sendMessage("§aTu as ajouté §2"+n+"§a$ à la banque d'île !");
+									}else p.sendMessage("§cTu n'as pas assez d'argent !");
+
+								}
+
+							}catch(NumberFormatException ignore){
+								p.sendMessage("§cLe chiffre §4"+args[1]+"§c est invalide !");
+							}
+						}
+						break;
+					}
+					case "bank":
+					case "money": {
+						p.sendMessage("§eValeur de la banque d'île actuellement : §6"+link.is.getBank()+"§e$");
+						break;
+					}
+
 					case "setowner": {
 						if (args.length < 2) p.sendMessage("§cMet un joueur en argument !");
 						else {
@@ -431,6 +466,10 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage("§e- demote §6pour diminuer le grade d'un membre");
 						p.sendMessage("§e- ban §6pour bannir quelqu'un de île");
 						p.sendMessage("§e- unban §6pour débannir quelqu'un de l'île");
+						p.sendMessage("§bBanque d'île :");
+						p.sendMessage("§e- deposit §6pour poser de l'argent bien au chaud dans la banque d'île");
+						p.sendMessage("§e- withdraw §6pour récupérer de l'argent de la banque d'île");
+						p.sendMessage("§e- money/bank §6pour voir la valeur de la banque d'île");
 						p.sendMessage("§cCommandes dangereuses :");
 						p.sendMessage("§e- setowner §6pour changer la propriété de l'île");
 						p.sendMessage("§e- delete §6pour supprimer l'île");
