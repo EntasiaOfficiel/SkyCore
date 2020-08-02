@@ -48,7 +48,7 @@ public class InternalAPI {
 				postenable=1;
 				Main.main.getLogger().info("Activation POST du plugin méga-badass");
 
-				if(Main.sql !=null)loadIslands();
+				if(Main.sql!=null)loadIslands();
 
 				postenable=2;
 			}
@@ -84,7 +84,6 @@ public class InternalAPI {
 		while(rs.next()){
 			sp = new SkyPlayer(UUID.fromString(rs.getString("uuid")), rs.getString("name"));
 			sp.addMoney(rs.getLong("money"));
-//					 sp.setDefaultIS(new ISID(rs.getInt("dis_x"), rs.getInt("dis_z")));
 			Utils.playerCache.add(sp);
 		}
 		int i = 0;

@@ -8,10 +8,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static org.bukkit.event.EventPriority.HIGH;
+import static org.bukkit.event.EventPriority.HIGHEST;
 
 public class ChatEvents implements Listener {
 
-	@EventHandler(priority = HIGH)
+	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e){
 		SkyPlayer sp  = BaseAPI.getOnlineSP(e.getPlayer().getUniqueId());
 		assert sp != null;
@@ -21,6 +22,7 @@ public class ChatEvents implements Listener {
 				e.setCancelled(true);
 				link.is.islandChat(link, String.join(" ", e.getMessage()));
 			}else{
+				System.out.println("formatted");
 				e.setFormat("[" + link.is.getLevel() + "] " + e.getFormat());
 				// SUITE EVENT ICI
 			}

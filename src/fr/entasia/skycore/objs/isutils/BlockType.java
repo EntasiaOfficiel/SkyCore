@@ -1,5 +1,7 @@
 package fr.entasia.skycore.objs.isutils;
 
+import org.bukkit.Material;
+
 import java.util.HashMap;
 
 public class BlockType {

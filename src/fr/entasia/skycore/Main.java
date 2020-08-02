@@ -128,12 +128,16 @@ public class Main extends JavaPlugin {
 		for(String k : blockValues.getKeys(false)){
 			o = blockValues.get(k);
 			m = Material.getMaterial(k);
+			if(m==null){
+				main.getLogger().warning("Material invalide : "+k);
+				continue;
+			}
 			if(o instanceof ConfigurationSection){
 				sec = (ConfigurationSection)o;
 				bt = new BlockType();
 				for(String k2 : sec.getKeys(false)){
-					if(k2.equals("others")){
-						bt.others = sec.getInt("others");
+					if(k2.equals("other")){
+						bt.others = sec.getInt("other");
 					}else{
 						bt.prices.put(Integer.parseInt(k2), sec.getInt(k2));
 					}
