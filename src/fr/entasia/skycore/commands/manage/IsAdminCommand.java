@@ -95,6 +95,7 @@ public class IsAdminCommand implements CommandExecutor {
 								}
 								p.sendMessage("§7Extension : §bNiveau "+(is.getExtension()+1)+" §7("+is.getExtension()+"/3)");
 								p.sendMessage("§7Niveau : §b" + is.getLevel());
+								p.sendMessage("§7Banque d'île : §b" + is.getBank());
 								p.sendMessage("§8Dimensions :");
 								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));
 								p.sendMessage("§7End : §b"+is.hasDimension(Dimensions.END));
