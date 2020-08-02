@@ -181,11 +181,11 @@ public class IsCommand implements CommandExecutor {
 					case "level":
 					case "lvl": {
 
-						int a = link.is.updateLvl(new CodePasser.None() {
+						int a = link.is.updateLvl(new CodePasser.Arg<Integer>() {
 							@Override
-							public void run() {
+							public void run(Integer rem) {
 								p.sendMessage("§aNiveau de l'île : " + link.is.getLevel());
-								p.sendMessage("§aPoints demandés pour le niveau suivant : " + link.is.getRemPoints());
+//								p.sendMessage("§aPoints demandés pour le niveau suivant : "+rem);
 							}
 						});
 						if (a == 0) p.sendMessage("§aCalcul du niveau de l'île en cours...");

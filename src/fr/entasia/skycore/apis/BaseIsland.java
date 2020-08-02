@@ -46,7 +46,6 @@ public class BaseIsland {
 	protected long rawpoints=0;
 	protected int malus=0;
 	protected long lvl=0;
-	protected int remPoints=1;
 
 	protected boolean hasNether, hasEnd;
 	protected Location netherPortal, endPortal, OWNetherPortal, OWEndPortal;
@@ -54,7 +53,7 @@ public class BaseIsland {
 
 	// online stuff
 	public boolean loaded = false;
-	protected long lvlCooldown =10000;
+	protected long lvlCooldown = 10000;
 	public ArrayList<AutoMiner> autominers = new ArrayList<>();
 	public boolean generating = false;
 
@@ -166,7 +165,7 @@ public class BaseIsland {
 
 	private static final int time = 5*60*1000;
 
-	public int updateLvl(CodePasser.None code){
+	public int updateLvl(CodePasser.Arg<Integer> code){
 		long a = System.currentTimeMillis() - lvlCooldown;
 		if(a < time)return (int) (time-a)/1000;
 		else {
@@ -185,12 +184,12 @@ public class BaseIsland {
 
 
 
-	public long getLevel(){
-		return lvl;
+	public long getRawpoints(){
+		return rawpoints;
 	}
 
-	public int getRemPoints(){
-		return remPoints;
+	public long getLevel(){
+		return lvl;
 	}
 
 	public void setMalus(int malus){

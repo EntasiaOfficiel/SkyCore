@@ -10,6 +10,7 @@ import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.registry.WorldData;
 import fr.entasia.apis.other.CodePasser;
+import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
@@ -116,9 +117,9 @@ public class TerrainManager {
 					new BukkitRunnable() {
 						@Override
 						public void run() {
-							calcPoints(link.is, new CodePasser.None() {
+							calcPoints(link.is, new CodePasser.Arg<Integer>() {
 								@Override
-								public void run() {
+								public void run(Integer rem) {
 									link.is.setMalus((int) link.is.rawpoints);
 									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
 									sp.p.teleport(link.is.getHome());
@@ -178,7 +179,7 @@ public class TerrainManager {
 		genBaseDimension(isid, session, Dimensions.END.world, Dimensions.END.schems);
 	}
 
-	protected static void calcPoints(BaseIsland is, CodePasser.None
+	protected static void calcPoints(BaseIsland is, CodePasser.Arg<Integer>
 			code){
 		ServerUtils.wantMainThread();
 		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimensions.OVERWORLD);
@@ -206,14 +207,15 @@ public class TerrainManager {
 				}
 
 				is.rawpoints = points-is.malus;
+				Pair<Integer, Integer> p = calcLevel(is.rawpoints);
 				// TODO UPDATE LVL ET REM_POINTS
-				is.lvl = is.rawpoints; // temporaire
+				is.lvl = p.key; // temporaire
 				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ? WHERE x=? and z=?", is.rawpoints, is.isid.x, is.isid.z);
 				new BukkitRunnable() {
 					@Override
 					public void run() {
 						try {
-							code.run();
+							code.run(p.value);
 						}catch(Throwable e){
 							e.printStackTrace();
 						}
@@ -221,6 +223,18 @@ public class TerrainManager {
 				}.runTask(Main.main);
 			}
 		}.runTaskAsynchronously(Main.main);
+	}
+
+	public static Pair<Integer, Integer> calcLevel(long raw){
+		int lvl = -1;
+		int rem = 5000;
+		while(raw>0){
+			lvl++;
+			raw-=rem;
+			if(rem>100000)rem+=10000;
+			else rem*=1.1;
+		}
+		return new Pair<>(lvl, (int)-raw);
 	}
 
 	public static boolean clearTerrain(ISID isid, EditSession editSession){

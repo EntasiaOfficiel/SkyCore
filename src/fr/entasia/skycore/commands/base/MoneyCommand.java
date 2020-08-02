@@ -13,7 +13,7 @@ public class MoneyCommand implements CommandExecutor {
 		if(args.length==0){
 			if(sender instanceof Player){
 				sp = BaseAPI.getSkyPlayer(((Player) sender));
-				sender.sendMessage("§aTa monnaie : §2"+sp.getMoney());
+				sender.sendMessage("§aTa monnaie : §2"+sp.getMoney()+"§a");
 			}else sender.sendMessage("§cTu es la console ! Met un nom de joueur");
 		}else{
 			sp = BaseAPI.getArgSP(sender, args[0], false);
