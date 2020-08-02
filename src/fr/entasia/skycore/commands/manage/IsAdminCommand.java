@@ -15,6 +15,7 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§cArguments disponibles : ");
 		sender.sendMessage("§4Joueurs :");
 		sender.sendMessage("§c- infop");
+		sender.sendMessage("§c- resetgen");
 		sender.sendMessage("§c- deletep");
 		sender.sendMessage("§4Îles :");
 		sender.sendMessage("§c- infois");
@@ -69,6 +70,19 @@ public class IsAdminCommand implements CommandExecutor {
 						}
 						break;
 					}
+
+					case "resetgen":{
+						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
+						else {
+							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
+							if (target != null) {
+								target.setLastGenerated(0);
+								p.sendMessage("§aSuccès !");
+							}
+						}
+						break;
+					}
+
 					case "infois": {
 						ISID isid;
 						if (args.length == 1) {

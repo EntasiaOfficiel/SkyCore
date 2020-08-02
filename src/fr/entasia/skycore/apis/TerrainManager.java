@@ -11,6 +11,7 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.registry.WorldData;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.ServerUtils;
+import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.objs.IslandShematics;
@@ -82,9 +83,18 @@ public class TerrainManager {
 
 
 	public static void generateIsland(SkyPlayer sp, IslandType type){
-		if(sp.getIslands().size()>10||sp.generating)return;
-		sp.generating = true;
-		sp.p.sendMessage("§eGénération de votre île en cours.. merci de patienter !");
+		if(sp.getIslands().size()>5) {
+			sp.p.sendMessage("§cTu as déja trop d'îles ! Quitte en pour pouvoir en créer une");
+			return;
+		}
+		int ts = (int) (System.currentTimeMillis()/1000);
+		int a = 60*60*24*3-(ts-sp.lastGenerated);
+		if(a>0){ // 3 jours
+			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
+			return;
+		}
+		sp.setLastGenerated(ts);
+		sp.p.sendMessage("§eGénération de ton île en cours.. Merci de patienter !");
 
 		new BukkitRunnable(){
 			@Override
@@ -112,7 +122,6 @@ public class TerrainManager {
 									link.is.setMalus((int) link.is.rawpoints);
 									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
 									sp.p.teleport(link.is.getHome());
-									sp.generating = false;
 								}
 							});
 						}

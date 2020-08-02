@@ -83,7 +83,8 @@ public class InternalAPI {
 		SkyPlayer sp=null;
 		while(rs.next()){
 			sp = new SkyPlayer(UUID.fromString(rs.getString("uuid")), rs.getString("name"));
-			sp.addMoney(rs.getLong("money"));
+			sp.money = rs.getLong("money");
+			sp.lastGenerated = rs.getInt("lastgen");
 			Utils.playerCache.add(sp);
 		}
 		int i = 0;

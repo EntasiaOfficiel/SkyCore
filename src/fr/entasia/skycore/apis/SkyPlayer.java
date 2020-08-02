@@ -21,7 +21,8 @@ public class SkyPlayer {
 
 	// online stuff
 	public boolean islandChat = false;
-	public boolean generating = false;
+
+	protected int lastGenerated = 10000;
 
 
 	// CONSTRUCTEURS
@@ -137,5 +138,12 @@ public class SkyPlayer {
 			if(is.equals(isid))return is;
 		}
 		return null;
+	}
+
+
+	public void setLastGenerated(int lastGenerated){
+		this.lastGenerated = lastGenerated;
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_players SET lastgen=? WHERE uuid=?", lastGenerated, uuid);
+
 	}
 }
