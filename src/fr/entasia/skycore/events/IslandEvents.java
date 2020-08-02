@@ -16,8 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -39,6 +38,16 @@ public class IslandEvents implements Listener {
 
 
 	@EventHandler
+	public void interact(PlayerBucketFillEvent e){
+		if(isBlockDenied(e.getPlayer(), e.getBlockClicked()))e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void interact(PlayerBucketEmptyEvent e){
+		if(isBlockDenied(e.getPlayer(), e.getBlockClicked()))e.setCancelled(true);
+	}
+
+	@EventHandler
 	public void interact(PlayerInteractEvent e){
 		Player p = e.getPlayer();
 		if(Dimensions.isIslandWorld(p.getWorld())&&e.hasBlock()){
@@ -51,13 +60,13 @@ public class IslandEvents implements Listener {
 		} // on bloque pas les interactions dans les autres mondes (pour le moment ?)
 	}
 
-	public static boolean isBlockDenied(Player p, Block b){
+	private static boolean isBlockDenied(Player p, Block b){
 		if(Utils.masterEditors.contains(p)&&p.getGameMode()==GameMode.CREATIVE)return false;
 		if(Dimensions.isIslandWorld(p.getWorld())) {
 			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
 			if (is != null) {
 				ISPLink link = is.getMember(p.getUniqueId());
-				if (link == null) p.sendMessage("§cTu ne peux pas casser de blocks sur cette ile !");
+				if (link == null) p.sendMessage("§cTu n'est pas membre de cette ile !");
 				else {
 					if (is.hasDimension(Dimensions.getDimension(p.getWorld()))) {
 						int m = is.isid.distanceFromIS(b.getLocation());
@@ -80,9 +89,7 @@ public class IslandEvents implements Listener {
 
 	@EventHandler
 	public void blockPlace(BlockPlaceEvent e){
-		if(isBlockDenied(e.getPlayer(), e.getBlock())){
-			e.setCancelled(true);
-		}
+		if(isBlockDenied(e.getPlayer(), e.getBlock()))e.setCancelled(true);
 	}
 
 	@EventHandler
@@ -99,6 +106,12 @@ public class IslandEvents implements Listener {
 			if(e.getAction()==Action.PHYSICAL)return;
 
 			if(!OthersAPI.isMasterEdit(e.getPlayer())){
+				switch(e.getPlayer().getInventory().getItemInMainHand().getType()){
+					case BUCKET:
+					case LAVA_BUCKET:
+					case WATER_BUCKET:
+						e.setCancelled(true);
+				}
 				e.setUseInteractedBlock(Event.Result.DENY);
 			}
 		}
@@ -116,7 +129,7 @@ public class IslandEvents implements Listener {
 	}
 
 	@EventHandler
-	public void onAnyMovement(PlayerMoveEvent e){
+	public void onMove(PlayerMoveEvent e){
 		Player p = e.getPlayer();
 		if(Dimensions.isIslandWorld(p.getWorld())){
 			BaseIsland fr = BaseAPI.getIsland(CooManager.getIslandID(e.getFrom()));

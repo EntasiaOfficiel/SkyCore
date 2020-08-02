@@ -87,7 +87,10 @@ public class BaseEvents implements Listener {
 				for (PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());
 				}
+				p.setFireTicks(0);
+				p.setFallDistance(0);
 				p.setMaxHealth(20);
+				p.setSprinting(false);
 				p.setHealth(20);
 				p.setFoodLevel(20);
 
