@@ -220,7 +220,6 @@ public class IsAdminCommand implements CommandExecutor {
 					// AUTRES
 					case "help": {
 						args(sender);
-
 						break;
 					}
 					default:{

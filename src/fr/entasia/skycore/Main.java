@@ -6,6 +6,7 @@ import fr.entasia.apis.sql.SQLConnection;
 import fr.entasia.skycore.apis.TerrainManager;
 import fr.entasia.skycore.commands.base.*;
 import fr.entasia.skycore.commands.manage.IsAdminCommand;
+import fr.entasia.skycore.commands.manage.MasterEditCommand;
 import fr.entasia.skycore.commands.manage.SetSpawnCommand;
 import fr.entasia.skycore.commands.manage.SkyCoreCommand;
 import fr.entasia.skycore.events.*;
@@ -73,16 +74,18 @@ public class Main extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new MiningEvents(), this);
 
 			getCommand("skycore").setExecutor(new SkyCoreCommand());
-			getCommand("spawn").setExecutor(new SpawnCommand());
-			getCommand("bin").setExecutor(new BinCommand());
-			getCommand("is").setExecutor(new IsCommand());
 			getCommand("isadmin").setExecutor(new IsAdminCommand());
 			getCommand("setspawn").setExecutor(new SetSpawnCommand());
+			getCommand("setspawn").setExecutor(new SetSpawnCommand());
+			getCommand("masteredit").setExecutor(new MasterEditCommand());
 
 			getCommand("baltop").setExecutor(new BaltopCommand());
 			getCommand("money").setExecutor(new MoneyCommand());
 			getCommand("pay").setExecutor(new PayCommand());
 			getCommand("eco").setExecutor(new EcoCommand());
+			getCommand("bin").setExecutor(new BinCommand());
+			getCommand("is").setExecutor(new IsCommand());
+			getCommand("spawn").setExecutor(new SpawnCommand());
 
 			loadIslandStructs();
 

@@ -38,14 +38,6 @@ public class SkyCoreCommand implements CommandExecutor {
 						p.sendMessage("§cSauvegardes SQL désactivées !");
 
 					}else p.sendMessage("§cArgument invalide !");
-				}else if(args[0].equalsIgnoreCase("masteredit")){
-					if(Utils.masterEditors.remove(p)) {
-						p.sendMessage("§6Master Editor §cDésactivé §6!");
-					}else{
-						Utils.masterEditors.add(p);
-						p.sendMessage("§6Master Editor §aActivé §6!");
-					}
-
 				}else {
 					p.sendMessage("§cArgument invalide ! Arguments disponibles :");
 					showArgs(sender);
@@ -58,6 +50,5 @@ public class SkyCoreCommand implements CommandExecutor {
 	private static void showArgs(CommandSender sender){
 		sender.sendMessage("§c- reload");
 		sender.sendMessage("§c- sql");
-		sender.sendMessage("§c- masteredit");
 	}
 }

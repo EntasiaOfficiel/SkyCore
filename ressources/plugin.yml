@@ -6,21 +6,22 @@ main: fr.entasia.skycore.Main
 commands:
   skycore:
 
-  spawn:
-
   setspawn:
+
+  masteredit:
+    aliases: [buildtoggle]
+
+  isadmin:
+    aliases: [adminis]
 
 
   bin:
     aliases: [corbeille, poubelle, trash, binaries]
 
+  spawn:
 
   is:
     aliases: [island, islands, ile, iles]
-
-  isadmin:
-    aliases: [adminis]
-
 
   money:
     aliases: [monnaie, bal, balance]
