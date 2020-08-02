@@ -410,6 +410,7 @@ public class BaseIsland {
 
 	public boolean setBank(long m){
 		if(m<0)return false;
+		bank = m;
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank=? WHERE x=? and z=?", m, isid.x, isid.z);
 		return true;
 
