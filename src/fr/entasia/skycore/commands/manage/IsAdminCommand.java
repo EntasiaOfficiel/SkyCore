@@ -205,7 +205,7 @@ public class IsAdminCommand implements CommandExecutor {
 										case "setowner":{
 											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
 											else {
-												if (is.reRankMember(targetLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
+												if (targetLink.setRank(MemberRank.CHEF)) p.sendMessage("§aSuccès !");
 												else p.sendMessage("§cUne erreur est survenue !");
 											}
 											break;
@@ -217,7 +217,7 @@ public class IsAdminCommand implements CommandExecutor {
 													MemberRank r = MemberRank.valueOf(args[3]);
 													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exlure un membre de l'île !");
 													else{
-														targetLink.is.reRankMember(targetLink.sp, r);
+														targetLink.setRank(r);
 														p.sendMessage();
 													}
 												}catch(IllegalArgumentException ignore){
@@ -230,7 +230,7 @@ public class IsAdminCommand implements CommandExecutor {
 											}
 											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
 											else {
-												if (is.reRankMember(targetLink, MemberRank.CHEF)) p.sendMessage("§aSuccès !");
+												if (targetLink.setRank(MemberRank.CHEF)) p.sendMessage("§aSuccès !");
 												else p.sendMessage("§cUne erreur est survenue !");
 											}
 											break;

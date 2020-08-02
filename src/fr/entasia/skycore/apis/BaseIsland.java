@@ -262,7 +262,7 @@ public class BaseIsland {
 			if(link==null){
 				link = new ISPLink(this, sp, rank);
 				if(rank==MemberRank.CHEF){
-					if(owner!=null) owner.setRank(MemberRank.ADJOINT);
+					if(owner!=null) owner.rank = MemberRank.ADJOINT;
 					owner = link;
 				}
 				members.add(link);
@@ -276,7 +276,7 @@ public class BaseIsland {
 
 	public boolean removeMember(ISPLink link){
 		if(link.is.equals(this)){
-			link.setRank(MemberRank.DEFAULT);
+			link.rank = MemberRank.DEFAULT;
 			members.remove(link);
 			link.sp.islands.remove(link);
 			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, link.sp.uuid);
@@ -285,19 +285,19 @@ public class BaseIsland {
 		return false;
 	}
 
-	public boolean reRankMember(ISPLink link, MemberRank rank){
-		if(rank==MemberRank.DEFAULT) InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !", true);
-		else if(link.is.equals(this)){
-			link.setRank(rank);
-			if(rank==MemberRank.CHEF) {
-				owner.setRank(MemberRank.ADJOINT);
-				owner = link;
-			}
-			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_pis SET rank = ? WHERE uuid=? and x=? and z=?", rank.id, link.sp.uuid, link.is.isid.x, link.is.isid.z);
-			return true;
-		} else InternalAPI.warn("L'île fournie ne correspond pas", true);
-		return false;
-	}
+//	public boolean reRankMember(ISPLink link, MemberRank rank){
+//		if(rank==MemberRank.DEFAULT) InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !", true);
+//		else if(link.is.equals(this)){
+//			link.setRank(rank);
+//			if(rank==MemberRank.CHEF) {
+//				owner.setRank(MemberRank.ADJOINT);
+//				owner = link;
+//			}
+//			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_pis SET rank = ? WHERE uuid=? and x=? and z=?", rank.id, link.sp.uuid, link.is.isid.x, link.is.isid.z);
+//			return true;
+//		} else InternalAPI.warn("L'île fournie ne correspond pas", true);
+//		return false;
+//	}
 
 
 	public ArrayList<SkyPlayer> getInvites(){

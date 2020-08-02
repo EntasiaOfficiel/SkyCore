@@ -134,7 +134,7 @@ public class BaseAPI {
 		int maxz = is.isid.getMaxZTotal();
 
 		for (ISPLink link : is.getMembers()) {
-			link.setRank(MemberRank.DEFAULT);
+			link.rank = MemberRank.DEFAULT;
 			link.sp.islands.remove(link);
 		}
 		is.members.clear();
