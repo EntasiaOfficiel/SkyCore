@@ -161,6 +161,14 @@ public class IsCommand implements CommandExecutor {
 						IsMenus.manageTeamOpen(link);
 						break;
 					}
+					case "sethome": {
+						if(link.getRank()==MemberRank.RECRUE)p.sendMessage("§cTu es une recrue, tu ne peux pas redéfinir le spawn de l'île !");
+						else{
+							link.is.setHome(p.getLocation());
+							p.sendMessage("§aLe spawn de l'île à été redéfini avec succès !");
+						}
+						break;
+					}
 					case "c":
 					case "chat": {
 						if (args.length == 1) {
@@ -460,8 +468,9 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage("§bCommandes de bases :");
 						p.sendMessage(new ChatComponent("§e- go/home [numero]").setTextHover("§6pour te téléporter à ton île").create());
 						p.sendMessage(new ChatComponent("§e- chat").setTextHover("§6pour parler avec les membres de l'île").create());
-						p.sendMessage(new ChatComponent("§e- list").setTextHover("§6Voir tes îles, et choisir l'île par défaut").create());
-						p.sendMessage(new ChatComponent("§e- help").setTextHover("§6Pour voir cette liste. Très surprenant.").create());
+						p.sendMessage(new ChatComponent("§e- list").setTextHover("§6voir tes îles, et choisir l'île par défaut").create());
+						p.sendMessage(new ChatComponent("§e- sethome").setTextHover("§6pour redéfinir le spawn de ton île").create());
+						p.sendMessage(new ChatComponent("§e- help").setTextHover("§6pour voir cette liste. Très surprenant.").create());
 						p.sendMessage("§bCommandes d'équipe :");
 						p.sendMessage(new ChatComponent("§e- team").setTextHover("§6pour voir l'équipe de ton île").create());
 						p.sendMessage(new ChatComponent("§e- invite").setTextHover("§6pour inviter un joueur sur l'île").create());
