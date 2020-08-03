@@ -136,8 +136,8 @@ public class Main extends JavaPlugin {
 				continue;
 			}
 			if(o instanceof ConfigurationSection){
-				sec = (ConfigurationSection)o;
 				bt = new BlockType();
+				sec = (ConfigurationSection)o;
 				for(String k2 : sec.getKeys(false)){
 					if(k2.equals("other")){
 						bt.others = sec.getInt("other");
@@ -145,6 +145,7 @@ public class Main extends JavaPlugin {
 						bt.prices.put(Integer.parseInt(k2), sec.getInt(k2));
 					}
 				}
+				TerrainManager.blockValues.put(m, bt);
 			}else{
 				TerrainManager.blockValues.put(m, new BlockType(Integer.parseInt(o.toString())));
 			}

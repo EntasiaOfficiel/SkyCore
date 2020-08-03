@@ -408,7 +408,7 @@ public class IsCommand implements CommandExecutor {
 											} else {
 												int time = (int) Math.ceil((15 - System.currentTimeMillis() - co.when) / 1000f);
 												p.sendMessage("§cTape la commande §4" + command.getName() + " setowner " + args[1] + " confirm§c dans les " + time +
-														" secondes pour confirmer lae changement de propriétaire. " + is.isid.str());
+														" secondes pour confirmer le changement de propriétaire de l'île " + is.isid.str());
 											}
 										}
 									} else p.sendMessage("§cTu n'es pas le propriétaire de cette île !");
@@ -453,7 +453,7 @@ public class IsCommand implements CommandExecutor {
 											co.task = new WaitConfirm(p, confirmDelete).runTaskLaterAsynchronously(Main.main, 300); // 15*20 = 300 ticks
 										} else {
 											int time = (int) Math.ceil((15 - System.currentTimeMillis() - co.when) / 1000f);
-											p.sendMessage("§cTape la commande " + args[0] + " delete confirm dans les " + time + " secondes pour confirmer la suppression de l'île. " + is.isid.str());
+											p.sendMessage("§cTape la commande " + args[0] + " delete confirm dans les " + time + " secondes pour confirmer la suppression de l'île " + is.isid.str());
 										}
 									}
 								} else p.sendMessage("§cTu n'es pas le propriétaire de cette île !");

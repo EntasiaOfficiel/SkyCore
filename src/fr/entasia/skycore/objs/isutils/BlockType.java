@@ -23,6 +23,6 @@ public class BlockType {
 
 	@Override
 	public String toString() {
-		return "BlockType["+prices.size()+" prices]";
+		return "BlockType["+prices.size()+" custom prices]";
 	}
 }

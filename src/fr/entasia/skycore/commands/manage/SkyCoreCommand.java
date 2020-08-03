@@ -1,7 +1,6 @@
 package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.InternalAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -73,6 +73,7 @@ public class InternalAPI {
 			is.setName(rs.getString("name"));
 			is.addBank(rs.getLong("bank"));
 			is.setExtension(rs.getByte("extension"));
+			is.setMalus(rs.getInt("malus"));
 
 			if(rs.getByte("hasNether")==1)is.hasNether = true;
 			if(rs.getByte("hasEnd")==1)is.hasEnd = true;

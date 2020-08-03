@@ -167,7 +167,8 @@ public class BaseIsland {
 
 	public int updateLvl(CodePasser.Arg<Integer> code){
 		long a = System.currentTimeMillis() - lvlCooldown;
-		if(a < time)return (int) (time-a)/1000;
+//		if(a < time)return (int) (time-a)/1000;
+		if(false)return 0;
 		else {
 			lvlCooldown = System.currentTimeMillis();
 			TerrainManager.calcPoints(this, code);

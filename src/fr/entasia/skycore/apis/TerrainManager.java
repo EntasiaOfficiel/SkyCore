@@ -89,7 +89,8 @@ public class TerrainManager {
 			return;
 		}
 		int ts = (int) (System.currentTimeMillis()/1000);
-		int a = 60*60*24*3-(ts-sp.lastGenerated);
+//		int a = 60*60*24*3-(ts-sp.lastGenerated);
+		int a = -1;
 		if(a>0){ // 3 jours
 			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
 			return;
@@ -126,7 +127,7 @@ public class TerrainManager {
 								}
 							});
 						}
-					}.runTask(Main.main);
+					}.runTaskLater(Main.main, 20);
 
 				}catch(Throwable e){
 					e.printStackTrace();
@@ -179,8 +180,7 @@ public class TerrainManager {
 		genBaseDimension(isid, session, Dimensions.END.world, Dimensions.END.schems);
 	}
 
-	protected static void calcPoints(BaseIsland is, CodePasser.Arg<Integer>
-			code){
+	protected static void calcPoints(BaseIsland is, CodePasser.Arg<Integer> code){
 		ServerUtils.wantMainThread();
 		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimensions.OVERWORLD);
 
@@ -190,11 +190,10 @@ public class TerrainManager {
 				Material m;
 				long points = 0;
 				for (ChunkSnapshot cs : chunks) {
-					for (int x = 0; x <= 16; x++) {
+					for (int x = 0; x < 16; x++) {
 						for (int y = 0; y < 256; y++) {
-							for (int z = 0; z <= 16; z++) {
+							for (int z = 0; z < 16; z++) {
 								m = cs.getBlockType(x, y, z);
-//										cs.getBlockData(x, y, z));
 								if (m != Material.AIR) {
 									BlockType bt = blockValues.get(m);
 									if(bt!=null){
@@ -205,11 +204,13 @@ public class TerrainManager {
 						}
 					}
 				}
-
+				System.out.println("COLL="+points);
 				is.rawpoints = points-is.malus;
+				System.out.println("RAW="+is.rawpoints);
+				if(is.rawpoints<0)is.rawpoints=0; // security
 				Pair<Integer, Integer> p = calcLevel(is.rawpoints);
 				// TODO UPDATE LVL ET REM_POINTS
-				is.lvl = p.key; // temporaire
+				is.lvl = p.key;
 				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ? WHERE x=? and z=?", is.rawpoints, is.isid.x, is.isid.z);
 				new BukkitRunnable() {
 					@Override
@@ -227,12 +228,11 @@ public class TerrainManager {
 
 	public static Pair<Integer, Integer> calcLevel(long raw){
 		int lvl = -1;
-		int rem = 5000;
+		int rem = 2000;
 		while(raw>0){
 			lvl++;
 			raw-=rem;
-			if(rem>100000)rem+=10000;
-			else rem*=1.1;
+			rem*=1.1;
 		}
 		return new Pair<>(lvl, (int)-raw);
 	}
