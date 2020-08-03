@@ -22,7 +22,7 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§c- deleteis");
 		sender.sendMessage("§c- join");
 		sender.sendMessage("§c- kick");
-		sender.sendMessage("§c- setowner");
+//		sender.sendMessage("§c- setowner");
 		sender.sendMessage("§c- setrange");
 		sender.sendMessage("§c- setrank");
 		sender.sendMessage("§4Autres :");
@@ -203,14 +203,14 @@ public class IsAdminCommand implements CommandExecutor {
 											}
 											break;
 										}
-										case "setowner":{
-											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-											else {
-												if (targetLink.setRank(MemberRank.CHEF)) p.sendMessage("§aSuccès !");
-												else p.sendMessage("§cUne erreur est survenue !");
-											}
-											break;
-										}
+//										case "setowner":{
+//											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+//											else {
+//												if (targetLink.setRank(MemberRank.CHEF)) p.sendMessage("§aSuccès !");
+//												else p.sendMessage("§cUne erreur est survenue !");
+//											}
+//											break;
+//										}
 										case "setrank":{
 											if(args.length==3)p.sendMessage("§cMet un rôle !");
 											else{
@@ -228,11 +228,6 @@ public class IsAdminCommand implements CommandExecutor {
 														p.sendMessage("§c- "+rank.name+" ("+rank.getName()+"§c)");
 													}
 												}
-											}
-											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-											else {
-												if (targetLink.setRank(MemberRank.CHEF)) p.sendMessage("§aSuccès !");
-												else p.sendMessage("§cUne erreur est survenue !");
 											}
 											break;
 										}
