@@ -97,11 +97,21 @@ public class InternalAPI {
 			while(rs.next()){
 				i++;
 				isid = new ISID(rs.getInt("x"), rs.getInt("z"));
-
-				if(!is.isid.equals(isid))is = BaseAPI.getIsland(isid);
-				assert is != null;
-				sp = BaseAPI.getSkyPlayer(UUID.fromString(rs.getString("uuid")));
 				rID = rs.getInt("rank");
+
+				assert is != null; // tkt
+				if(!is.isid.equals(isid))is = BaseAPI.getIsland(isid);
+
+				if(is==null){
+					Main.main.getLogger().severe("Tentative de récupération du lien d'une île non existante !");
+					Main.main.getLogger().severe("UUID="+rs.getString("uuid"));
+					Main.main.getLogger().severe("ISID="+isid);
+					Main.main.getLogger().severe("RANK="+rID);
+					continue;
+				}
+
+
+				sp = BaseAPI.getSkyPlayer(UUID.fromString(rs.getString("uuid")));
 				if(sp==null){
 					Main.main.getLogger().severe("Tentative de récupération du lien d'un joueur non existant !");
 					Main.main.getLogger().severe("UUID="+rs.getString("uuid"));
