@@ -204,9 +204,7 @@ public class TerrainManager {
 						}
 					}
 				}
-				System.out.println("COLL="+points);
 				is.rawpoints = points-is.malus;
-				System.out.println("RAW="+is.rawpoints);
 				if(is.rawpoints<0)is.rawpoints=0; // security
 				Pair<Integer, Integer> p = calcLevel(is.rawpoints);
 				// TODO UPDATE LVL ET REM_POINTS
