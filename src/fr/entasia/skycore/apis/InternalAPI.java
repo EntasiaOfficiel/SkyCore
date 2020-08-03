@@ -100,8 +100,6 @@ public class InternalAPI {
 
 				if(!is.isid.equals(isid))is = BaseAPI.getIsland(isid);
 				assert is != null;
-				System.out.println(" ");
-
 				sp = BaseAPI.getSkyPlayer(UUID.fromString(rs.getString("uuid")));
 				rID = rs.getInt("rank");
 				if(sp==null){
