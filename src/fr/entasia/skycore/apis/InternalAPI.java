@@ -100,12 +100,19 @@ public class InternalAPI {
 
 				if(!is.isid.equals(isid))is = BaseAPI.getIsland(isid);
 				assert is != null;
+				System.out.println(" ");
 
 				sp = BaseAPI.getSkyPlayer(UUID.fromString(rs.getString("uuid")));
-				assert sp != null;
-
-
 				rID = rs.getInt("rank");
+				if(sp==null){
+					Main.main.getLogger().severe("Tentative de récupération du lien d'un joueur non existant !");
+					Main.main.getLogger().severe("UUID="+rs.getString("uuid"));
+					Main.main.getLogger().severe("ISID="+isid);
+					Main.main.getLogger().severe("RANK="+rID);
+					continue;
+				}
+
+
 				if(rID==0)is.addBanned(sp);
 				else is.addMember(sp, MemberRank.getType(rID));
 				if(rs.getByte("def")==1){
