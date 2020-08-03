@@ -196,11 +196,12 @@ public class IsAdminCommand implements CommandExecutor {
 											break;
 										}
 										case "kick":{
-											if(targetLink==null)p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-											else{
-												if(is.removeMember(targetLink))p.sendMessage("§aSuccès !");
-												else p.sendMessage("§cUne erreur est survenue !");
+											if(targetLink==null){
+												p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+												return true;
 											}
+											if(is.removeMember(targetLink))p.sendMessage("§aSuccès !");
+											else p.sendMessage("§cUne erreur est survenue !");
 											break;
 										}
 //										case "setowner":{
@@ -214,6 +215,10 @@ public class IsAdminCommand implements CommandExecutor {
 										case "setrank":{
 											if(args.length==3)p.sendMessage("§cMet un rôle !");
 											else{
+												if(targetLink==null){
+													p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+													return true;
+												}
 												try{
 													MemberRank r = MemberRank.valueOf(args[3]);
 													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exclure un membre de l'île !");
