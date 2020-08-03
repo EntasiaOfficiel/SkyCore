@@ -197,11 +197,16 @@ public class IsCommand implements CommandExecutor {
 
 					case "leave":
 					case "quit": {
-						if (link.is.removeMember(link)) {
-							link.is.sendTeamMsg(link.getName() + "§e à quitté l'île !");
-							p.sendMessage("§cTu as quitté l'île !");
-						} else p.sendMessage("§cUne erreur s'est produite !");
-						break;
+						if(link.getRank()==MemberRank.CHEF){
+							p.sendMessage("§cTu es le chef de cette île, tu ne peux pas la quitter !");
+							p.sendMessage("§cUtilise /is setowner pour transférer la propriété de l'île");
+						}else{
+							if (link.is.removeMember(link)) {
+								link.is.sendTeamMsg(link.getName() + "§e à quitté l'île !");
+								p.sendMessage("§cTu as quitté l'île !");
+							} else p.sendMessage("§cUne erreur s'est produite !");
+							break;
+						}
 					}
 
 					case "ban":
