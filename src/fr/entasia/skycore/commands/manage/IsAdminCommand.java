@@ -22,7 +22,6 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§c- deleteis");
 		sender.sendMessage("§c- join");
 		sender.sendMessage("§c- kick");
-//		sender.sendMessage("§c- setowner");
 		sender.sendMessage("§c- setrange");
 		sender.sendMessage("§c- setrank");
 		sender.sendMessage("§4Autres :");
@@ -178,8 +177,7 @@ public class IsAdminCommand implements CommandExecutor {
 					}
 					case "setrank":
 					case "join":
-					case "kick":
-					case "setowner":{
+					case "kick":{
 						BaseIsland is = getIS(sender, args);
 						if(is!=null){
 							if(args.length==2)p.sendMessage("§cMet un joueur !");

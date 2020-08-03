@@ -365,9 +365,9 @@ public class IsCommand implements CommandExecutor {
 									if (is.getOwner().sp.equals(link.sp)) {
 										ConfirmObj co = confirmPassOwner.get(p);
 										if (args.length == 2 && args[1].equals("confirm")) {
-											if (co == null || (System.currentTimeMillis() - co.when > 10000))
+											if (co == null || (System.currentTimeMillis() - co.when > 10000)){
 												p.sendMessage("§cLe temps de confirmation est écoulé !");
-											else {
+											}else {
 												co.task.cancel();
 												confirmPassOwner.remove(p);
 												if (co.is.isid.equals(is.isid)) {
@@ -385,8 +385,9 @@ public class IsCommand implements CommandExecutor {
 															}
 														}
 													}
-												} else
+												} else{
 													p.sendMessage("§cL'île sur laquelle tu es n'est pas la même que celle ou tu as fait la première commande ! Annulation");
+												}
 											}
 										} else {
 											if (co == null) {
@@ -406,7 +407,7 @@ public class IsCommand implements CommandExecutor {
 													}
 												}
 											} else {
-												int time = (int) Math.ceil((15 - System.currentTimeMillis() - co.when) / 1000f);
+												int time = (int) (15 - (Math.ceil(System.currentTimeMillis() - co.when) / 1000f));
 												p.sendMessage("§cTape la commande §4" + command.getName() + " setowner " + args[1] + " confirm§c dans les " + time +
 														" secondes pour confirmer le changement de propriétaire de l'île " + is.isid.str());
 											}
@@ -452,7 +453,7 @@ public class IsCommand implements CommandExecutor {
 											confirmDelete.put(p, co);
 											co.task = new WaitConfirm(p, confirmDelete).runTaskLaterAsynchronously(Main.main, 300); // 15*20 = 300 ticks
 										} else {
-											int time = (int) Math.ceil((15 - System.currentTimeMillis() - co.when) / 1000f);
+											int time = (int) (15 - Math.floor((System.currentTimeMillis() - co.when) / 1000f));
 											p.sendMessage("§cTape la commande " + args[0] + " delete confirm dans les " + time + " secondes pour confirmer la suppression de l'île " + is.isid.str());
 										}
 									}
