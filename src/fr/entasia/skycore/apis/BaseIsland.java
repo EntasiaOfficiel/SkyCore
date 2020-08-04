@@ -60,10 +60,6 @@ public class BaseIsland {
 
 
 	// CONSTRUCTEURS
-	public BaseIsland(){ // faked
-		isid = null;
-		type = null;
-	}
 
 	public BaseIsland(ISID isid, IslandType type){
 		this.isid = isid;
