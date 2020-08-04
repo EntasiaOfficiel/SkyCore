@@ -89,8 +89,7 @@ public class TerrainManager {
 			return;
 		}
 		int ts = (int) (System.currentTimeMillis()/1000);
-//		int a = 60*60*24*3-(ts-sp.lastGenerated);
-		int a = -1;
+		int a = 60*60*24*3-(ts-sp.lastGenerated);
 		if(a>0){ // 3 jours
 			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
 			return;
