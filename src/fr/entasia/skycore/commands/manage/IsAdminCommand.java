@@ -15,10 +15,11 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§cArguments disponibles : ");
 		sender.sendMessage("§4Joueurs :");
 		sender.sendMessage("§c- infop");
-		sender.sendMessage("§c- resetgen");
 		sender.sendMessage("§c- deletep");
+		sender.sendMessage("§c- resetgen");
 		sender.sendMessage("§4Îles :");
 		sender.sendMessage("§c- infois");
+		sender.sendMessage("§c- tp");
 		sender.sendMessage("§c- deleteis");
 		sender.sendMessage("§c- join");
 		sender.sendMessage("§c- kick");
@@ -58,7 +59,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "infop": {
 						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
 						else {
-							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
+							SkyPlayer target = InternalAPI.getArgSP(p, args[1], false);
 							if(target==null)return true;
 							p.sendMessage("Joueur : " + target.name);
 							p.sendMessage("îles :");
@@ -73,7 +74,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "resetgen":{
 						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
 						else {
-							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
+							SkyPlayer target = InternalAPI.getArgSP(p, args[1], false);
 							if (target != null) {
 								target.setLastGenerated(0);
 								p.sendMessage("§aSuccès !");
@@ -125,7 +126,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "deletep":{
 						if(args.length==1)p.sendMessage("§cMet un pseudo/UUID !");
 						else{
-							SkyPlayer target = BaseAPI.getArgSP(p, args[1], false);
+							SkyPlayer target = InternalAPI.getArgSP(p, args[1], false);
 							if(target!=null){
 								if(BaseAPI.deleteSkyPlayer(target))p.sendMessage("§cJoueur supprimé avec succès !");
 								else p.sendMessage("§4Erreur lors de la suppression du joueur !");
@@ -160,19 +161,25 @@ public class IsAdminCommand implements CommandExecutor {
 
 					case "setrange":{
 						BaseIsland is = getIS(sender, args);
-						if(is!=null){
-							byte range;
-							try{
-								if(args.length==2)throw new NumberFormatException();
-								range = Byte.parseByte(args[2]);
-								if(range<0||range>3)throw new NumberFormatException();
-							}catch(NumberFormatException ignore){
-								p.sendMessage("§cMet un nombre entre 0 et 3 !");
-								return true;
-							}
-							is.setExtension(range);
-							p.sendMessage("§aNouvelle extension de l'île définie à "+range+" !");
+						if(is==null)return true;
+						byte range;
+						try{
+							if(args.length==2)throw new NumberFormatException();
+							range = Byte.parseByte(args[2]);
+							if(range<0||range>3)throw new NumberFormatException();
+						}catch(NumberFormatException ignore){
+							p.sendMessage("§cMet un nombre entre 0 et 3 !");
+							return true;
 						}
+						is.setExtension(range);
+						p.sendMessage("§aNouvelle extension de l'île définie à "+range+" !");
+						break;
+					}
+					case "tp":{
+						BaseIsland is = getIS(sender, args);
+						if(is==null)return true;
+						p.teleport(is.getHome());
+						p.sendMessage("§aSuccès !");
 						break;
 					}
 					case "setrank":
@@ -182,7 +189,7 @@ public class IsAdminCommand implements CommandExecutor {
 						if(is!=null){
 							if(args.length==2)p.sendMessage("§cMet un joueur !");
 							else{
-								SkyPlayer target = BaseAPI.getArgSP(sender, args[2], false);
+								SkyPlayer target = InternalAPI.getArgSP(sender, args[2], false);
 								if(target!=null){
 									ISPLink targetLink = target.getIsland(is.isid);
 									switch(args[0]){

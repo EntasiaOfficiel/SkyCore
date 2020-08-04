@@ -1,9 +1,9 @@
 package fr.entasia.skycore.commands.base;
 
 import fr.entasia.apis.other.ChatComponent;
-import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.ISPLink;
+import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
 import fr.entasia.skycore.others.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -64,7 +64,7 @@ public class IsCmdUtils {
 		else {
 			if (args.length < 2) link.sp.p.sendMessage("§cMet un joueur en argument !");
 			else {
-				SkyPlayer target = BaseAPI.getArgSP(link.sp.p, args[1], false);
+				SkyPlayer target = InternalAPI.getArgSP(link.sp.p, args[1], false);
 				if (target != null) {
 					if (target.equals(link.sp)) link.sp.p.sendMessage("§cCe joueur est.. toi même ?");
 					else return target;

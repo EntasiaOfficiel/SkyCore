@@ -1,6 +1,7 @@
 package fr.entasia.skycore.commands.base;
 
 import fr.entasia.skycore.apis.BaseAPI;
+import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +24,7 @@ public class EcoCommand implements CommandExecutor {
 				SkyPlayer sp;
 				boolean tierce=false;
 				if(args.length >= 3){
-					sp = BaseAPI.getArgSP(sender, args[2], true);
+					sp = InternalAPI.getArgSP(sender, args[2], true);
 					if(sp==null)return true;
 
 					tierce = true;

@@ -1,6 +1,7 @@
 package fr.entasia.skycore.commands.base;
 
 import fr.entasia.skycore.apis.BaseAPI;
+import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +17,7 @@ public class MoneyCommand implements CommandExecutor {
 				sender.sendMessage("§aTa monnaie : §2"+sp.getMoney()+"§a");
 			}else sender.sendMessage("§cTu es la console ! Met un nom de joueur");
 		}else{
-			sp = BaseAPI.getArgSP(sender, args[0], false);
+			sp = InternalAPI.getArgSP(sender, args[0], false);
 			if(sp==null)sender.sendMessage("§cCe joueur n'existe pas !");
 			else sender.sendMessage("§aMonnaie de "+sp.name+" : "+sp.getMoney());
 		}

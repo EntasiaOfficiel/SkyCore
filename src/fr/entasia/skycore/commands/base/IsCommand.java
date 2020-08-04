@@ -371,7 +371,7 @@ public class IsCommand implements CommandExecutor {
 												co.task.cancel();
 												confirmPassOwner.remove(p);
 												if (co.is.isid.equals(is.isid)) {
-													SkyPlayer target = BaseAPI.getArgSP(link.sp.p, args[1], true);
+													SkyPlayer target = InternalAPI.getArgSP(link.sp.p, args[1], true);
 													if (target != null) {
 														if (target.equals(link.sp))
 															p.sendMessage("§cCe joueur est.. toi-même ?");
@@ -391,7 +391,7 @@ public class IsCommand implements CommandExecutor {
 											}
 										} else {
 											if (co == null) {
-												SkyPlayer target = BaseAPI.getArgSP(p, args[1], true);
+												SkyPlayer target = InternalAPI.getArgSP(p, args[1], true);
 												if (target != null) {
 													if (target.equals(link.sp))
 														p.sendMessage("§cCe joueur est.. toi-même ?");

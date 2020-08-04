@@ -1,5 +1,6 @@
 package fr.entasia.skycore.apis;
 
+import fr.entasia.apis.utils.PlayerUtils;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.errors.EntasiaException;
 import fr.entasia.skycore.Main;
@@ -9,6 +10,9 @@ import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
 import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import fr.entasia.skycore.others.tasks.RankTask;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 
 import java.sql.ResultSet;
 import java.util.UUID;
@@ -170,4 +174,31 @@ public class InternalAPI {
 		return true;
 	}
 
+
+
+
+	private static UUID parseArg(String str, boolean exact) {
+		try{
+			return UUID.fromString(str);
+		}catch(IllegalArgumentException ignore){
+			if(exact)return PlayerUtils.getUUID(str);
+			else{
+				OfflinePlayer p = Bukkit.getPlayer(str);
+				if(p==null) return PlayerUtils.getUUID(str);
+				else return p.getUniqueId();
+			}
+		}
+	}
+
+
+	public static SkyPlayer getArgSP(CommandSender p, String str, boolean exact) {
+		UUID uuid = parseArg(str, exact);
+		if(uuid==null)p.sendMessage("§cCe joueur n'existe pas ou n'est pas inscrit en Skyblock !");
+		else{
+			SkyPlayer sp = BaseAPI.getSkyPlayer(uuid);
+			if(sp==null)p.sendMessage("§cCe joueur n'existe pas ou n'est pas inscrit en Skyblock !");
+			else return sp;
+		}
+		return null;
+	}
 }

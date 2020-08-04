@@ -1,6 +1,7 @@
 package fr.entasia.skycore.commands.base;
 
 import fr.entasia.skycore.apis.BaseAPI;
+import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +12,7 @@ public class PayCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 		if(!(sender instanceof Player))return true;
 		if(args.length==2){
-			SkyPlayer target = BaseAPI.getArgSP(sender, args[0], true);
+			SkyPlayer target = InternalAPI.getArgSP(sender, args[0], true);
 			if(target==null)return true;
 			int money;
 			try {
