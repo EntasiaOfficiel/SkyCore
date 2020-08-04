@@ -3,6 +3,8 @@ package fr.entasia.skycore.invs;
 import fr.entasia.apis.menus.MenuClickEvent;
 import fr.entasia.apis.menus.MenuCreator;
 import fr.entasia.apis.other.ItemBuilder;
+import fr.entasia.apis.utils.ItemUtils;
+import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.others.tasks.RankTask;
 import org.bukkit.ChatColor;
@@ -33,7 +35,7 @@ public class OtherMenus {
 			e = entries[i];
 			item = new ItemBuilder(Material.SKULL_ITEM).damage(3).name(e.color+"Top "+(i+1)).lore(is.getName(), "§aNiveau : "+
 					is.getLevel(), "§cChef §6: "+is.getOwner().sp.name).build();
-			inv.setItem(e.slot, item);
+			ItemUtils.placeSkullAsync(inv, e.slot, item, is.getOwner().sp.name, Main.main);
 		}
 
 		p.openInventory(inv);
