@@ -6,26 +6,33 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class RankTask extends BukkitRunnable {
 
-	public static BaseIsland[] list;
+	public static RankEntry[] list;
 
 	@Override
 	public void run() {
-		BaseIsland[] list = new BaseIsland[10];
+		RankEntry[] list = new RankEntry[10];
 		for(int i=0;i<list.length;i++) {
-			list[i] = new BaseIsland(); // fake
+			list[i] = new RankEntry(); // fake
 		}
 
-		for(int i=0;i<list.length;i++) {
+		for (RankEntry rankEntry : list) {
 			check:
 			for (BaseIsland is : Utils.islandCache) {
-				if (list[i].getLevel() < is.getLevel()) {
-					for(BaseIsland is2 : list){
-						if(is2==is)continue check;
+				if (rankEntry.lvl < is.getLevel()) {
+					for (RankEntry is2 : list) {
+						if (is2.is == is) continue check;
 					}
-					list[i] = is;
+					rankEntry.is = is;
+					rankEntry.lvl = is.getLevel();
 				}
 			}
 		}
 		RankTask.list = list;
+	}
+
+	public static class RankEntry{
+		public BaseIsland is;
+		public int lvl;
+
 	}
 }

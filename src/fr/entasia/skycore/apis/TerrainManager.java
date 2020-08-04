@@ -234,7 +234,7 @@ public class TerrainManager {
 
 	public static Pair<Integer, Integer> calcLevel(long raw){
 		int lvl = -1;
-		int rem = 1000;
+		int rem = 200;
 		while(raw>0){
 			lvl++;
 			raw-=rem;

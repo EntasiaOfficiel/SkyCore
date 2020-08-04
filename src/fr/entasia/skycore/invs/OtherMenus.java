@@ -27,43 +27,43 @@ public class OtherMenus {
 
 
 		ItemStack item;
-		BaseIsland is;
-		Entry e;
+		RankTask.RankEntry re;
+		SlotEntry se;
 		for(int i=0;i<entries.length;i++){
-			is = RankTask.list[i];
-			if(is.getLevel()<=0)break;
-			e = entries[i];
-			item = new ItemBuilder(Material.SKULL_ITEM).damage(3).name(e.color+"Top "+(i+1)).lore(is.getName(), "§aNiveau : "+
-					is.getLevel(), "§cChef §6: "+is.getOwner().sp.name).build();
-			ItemUtils.placeSkullAsync(inv, e.slot, item, is.getOwner().sp.name, Main.main);
+			re = RankTask.list[i];
+			if(re.is==null||re.lvl<=0)break;
+			se = entries[i];
+			item = new ItemBuilder(Material.SKULL_ITEM).damage(3).name(se.color+"Top "+(i+1)).lore(re.is.getName(), "§aNiveau : "+
+					re.lvl, "§cChef §6: "+re.is.getOwner().sp.name).build();
+			ItemUtils.placeSkullAsync(inv, se.slot, item, re.is.getOwner().sp.name, Main.main);
 		}
 
 		p.openInventory(inv);
 	}
 
-	public static Entry[] entries = new Entry[RankTask.list.length];
+	public static SlotEntry[] entries = new SlotEntry[RankTask.list.length];
 
-	public static class Entry{
+	public static class SlotEntry {
 		public int slot;
 		public ChatColor color;
 
-		public Entry(int slot, ChatColor color){
+		public SlotEntry(int slot, ChatColor color){
 			this.slot = slot;
 			this.color = color;
 		}
 	}
 
 	static{
-		entries[0] = new Entry(4 , ChatColor.GOLD); // 1
-		entries[1] = new Entry(11, ChatColor.YELLOW);
-		entries[2] = new Entry(15, ChatColor.YELLOW); // 3
-		entries[3] = new Entry(22, ChatColor.AQUA);
-		entries[4] = new Entry(28, ChatColor.AQUA); // 5
-		entries[5] = new Entry(34, ChatColor.BLUE);
-		entries[6] = new Entry(39, ChatColor.BLUE); // 7
-		entries[7] = new Entry(41, ChatColor.BLUE);
-		entries[8] = new Entry(45, ChatColor.BLUE); // 9
-		entries[9] = new Entry(53, ChatColor.BLUE);
+		entries[0] = new SlotEntry(4 , ChatColor.GOLD); // 1
+		entries[1] = new SlotEntry(11, ChatColor.YELLOW);
+		entries[2] = new SlotEntry(15, ChatColor.YELLOW); // 3
+		entries[3] = new SlotEntry(22, ChatColor.AQUA);
+		entries[4] = new SlotEntry(28, ChatColor.AQUA); // 5
+		entries[5] = new SlotEntry(34, ChatColor.BLUE);
+		entries[6] = new SlotEntry(39, ChatColor.BLUE); // 7
+		entries[7] = new SlotEntry(41, ChatColor.BLUE);
+		entries[8] = new SlotEntry(45, ChatColor.BLUE); // 9
+		entries[9] = new SlotEntry(53, ChatColor.BLUE);
 	}
 
 
