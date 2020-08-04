@@ -31,7 +31,7 @@ public class OtherMenus {
 		Entry e;
 		for(int i=0;i<entries.length;i++){
 			is = RankTask.list[i];
-			if(is.getLevel()==0)break;
+			if(is.getLevel()<=0)break;
 			e = entries[i];
 			item = new ItemBuilder(Material.SKULL_ITEM).damage(3).name(e.color+"Top "+(i+1)).lore(is.getName(), "§aNiveau : "+
 					is.getLevel(), "§cChef §6: "+is.getOwner().sp.name).build();

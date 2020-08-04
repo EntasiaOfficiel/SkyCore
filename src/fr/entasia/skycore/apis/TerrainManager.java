@@ -215,7 +215,6 @@ public class TerrainManager {
 					is.lvl = p.key;
 					rem = p.value;
 				}
-				// TODO UPDATE LVL ET REM_POINTS
 				if(InternalAPI.SQLEnabled()) {
 					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.lvl, is.isid.x, is.isid.z);
 				}
