@@ -205,10 +205,17 @@ public class TerrainManager {
 					}
 				}
 				is.rawpoints = points-is.malus;
-				if(is.rawpoints<0)is.rawpoints=0; // security
-				Pair<Integer, Integer> p = calcLevel(is.rawpoints);
+				int rem;
+				if(is.rawpoints<=0){ // security
+					is.rawpoints=0;
+					is.lvl = 0;
+					rem = 0;
+				}else{
+					Pair<Integer, Integer> p = calcLevel(is.rawpoints);
+					is.lvl = p.key;
+					rem = p.value;
+				}
 				// TODO UPDATE LVL ET REM_POINTS
-				is.lvl = p.key;
 				if(InternalAPI.SQLEnabled()) {
 					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.lvl, is.isid.x, is.isid.z);
 				}
@@ -216,7 +223,7 @@ public class TerrainManager {
 					@Override
 					public void run() {
 						try {
-							code.run(p.value);
+							code.run(rem);
 						}catch(Throwable e){
 							e.printStackTrace();
 						}
@@ -228,11 +235,11 @@ public class TerrainManager {
 
 	public static Pair<Integer, Integer> calcLevel(long raw){
 		int lvl = -1;
-		int rem = 2000;
+		int rem = 1000;
 		while(raw>0){
 			lvl++;
 			raw-=rem;
-			rem*=1.1;
+			if(lvl%10==0) rem*=1.2;
 		}
 		return new Pair<>(lvl, (int)-raw);
 	}
