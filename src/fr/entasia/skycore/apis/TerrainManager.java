@@ -209,7 +209,9 @@ public class TerrainManager {
 				Pair<Integer, Integer> p = calcLevel(is.rawpoints);
 				// TODO UPDATE LVL ET REM_POINTS
 				is.lvl = p.key;
-				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ? WHERE x=? and z=?", is.rawpoints, is.isid.x, is.isid.z);
+				if(InternalAPI.SQLEnabled()) {
+					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.lvl, is.isid.x, is.isid.z);
+				}
 				new BukkitRunnable() {
 					@Override
 					public void run() {

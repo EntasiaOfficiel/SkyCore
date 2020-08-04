@@ -7,6 +7,8 @@ import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
 import fr.entasia.skycore.others.enums.MemberRank;
+import fr.entasia.skycore.others.tasks.AutoMinerTask;
+import fr.entasia.skycore.others.tasks.RankTask;
 
 import java.sql.ResultSet;
 import java.util.UUID;
@@ -50,6 +52,9 @@ public class InternalAPI {
 
 				if(Main.sql!=null)loadIslands();
 
+				new AutoMinerTask().runTaskTimerAsynchronously(Main.main, 0, 20*6); // full cycle
+				new RankTask().runTaskTimerAsynchronously(Main.main, 0, 20*60*5); // full cycle
+
 				postenable=2;
 			}
 		}catch(Throwable e){
@@ -70,10 +75,11 @@ public class InternalAPI {
 		while(rs.next()){
 			is = new BaseIsland(new ISID(rs.getInt("x"), rs.getInt("z")), IslandType.getType(rs.getInt("type")));
 
-			is.setName(rs.getString("name"));
-			is.addBank(rs.getLong("bank"));
-			is.setExtension(rs.getByte("extension"));
-			is.setMalus(rs.getInt("malus"));
+			is.name = rs.getString("name");
+			is.bank = rs.getLong("bank");
+			is.extension = rs.getByte("extension");
+			is.malus = rs.getInt("malus");
+			is.lvl = rs.getInt("lvl");
 
 			if(rs.getByte("hasNether")==1)is.hasNether = true;
 			if(rs.getByte("hasEnd")==1)is.hasEnd = true;

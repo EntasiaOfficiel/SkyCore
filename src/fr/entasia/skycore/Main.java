@@ -14,7 +14,6 @@ import fr.entasia.skycore.objs.IslandShematics;
 import fr.entasia.skycore.objs.isutils.BlockType;
 import fr.entasia.skycore.others.enums.Dimensions;
 import fr.entasia.skycore.others.enums.IslandType;
-import fr.entasia.skycore.others.tasks.AutoMinerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -86,10 +85,9 @@ public class Main extends JavaPlugin {
 			getCommand("bin").setExecutor(new BinCommand());
 			getCommand("is").setExecutor(new IsCommand());
 			getCommand("spawn").setExecutor(new SpawnCommand());
+			getCommand("rank").setExecutor(new RankCommand());
 
 			loadIslandStructs();
-
-			new AutoMinerTask().runTaskTimerAsynchronously(this, 0, 20*6); // full cycle
 
 		}catch(Throwable e){
 			e.printStackTrace();

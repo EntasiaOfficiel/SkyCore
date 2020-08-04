@@ -471,6 +471,7 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage(new ChatComponent("§e- chat").setTextHover("§6pour parler avec les membres de l'île").create());
 						p.sendMessage(new ChatComponent("§e- list").setTextHover("§6voir tes îles, et choisir l'île par défaut").create());
 						p.sendMessage(new ChatComponent("§e- sethome").setTextHover("§6pour redéfinir le spawn de ton île").create());
+						p.sendMessage(new ChatComponent("§e- top").setTextHover("§6pour voir le top 10 des îles !").create());
 						p.sendMessage(new ChatComponent("§e- help").setTextHover("§6pour voir cette liste. Très surprenant.").create());
 						p.sendMessage("§bCommandes d'équipe :");
 						p.sendMessage(new ChatComponent("§e- team").setTextHover("§6pour voir l'équipe de ton île").create());

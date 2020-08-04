@@ -23,6 +23,9 @@ commands:
   is:
     aliases: [island, islands, ile, iles]
 
+  rank:
+
+
   money:
     aliases: [monnaie, bal, balance]
 

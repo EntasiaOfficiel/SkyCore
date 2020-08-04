@@ -45,7 +45,7 @@ public class BaseIsland {
 
 	protected long rawpoints=0;
 	protected int malus=0;
-	protected long lvl=0;
+	protected int lvl=0;
 
 	protected boolean hasNether, hasEnd;
 	protected Location netherPortal, endPortal, OWNetherPortal, OWEndPortal;
@@ -60,6 +60,10 @@ public class BaseIsland {
 
 
 	// CONSTRUCTEURS
+	public BaseIsland(){ // faked
+		isid = null;
+		type = null;
+	}
 
 	public BaseIsland(ISID isid, IslandType type){
 		this.isid = isid;
@@ -189,7 +193,7 @@ public class BaseIsland {
 		return rawpoints;
 	}
 
-	public long getLevel(){
+	public int getLevel(){
 		return lvl;
 	}
 
