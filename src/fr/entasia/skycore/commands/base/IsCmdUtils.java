@@ -5,7 +5,7 @@ import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
-import fr.entasia.skycore.others.enums.MemberRank;
+import fr.entasia.skycore.objs.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.command.CommandSender;

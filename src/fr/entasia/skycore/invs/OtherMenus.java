@@ -5,7 +5,7 @@ import fr.entasia.apis.menus.MenuCreator;
 import fr.entasia.apis.other.ItemBuilder;
 import fr.entasia.apis.utils.ItemUtils;
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.others.tasks.RankTask;
+import fr.entasia.skycore.objs.tasks.RankTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

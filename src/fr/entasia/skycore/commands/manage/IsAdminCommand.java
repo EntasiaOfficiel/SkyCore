@@ -2,8 +2,8 @@ package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.others.enums.Dimensions;
-import fr.entasia.skycore.others.enums.MemberRank;
+import fr.entasia.skycore.objs.enums.Dimensions;
+import fr.entasia.skycore.objs.enums.MemberRank;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

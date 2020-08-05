@@ -1,4 +1,4 @@
-package fr.entasia.skycore.others.tasks;
+package fr.entasia.skycore.objs.tasks;
 
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;

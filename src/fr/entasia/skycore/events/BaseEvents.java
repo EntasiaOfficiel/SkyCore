@@ -2,7 +2,7 @@ package fr.entasia.skycore.events;
 
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.others.enums.Dimensions;
+import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;

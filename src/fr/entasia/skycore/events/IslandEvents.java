@@ -2,8 +2,8 @@ package fr.entasia.skycore.events;
 
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.others.enums.Dimensions;
-import fr.entasia.skycore.others.enums.MemberRank;
+import fr.entasia.skycore.objs.enums.Dimensions;
+import fr.entasia.skycore.objs.enums.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

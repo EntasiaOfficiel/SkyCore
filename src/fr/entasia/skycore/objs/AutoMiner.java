@@ -1,7 +1,7 @@
 package fr.entasia.skycore.objs;
 
 import fr.entasia.skycore.apis.BaseIsland;
-import fr.entasia.skycore.others.tasks.AutoMinerTask;
+import fr.entasia.skycore.objs.tasks.AutoMinerTask;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

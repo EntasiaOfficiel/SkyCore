@@ -1,7 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.others.enums.Dimensions;
+import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;

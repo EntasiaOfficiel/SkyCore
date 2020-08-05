@@ -1,4 +1,4 @@
-package fr.entasia.skycore.others.tasks;
+package fr.entasia.skycore.objs.tasks;
 
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.BaseIsland;

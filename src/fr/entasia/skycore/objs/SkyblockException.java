@@ -1,4 +1,4 @@
-package fr.entasia.skycore.others;
+package fr.entasia.skycore.objs;
 
 import fr.entasia.errors.EntasiaException;
 

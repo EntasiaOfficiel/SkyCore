@@ -1,7 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.others.enums.MemberRank;
+import fr.entasia.skycore.objs.enums.MemberRank;
 
 public class ISPLink {
 

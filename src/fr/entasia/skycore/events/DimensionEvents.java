@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityTeleportEndGatewayEvent;
 import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.*;
-import fr.entasia.skycore.others.enums.Dimensions;
+import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

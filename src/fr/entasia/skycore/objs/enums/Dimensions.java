@@ -1,4 +1,4 @@
-package fr.entasia.skycore.others.enums;
+package fr.entasia.skycore.objs.enums;
 
 import fr.entasia.skycore.objs.IslandShematics;
 import org.bukkit.World;
