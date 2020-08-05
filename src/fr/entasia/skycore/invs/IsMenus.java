@@ -219,11 +219,12 @@ public class IsMenus {
 		meta.setDisplayName("§6Informations");
 		ArrayList<String> a = new ArrayList<>();
 		a.add("§eID : " + link.is.isid.x + ";" + link.is.isid.z);
-		a.add("§eNuméro : " + link.sp.getIslands().indexOf(link));
+		a.add("§eNiveau : " + link.is.getLevel());
 		ArrayList<ISPLink> members = link.is.getMembers();
 		if(members.size()==1)a.add("§eAucune équipe !");
 		else a.add("§eÉquipe : "+members.size()+" membres");
 		a.add("§eRôle : "+TextUtils.firstLetterUpper(link.getRank().name));
+		a.add("§eNuméro personnel : " + link.sp.getIslands().indexOf(link)+1);
 		meta.setLore(a);
 		item.setItemMeta(meta);
 		inv.setItem(4, item);

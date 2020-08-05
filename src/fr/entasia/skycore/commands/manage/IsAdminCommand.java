@@ -225,7 +225,7 @@ public class IsAdminCommand implements CommandExecutor {
 													return true;
 												}
 												try{
-													MemberRank r = MemberRank.valueOf(args[3]);
+													MemberRank r = MemberRank.valueOf(args[3].toUpperCase());
 													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exclure un membre de l'île !");
 													else{
 														targetLink.setRank(r);
@@ -235,7 +235,7 @@ public class IsAdminCommand implements CommandExecutor {
 													p.sendMessage("§cCe rôle n'existe pas ! Liste des rôles :");
 													for(MemberRank rank : MemberRank.values()){
 														if(rank==MemberRank.DEFAULT)continue;
-														p.sendMessage("§c- "+rank.name+" ("+rank.getName()+"§c)");
+														p.sendMessage("§c- "+rank.name()+" ("+rank.getName()+"§c)");
 													}
 												}
 											}

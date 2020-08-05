@@ -209,8 +209,9 @@ public class IsCommand implements CommandExecutor {
 							p.sendMessage("§cTu es le chef de cette île, tu ne peux pas la quitter !");
 							p.sendMessage("§cUtilise /is setowner pour transférer la propriété de l'île");
 						}else{
+							String name = link.getName();
 							if (link.is.removeMember(link)) {
-								link.is.sendTeamMsg(link.getName() + "§e à quitté l'île !");
+								link.is.sendTeamMsg(name + "§e à quitté l'île !");
 								p.sendMessage("§cTu as quitté l'île !");
 							} else p.sendMessage("§cUne erreur s'est produite !");
 							break;
