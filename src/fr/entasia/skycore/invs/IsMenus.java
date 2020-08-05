@@ -7,6 +7,7 @@ import fr.entasia.apis.other.ItemBuilder;
 import fr.entasia.apis.utils.ItemUtils;
 import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.SkyPlayer;
 import fr.entasia.skycore.apis.TerrainManager;
@@ -220,6 +221,7 @@ public class IsMenus {
 		ArrayList<String> a = new ArrayList<>();
 		a.add("§eID : §6" + link.is.isid.x + ";" + link.is.isid.z);
 		a.add("§eNiveau : §6" + link.is.getLevel());
+		a.add("§eBanque d'île : §6" + Utils.formatMoney(link.is.getBank()));
 		ArrayList<ISPLink> members = link.is.getMembers();
 		if(members.size()==1)a.add("§eAucune équipe !");
 		else a.add("§eÉquipe : §6"+members.size()+"§e membres");

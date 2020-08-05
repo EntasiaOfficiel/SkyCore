@@ -22,4 +22,16 @@ public class Utils {
 	public static ArrayList<SkyPlayer> onlineSPCache = new ArrayList<>();
 
 
+	public static String formatMoney(long money){
+		String a = Long.toString(money);
+		StringBuilder b = new StringBuilder();
+		char[] chars = a.toCharArray();
+		for(int i=0;i<chars.length;i++){
+			if(i%3==0)b.append(" ");
+			b.append(chars[i]);
+		}
+		return b.substring(1)+"$";
+	}
+
+
 }

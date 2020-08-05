@@ -1,5 +1,6 @@
 package fr.entasia.skycore.objs.isutils;
 
+import fr.entasia.skycore.Utils;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public enum Extensions {
 		this.price = price;
 		this.lore = new ArrayList<>(Arrays.asList(lore));
 		this.lore.add("");
-		this.lore.add("§ePrix : " + price + "$");
+		this.lore.add("§ePrix : " + Utils.formatMoney(price));
 		this.lore.add("§eNiveau requis : " + minlvl);
 	}
 }

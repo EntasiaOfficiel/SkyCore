@@ -325,6 +325,10 @@ public class IsCommand implements CommandExecutor {
 
 					case "deposit":
 					case "withdraw":{
+						if(link.getRank()==MemberRank.RECRUE){
+							p.sendMessage("§cTu es seulement une recrue ! Tu ne peux pas intéragir à la banque d'île");
+							return true;
+						}
 						if(args.length==1)p.sendMessage("§cMet un chiffre !");
 						else{
 							try{
@@ -332,14 +336,14 @@ public class IsCommand implements CommandExecutor {
 								if(args[0].equals("withdraw")){
 									if(link.is.withdrawBank(n)){
 										sp.addMoney(n);
-										p.sendMessage("§aTu as retiré §2"+n+"§a$ de la banque d'île !");
+										p.sendMessage("§aTu as retiré §2"+Utils.formatMoney(n)+"§a de la banque d'île !");
 									}else{
 										p.sendMessage("§cIl n'y a pas assez d'argent dans la banque d'île !");
 									}
 								}else{
 									if(sp.withdrawMoney(n)){
 										link.is.addBank(n);
-										p.sendMessage("§aTu as ajouté §2"+n+"§a$ à la banque d'île !");
+										p.sendMessage("§aTu as ajouté §2"+Utils.formatMoney(n)+"§a à la banque d'île !");
 									}else p.sendMessage("§cTu n'as pas assez d'argent !");
 
 								}
@@ -352,7 +356,7 @@ public class IsCommand implements CommandExecutor {
 					}
 					case "bank":
 					case "money": {
-						p.sendMessage("§eValeur de la banque d'île actuellement : §6"+link.is.getBank()+"§e$");
+						p.sendMessage("§eValeur de la banque d'île actuellement : §6"+Utils.formatMoney(link.is.getBank()));
 						break;
 					}
 

@@ -1,5 +1,6 @@
 package fr.entasia.skycore.commands.base;
 
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
@@ -32,9 +33,9 @@ public class PayCommand implements CommandExecutor {
 						sender.sendMessage("§cTu n'as pas assez d'argent ! Valeur actuelle : " + sp.getMoney());
 					} else {
 						sp.withdrawMoney(money);
-						sender.sendMessage("§aTu as versé §2" + money + "§a$ à §2" + args[0] + "§c !");
+						sender.sendMessage("§aTu as versé §2" + Utils.formatMoney(money) + "§a à §2" + args[0] + "§c !");
 						target.addMoney(money);
-						if(target.isOnline())target.p.sendMessage("§2"+sender.getName()+"§a t'a versé §2"+money+"§a$ !");
+						if(target.isOnline())target.p.sendMessage("§2"+sender.getName()+"§a t'a versé §2"+Utils.formatMoney(money)+"§a !");
 					}
 				}
 			}
