@@ -226,7 +226,7 @@ public class IsMenus {
 		if(members.size()==1)a.add("§eAucune équipe !");
 		else a.add("§eÉquipe : §6"+members.size()+"§e membres");
 		a.add("§eRôle : §6"+TextUtils.firstLetterUpper(link.getRank().name));
-		a.add("§eNuméro personnel : §6" + link.sp.getIslands().indexOf(link)+1);
+		a.add("§eNuméro personnel : §6" + (link.sp.getIslands().indexOf(link)+1));
 		meta.setLore(a);
 		item.setItemMeta(meta);
 		inv.setItem(4, item);

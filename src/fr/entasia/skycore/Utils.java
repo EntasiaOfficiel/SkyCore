@@ -26,12 +26,15 @@ public class Utils {
 		String a = Long.toString(money);
 		StringBuilder b = new StringBuilder();
 		char[] chars = a.toCharArray();
-		for(int i=0;i<chars.length;i++){
-			if(i%3==0)b.append(" ");
-			b.append(chars[i]);
+		int j = 0;
+		for(int i=chars.length-1;i>=0;i--){
+			if(j==3){
+				j = 0;
+				b.insert(0, " ");
+			}
+			b.insert(0, chars[i]);
+			j++;
 		}
-		return b.substring(1)+"$";
+		return b.substring(0)+"$";
 	}
-
-
 }
