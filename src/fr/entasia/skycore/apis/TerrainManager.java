@@ -233,11 +233,11 @@ public class TerrainManager {
 
 	public static Pair<Integer, Integer> calcLevel(long raw){
 		int lvl = -1;
-		int rem = 200;
+		int rem = 100;
 		while(raw>0){
 			lvl++;
 			raw-=rem;
-			if(lvl%10==0) rem*=1.2;
+			if(lvl%50==0) rem*=1.2;
 		}
 		return new Pair<>(lvl, (int)-raw);
 	}

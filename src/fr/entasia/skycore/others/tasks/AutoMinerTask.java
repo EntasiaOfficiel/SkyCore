@@ -141,6 +141,7 @@ public class AutoMinerTask extends BukkitRunnable {
 
 			for(AutoMiner am : miners){
 				for(ArmorStand as : am.armorStands){
+					if(as==null)Main.main.getLogger().warning("AS IS NULL !!!!");
 					as.setRightArmPose(baseAngle);
 				}
 			}

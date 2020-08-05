@@ -55,7 +55,7 @@ public class BaseIsland {
 	public boolean loaded = false;
 	protected long lvlCooldown = 10000;
 	public ArrayList<AutoMiner> autominers = new ArrayList<>();
-	public boolean generating = false;
+	public boolean dimGen = false;
 
 
 
@@ -134,7 +134,7 @@ public class BaseIsland {
 	public boolean teleportEnd(Player p) {
 		if (hasEnd) {
 			if (endPortal == null ||
-					(endPortal.getBlock().getType() != Material.ENDER_PORTAL && endPortal.getBlock().getType() != Material.END_GATEWAY)) {
+					(endPortal.getBlock().getType() != Material.ENDER_PORTAL)) {
 				PortalHelper.findEndPortal(this, p, Dimensions.END);
 			} else p.teleport(endPortal);
 		}else return false;

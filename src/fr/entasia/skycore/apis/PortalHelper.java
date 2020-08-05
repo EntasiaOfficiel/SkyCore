@@ -107,8 +107,6 @@ public class PortalHelper {
 												InternalAPI.warn("Dimension invalide !", true);
 												return;
 											}
-											finalLoc.getBlock().setType(Material.END_GATEWAY);
-											finalLoc.add(0, 1, 0).getBlock().setType(Material.END_GATEWAY);
 											p.teleport(finalLoc);
 										}
 									}.runTask(Main.main);

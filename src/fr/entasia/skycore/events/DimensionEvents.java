@@ -16,16 +16,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class DimensionEvents implements Listener {
 
 	@EventHandler
-	public void test(EntityTeleportEndGatewayEvent e) { // gl
+	public void a(EntityTeleportEndGatewayEvent e) { // gl
 		e.setCancelled(true);
 	}
+
 	@EventHandler
-	public void test(PlayerTeleportEndGatewayEvent e) { // gl
+	public void a(PlayerTeleportEndGatewayEvent e) { // gl
 		e.setCancelled(true);
 	}
 
 	@EventHandler
 	public void dimension(PlayerPortalEvent e){ // gl
+//		System.out.println("portal");
 		e.setCancelled(true);
 		Location loc = e.getFrom();
 		Location loc2 = loc.clone().add(0, 1, 0);
@@ -38,6 +40,8 @@ public class DimensionEvents implements Listener {
 						if(is.hasDimension(Dimensions.NETHER)){
 							is.teleportNether(link.sp.p);
 						}else{
+							if(link.is.dimGen)return;
+							link.is.dimGen = true;
 							new BukkitRunnable() {
 								@Override
 								public void run() {
@@ -46,13 +50,16 @@ public class DimensionEvents implements Listener {
 										link.sp.p.sendMessage("§aFini !");
 										Bukkit.getScheduler().callSyncMethod(Main.main, ()->is.teleportNether(link.sp.p));
 									}else link.sp.p.sendMessage("§cErreur d'activation de dimension ! Contacte un Membre du Staff !");
+									link.is.dimGen = false;
 								}
 							}.runTaskAsynchronously(Main.main);
 						}
 					} else if (loc.getBlock().getType() == Material.ENDER_PORTAL||loc2.getBlock().getType()==Material.ENDER_PORTAL){ // TP END
 						if(is.hasDimension(Dimensions.END)){
-							is.teleportNether(link.sp.p);
+							is.teleportEnd(link.sp.p);
 						}else{
+							if(link.is.dimGen)return;
+							link.is.dimGen = true;
 							new BukkitRunnable() {
 								@Override
 								public void run() {
@@ -61,6 +68,7 @@ public class DimensionEvents implements Listener {
 										link.sp.p.sendMessage("§aFini !");
 										Bukkit.getScheduler().callSyncMethod(Main.main, ()->is.teleportEnd(link.sp.p));
 									}else link.sp.p.sendMessage("§cErreur d'activation de dimension ! Contacte un Membre du Staff !");
+									link.is.dimGen = false;
 								}
 							}.runTaskAsynchronously(Main.main);
 						}
