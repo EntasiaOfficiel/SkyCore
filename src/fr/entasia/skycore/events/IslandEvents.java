@@ -72,7 +72,7 @@ public class IslandEvents implements Listener {
 				else {
 					if (is.hasDimension(Dimensions.getDimension(p.getWorld()))) {
 						int m = is.isid.distanceFromIS(b.getLocation());
-						if ((is.getExtension() + 1) * 50 <= m) {
+						if ((is.getExtension() + 1) * 50 < m) {
 							p.sendMessage("§cL'extension de ton ile n'est pas suffisante !");
 						} else if (link.getRank() == MemberRank.RECRUE && containers.contains(b.getType())) {
 							p.sendMessage("§cTu es seulement une recrue sur cette ile ! Tu ne peux pas intéragir avec les containers");

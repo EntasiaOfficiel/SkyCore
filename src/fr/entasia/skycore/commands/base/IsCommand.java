@@ -322,6 +322,31 @@ public class IsCommand implements CommandExecutor {
 						break;
 					}
 
+					case "warp":{
+						if(args.length==1)p.sendMessage("§cMet un nom de joueur !");
+						else{
+							SkyPlayer target = InternalAPI.getArgSP(sender, args[1], false);
+							if(target==null)return true;
+							ArrayList<ISPLink> list = target.getIslands();
+							ISPLink targetLink;
+							if(list.size()==0){
+								p.sendMessage("§cCe joueur n'a aucune île !");
+								return true;
+							}
+							else if(list.size()==1)targetLink = list.get(0);
+							else{
+								targetLink = target.getOwnerIsland();
+								if(targetLink==null){
+									p.sendMessage("§cCe joueur à plusieurs îles !");
+									return true;
+								}
+							}
+							p.teleport(targetLink.is.getHome());
+							p.sendMessage("§aSuccès !");
+						}
+						break;
+					}
+
 
 					case "deposit":
 					case "withdraw":{

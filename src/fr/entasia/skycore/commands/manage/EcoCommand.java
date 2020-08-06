@@ -1,5 +1,6 @@
-package fr.entasia.skycore.commands.base;
+package fr.entasia.skycore.commands.manage;
 
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
@@ -12,7 +13,7 @@ public class EcoCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		if(sender.hasPermission("skyblock.eco")){
+		if(sender.hasPermission("admin.eco")){
 			if(args.length >= 2){
 				int money;
 				try{
@@ -42,24 +43,25 @@ public class EcoCommand implements CommandExecutor {
 						case "set":
 							sp.setMoney(money);
 							if (tierce)
-								sender.sendMessage("§aTu as défini la monnaie de "+sp.name+" à "+money+" !");
+								sender.sendMessage("§aTu as défini la monnaie de "+sp.name+" à "+Utils.formatMoney(money)+" !");
 							else
-								sender.sendMessage("§aTu as défini ta monnaie à " + money + " !");
+								sender.sendMessage("§aTu as défini ta monnaie à " + Utils.formatMoney(money) + " !");
 							break;
 						case "give":
 						case "add":
 							sp.addMoney(money);
 							if (tierce)
-								sender.sendMessage("§aTu as ajouté " + money + " à la monnaie de "+sp.name+" ! Nouvelle valeur : " +sp.getMoney());
+								sender.sendMessage("§aTu as ajouté " + Utils.formatMoney(money) + " à la monnaie de "+sp.name+" ! Nouvelle valeur : " +Utils.formatMoney(sp.getMoney()));
 							else
-								sender.sendMessage("§aTu as ajouté " + money + " à ta monnaie ! Nouvelle valeur : " + sp.getMoney());
+								sender.sendMessage("§aTu as ajouté " + Utils.formatMoney(money) + " à ta monnaie ! Nouvelle valeur : " + Utils.formatMoney(sp.getMoney()));
 							break;
 						case "take":
 							sp.withdrawMoney(money);
-							if (tierce)
-								sender.sendMessage("§aTu as retiré " + money + " de la monnaie de "+sp.name+" ! Nouvelle valeur : " + sp.getMoney());
-							else
-								sender.sendMessage("§aTu as retiré " + money + " de ta monnaie ! Nouvelle valeur : " + sp.getMoney());
+							if (tierce){
+								sender.sendMessage("§aTu as retiré " + Utils.formatMoney(money) + " de la monnaie de "+sp.name+" ! Nouvelle valeur : " + Utils.formatMoney(sp.getMoney()));
+							}else{
+								sender.sendMessage("§aTu as retiré " + Utils.formatMoney(money) + " de ta monnaie ! Nouvelle valeur : " + Utils.formatMoney(sp.getMoney()));
+							}
 						default:
 							sender.sendMessage("§cAction à prendre sur la monnaie invalide !");
 					}

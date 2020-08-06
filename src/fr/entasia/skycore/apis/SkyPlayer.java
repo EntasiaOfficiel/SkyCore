@@ -2,6 +2,7 @@ package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.objs.enums.Dimensions;
+import fr.entasia.skycore.objs.enums.MemberRank;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ public class SkyPlayer {
 	protected ArrayList<ISPLink> islands = new ArrayList<>();
 	protected ArrayList<BaseIsland> invites = new ArrayList<>();
 	protected ISPLink defaultis;
+	protected ISPLink ownerIsland;
 	protected long money;
 
 	// online stuff
@@ -55,6 +57,10 @@ public class SkyPlayer {
 		}
 
 		if (defaultis != null) return defaultis;
+		for(ISPLink link : islands){
+			if(link.getRank()== MemberRank.CHEF)return link;
+		}
+
 		return null;
 	}
 
@@ -90,6 +96,10 @@ public class SkyPlayer {
 			if(link.is.isid.equals(isid))return link;
 		}
 		return null;
+	}
+
+	public ISPLink getOwnerIsland(){
+		return ownerIsland;
 	}
 
 	public ISPLink getDefaultIS(){

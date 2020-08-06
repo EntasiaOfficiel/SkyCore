@@ -76,7 +76,7 @@ public class InternalAPI {
 
 		ResultSet rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_islands").executeQuery();
 		BaseIsland is=null;
-		while(rs.next()){
+		while(rs.next()){ // BASEISLAND
 			is = new BaseIsland(new ISID(rs.getInt("x"), rs.getInt("z")), IslandType.getType(rs.getInt("type")));
 
 			is.name = rs.getString("name");
@@ -92,7 +92,7 @@ public class InternalAPI {
 
 		rs = Main.sql.connection.prepareStatement("SELECT global.name, sky_players.* from sky_players INNER JOIN global ON sky_players.uuid = global.uuid").executeQuery();
 		SkyPlayer sp=null;
-		while(rs.next()){
+		while(rs.next()){ // SKYPLAYER
 			sp = new SkyPlayer(UUID.fromString(rs.getString("uuid")), rs.getString("name"));
 			sp.money = rs.getLong("money");
 			sp.lastGenerated = rs.getInt("lastgen");
@@ -105,7 +105,7 @@ public class InternalAPI {
 		else{
 			rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_pis").executeQuery();
 			ISID isid;
-			while(rs.next()){
+			while(rs.next()){ // ISPLINK
 				i++;
 				isid = new ISID(rs.getInt("x"), rs.getInt("z"));
 				rID = rs.getInt("rank");
@@ -181,12 +181,11 @@ public class InternalAPI {
 		try{
 			return UUID.fromString(str);
 		}catch(IllegalArgumentException ignore){
-			if(exact)return PlayerUtils.getUUID(str);
-			else{
+			if(!exact) {
 				OfflinePlayer p = Bukkit.getPlayer(str);
-				if(p==null) return PlayerUtils.getUUID(str);
-				else return p.getUniqueId();
+				if (p != null) return PlayerUtils.getUUID(str);
 			}
+			return PlayerUtils.getUUID(str);
 		}
 	}
 

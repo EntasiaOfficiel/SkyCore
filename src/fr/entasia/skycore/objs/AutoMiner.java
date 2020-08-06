@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 
 public class AutoMiner {
 
-	public static final byte MAX = 10;
+	public static final byte MAX = 8;
 	public static final Vector normaliser = new Vector(0.5, -0.3, 0.5);
 
 	public Block hopper;
