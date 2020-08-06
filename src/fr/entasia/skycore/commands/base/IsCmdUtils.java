@@ -5,6 +5,7 @@ import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.apis.SkyPlayer;
+import fr.entasia.skycore.invs.IsMenus;
 import fr.entasia.skycore.objs.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 
 public class IsCmdUtils {
 
-	public static void sendInviteMsg(CommandSender sender, BaseIsland is){
+	protected static void sendInviteMsg(CommandSender sender, BaseIsland is){
 		ChatComponent accept = new ChatComponent("§2[§aAccepter§2]");
 		accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/is accept "+is.isid.str()));
 		accept.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ChatComponent.create("§aClique pour accepter l'invitation !")));
@@ -29,7 +30,7 @@ public class IsCmdUtils {
 		sender.sendMessage(accept.append("   ").append(deny).create());
 	}
 
-	public static class WaitConfirm extends BukkitRunnable {
+	protected static class WaitConfirm extends BukkitRunnable {
 
 		public Player p;
 		public HashMap<Player, ConfirmObj> list;
@@ -45,7 +46,7 @@ public class IsCmdUtils {
 		}
 	}
 
-	public static class ConfirmObj{
+	protected static class ConfirmObj{
 		public long when;
 		public BaseIsland is;
 		public BukkitTask task;
@@ -56,10 +57,10 @@ public class IsCmdUtils {
 		}
 	}
 
-	public static HashMap<Player, ConfirmObj> confirmDelete = new HashMap<>();
-	public static HashMap<Player, ConfirmObj> confirmPassOwner = new HashMap<>();
+	protected static HashMap<Player, ConfirmObj> confirmDelete = new HashMap<>();
+	protected static HashMap<Player, ConfirmObj> confirmPassOwner = new HashMap<>();
 
-	public static SkyPlayer teamCheck(ISPLink link, String[] args){
+	protected static SkyPlayer teamCheck(ISPLink link, String[] args){
 		if (link.getRank().id < MemberRank.ADJOINT.id) link.sp.p.sendMessage("§cTu dois être au minimum adjoint pour gérer l'équipe de cette île !");
 		else {
 			if (args.length < 2) link.sp.p.sendMessage("§cMet un joueur en argument !");
@@ -70,6 +71,22 @@ public class IsCmdUtils {
 					else return target;
 				}
 			}
+		}
+		return null;
+	}
+
+
+	protected static ISPLink isCheck(SkyPlayer sp){
+		if (sp.getIslands().size()==0){
+			IsMenus.startIslandChooseOpen(sp);
+		}
+		else {
+			ISPLink link = sp.referentIsland(true);
+			if (link == null){
+				sp.p.sendMessage("§cTu dois d'abord choisir une île préférée pouvoir choisir ces options ! (On ne sait pas de laquelle tu parles !)");
+				IsMenus.islandsListOpen(sp, true);
+			}
+			return link;
 		}
 		return null;
 	}

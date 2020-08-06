@@ -32,15 +32,15 @@ public class IsCommand implements CommandExecutor {
 			p.sendMessage("§cTon profil est mal chargé ! Contacte un Membre du Staff");
 			return true;
 		}
-		ISPLink link = sp.referentIsland(true);
 		if (args.length == 0) {
 			if (sp.getIslands().size()==0) IsMenus.startIslandChooseOpen(sp);
-			else if(link==null) {
-				p.sendMessage("§cTu dois d'abord choisir une île préférée pouvoir choisir ces options ! (On ne sait pas de laquelle tu parles !)");
-				IsMenus.islandsListOpen(sp, true);
-			}else IsMenus.baseIslandOpen(link);
-			return true;
+			else {
+				ISPLink link = IsCmdUtils.isCheck(sp);
+				if (link != null) IsMenus.baseIslandOpen(link);
+				return true;
+			}
 		}
+
 		args[0] = args[0].toLowerCase();
 		switch (args[0]) {
 			case "create":{
@@ -130,11 +130,9 @@ public class IsCommand implements CommandExecutor {
 				break;
 			}
 			default:{
-				if(link==null){
-					p.sendMessage("§cTu dois d'abord avoir au moins une île avant de pouvoir choisir ces options !");
-					IsMenus.startIslandChooseOpen(sp);
-					return true;
-				}
+				ISPLink link = IsCmdUtils.isCheck(sp);
+				if(link==null)return true;
+
 				switch (args[0]) {
 					case "go":
 					case "h":
