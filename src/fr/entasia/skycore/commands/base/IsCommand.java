@@ -198,7 +198,6 @@ public class IsCommand implements CommandExecutor {
 							@Override
 							public void run(Integer rem) {
 								int lvl = link.is.getLevel();
-								p.sendMessage("§aNiveau de l'île : "+lvl);
 								link.is.sendTeamMsg("§aNouveau niveau de l'île : "+lvl);
 //								p.sendMessage("§aPoints demandés pour le niveau suivant : "+rem);
 							}
