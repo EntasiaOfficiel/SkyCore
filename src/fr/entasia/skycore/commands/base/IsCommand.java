@@ -233,10 +233,16 @@ public class IsCommand implements CommandExecutor {
 							if (link.is.addBanned(target)) {
 								p.sendMessage("§cTu as banni " + target.name + " !");
 								link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§c à été bannu de l'île par " + link.getName() + "§c !");
+								if(target.isOnline()){
+									if(CooManager.getIslandID(target.p.getLocation()).equals(link.is.isid)){
+										target.p.sendMessage("§cTu as été banni de cette île ! Tu as été téléporté au Spawn");
+										target.p.teleport(Utils.spawn);
+									}
+								}
 							} else {
 								p.sendMessage("§cCe joueur est déja banni !");
 							}
-						} else if (args[0].equals("unban")) {
+						}else{
 							if (link.is.removeBanned(target)) {
 								p.sendMessage("§cTu as débanni " + target.name + " !");
 								link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été débanni de l'île par " + link.getName() + "§e !");
@@ -353,8 +359,11 @@ public class IsCommand implements CommandExecutor {
 									return true;
 								}
 							}
-							targetLink.is.teleportHome(p);
-							p.sendMessage("§aTéléportation à l'île de §2"+target.name+" §a!");
+							if(targetLink.is.isBanned(sp))p.sendMessage("§cTu es banni de cette île !");
+							else{
+								targetLink.is.teleportHome(p);
+								p.sendMessage("§aTéléportation à l'île de §2"+target.name+" §a!");
+							}
 						}
 						break;
 					}
