@@ -121,7 +121,7 @@ public class IsCommand implements CommandExecutor {
 						if(is==null) p.sendMessage("§cTu n'as pas recu d'invitation de la part de cette île !");
 						else{
 							if(is.cancelInvite(sp)){
-								p.sendMessage("§cTu as refusé l'invitation de l'île "+is.getNameOrID()+" !");
+								p.sendMessage("§cTu as refusé l'invitation de l'île "+is.isid.str()+" !");
 								is.sendTeamMsg("§3"+sp.p.getDisplayName()+" §cà refusé l'invitation !");
 							}else p.sendMessage("§cUne erreur s'est produite lors du refus de l'invitation !");
 						}
@@ -174,6 +174,17 @@ public class IsCommand implements CommandExecutor {
 						}
 						break;
 					}
+
+					case "setname":{
+						if(args.length==1){
+							p.sendMessage("§cMet un nom d'île !");
+							return true;
+						}
+						String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+						link.is.setName(name);
+						p.sendMessage("§aNouveau nom d'île : §d"+name);
+					}
+
 					case "c":
 					case "chat": {
 						if (args.length == 1) {
@@ -194,7 +205,7 @@ public class IsCommand implements CommandExecutor {
 					case "level":
 					case "lvl": {
 
-						int a = link.is.updateLvl(new CodePasser.Arg<Integer>() {
+						int a = link.is.updateLevel(new CodePasser.Arg<Integer>() {
 							@Override
 							public void run(Integer rem) {
 								int lvl = link.is.getLevel();
@@ -277,7 +288,7 @@ public class IsCommand implements CommandExecutor {
 								if (link.is.invitePlayer(target)) {
 									link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
 									if (target.p != null) {
-										target.p.sendMessage("§eTu as été invité sur l'île " + link.is.getNameOrID() + " par " + link.sp.name + " !");
+										target.p.sendMessage("§eTu as été invité sur l'île " + link.is.isid.str() + " par " + link.sp.name + " !");
 										sendInviteMsg(target.p, link.is);
 										target.p.sendMessage("§eTu peux à tout moment regarder tes invitations avec la commande §6/is invites");
 									}
@@ -288,7 +299,7 @@ public class IsCommand implements CommandExecutor {
 								if (link.is.cancelInvite(target)) {
 									link.is.sendTeamMsg("§3L'invitation de " + target.name + "§e à été annulée par " + link.getName() + "§e !");
 									if (target.p != null)
-										target.p.sendMessage("§cL'invitation de l'île §4" + link.is.getNameOrID() + "§c à été annulée !");
+										target.p.sendMessage("§cL'invitation de l'île §4" + link.is.isid.str() + "§c à été annulée !");
 								} else p.sendMessage("§cCe joueur n'est pas invité !");
 							} else p.sendMessage("§cCe joueur est un membre de l'île ! Utilise §4/is kick");
 						}
@@ -533,6 +544,7 @@ public class IsCommand implements CommandExecutor {
 						p.sendMessage("§bCommandes de bases :");
 						p.sendMessage(new ChatComponent("§e- create").setTextHover("§6pour créer ton île ! (Limite : 1 par joueur)").create());
 						p.sendMessage(new ChatComponent("§e- go/home [numero]").setTextHover("§6pour te téléporter à ton île").create());
+						p.sendMessage(new ChatComponent("§e- setname").setTextHover("§6pour renommer ton île").create());
 						p.sendMessage(new ChatComponent("§e- chat").setTextHover("§6pour parler avec les membres de l'île").create());
 						p.sendMessage(new ChatComponent("§e- list").setTextHover("§6voir tes îles, et choisir l'île par défaut").create());
 						p.sendMessage(new ChatComponent("§e- sethome").setTextHover("§6pour redéfinir le spawn de ton île").create());

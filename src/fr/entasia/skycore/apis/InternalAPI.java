@@ -31,9 +31,9 @@ public class InternalAPI {
 	}
 
 	public static void warn(String msg, boolean stack) {
-		if(stack)new EntasiaException("Warning Skyblock").printStackTrace();
+		if(stack)new EntasiaException("Warning SkyCore").printStackTrace();
 		Main.main.getLogger().warning(msg);
-		ServerUtils.permMsg("logs.warn", "§6Warning Skyblock : §c"+msg);
+		ServerUtils.permMsg("logs.warn", "§6Warning SkyCore : §c"+msg);
 	}
 
 
@@ -86,7 +86,7 @@ public class InternalAPI {
 			is.bank = rs.getLong("bank");
 			is.extension = rs.getByte("extension");
 			is.malus = rs.getInt("malus");
-			is.lvl = rs.getInt("lvl");
+			is.level = rs.getInt("lvl");
 
 			if(rs.getByte("hasNether")==1)is.hasNether = true;
 			if(rs.getByte("hasEnd")==1)is.hasEnd = true;

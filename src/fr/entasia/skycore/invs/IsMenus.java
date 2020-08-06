@@ -220,6 +220,7 @@ public class IsMenus {
 		meta.setDisplayName("§6Informations");
 		ArrayList<String> a = new ArrayList<>();
 		a.add("§eID : §6" + link.is.isid.x + ";" + link.is.isid.z);
+		if(link.is.getName()!=null)a.add("§eNom : "+link.is.getName());
 		a.add("§eNiveau : §6" + link.is.getLevel());
 		a.add("§eBanque d'île : §6" + Utils.formatMoney(link.is.getBank()));
 		ArrayList<ISPLink> members = link.is.getMembers();

@@ -5,6 +5,7 @@ import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.Serialization;
 import fr.entasia.skycore.Main;
+import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.objs.AutoMiner;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import fr.entasia.skycore.objs.enums.IslandType;
@@ -17,6 +18,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,7 +47,7 @@ public class BaseIsland {
 
 	protected long rawpoints=0;
 	protected int malus=0;
-	protected int lvl=0;
+	protected int level =0;
 
 	protected boolean hasNether, hasEnd;
 	protected Location netherPortal, endPortal, OWNetherPortal, OWEndPortal;
@@ -56,6 +58,8 @@ public class BaseIsland {
 	protected long lvlCooldown = 10000;
 	public ArrayList<AutoMiner> autominers = new ArrayList<>();
 	public boolean dimGen = false;
+
+	protected ArmorStand[] holo;
 
 
 
@@ -165,7 +169,7 @@ public class BaseIsland {
 
 	private static final int time = 5*60*1000;
 
-	public int updateLvl(CodePasser.Arg<Integer> code){
+	public int updateLevel(CodePasser.Arg<Integer> code){
 		long a = System.currentTimeMillis() - lvlCooldown;
 		if(a < time)return (int) (time-a)/1000;
 		else {
@@ -189,7 +193,7 @@ public class BaseIsland {
 	}
 
 	public int getLevel(){
-		return lvl;
+		return level;
 	}
 
 	public void setMalus(int malus){
@@ -201,18 +205,13 @@ public class BaseIsland {
 		return malus;
 	}
 
-
-
-	public String getNameOrID(){
-		if(name==null)return isid.str();
-		else return name;
-	}
 	public String getName(){
 		return name;
 	}
 
 	public void setName(String name){
 		this.name = name;
+		setHoloName();
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET name=? WHERE x=? and z=?", name, isid.x, isid.z);
 	}
 
@@ -225,6 +224,7 @@ public class BaseIsland {
 	public void teleportHome(Player p){
 		p.setFallDistance(0);
 		p.teleport(home);
+		trySetHolos();
 	}
 
 	public void setHome(Location home){
@@ -394,14 +394,56 @@ public class BaseIsland {
 	public boolean setBank(long m){
 		if(m<0)return false;
 		bank = m;
+		setHoloBank();
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank=? WHERE x=? and z=?", m, isid.x, isid.z);
 		return true;
 
 	}
 
-	public void trySetHolo(){
+	public void trySetHolos(){
+		if(holo==null){
+			for(Entity ent : home.clone().add(0, 2, 0).getNearbyEntities(1, 2, 1)){
+				if(ent instanceof ArmorStand){
+					if(!ent.getScoreboardTags().contains("isholo"))return;
+					ent.remove();
+				}
+			}
 
+			holo = new ArmorStand[4];
+			if(name!=null)setHoloName();
+			setHoloLevel();
+			setHoloBank();
+			if(holo[3]==null) holo[3] = createAM(3);
+			holo[3].setCustomName("§eID : §6"+isid.str());
+
+		}
 	}
+
+	protected void setHoloName(){
+		if(holo[0]==null) holo[0] = createAM(0);
+		holo[0].setCustomName("§a"+name);
+	}
+	protected void setHoloLevel(){
+		if(holo[1]==null) holo[1] = createAM(1);
+		holo[1].setCustomName("§eNiveau de l'île : §6"+level);
+	}
+	protected void setHoloBank(){
+		if(holo[2]==null) holo[2] = createAM(2);
+		holo[2].setCustomName("§eBanque : §6"+ Utils.formatMoney(bank));
+	}
+
+	private ArmorStand createAM(int n){
+		ArmorStand temp  = (ArmorStand) home.getWorld().spawnEntity(home.clone().add(0, 2-0.3*n, 0), EntityType.ARMOR_STAND);
+		temp.setVisible(false);
+		temp.setInvulnerable(true);
+		temp.setCustomNameVisible(true);
+		temp.setGravity(false);
+		temp.setMarker(true);
+		temp.addScoreboardTag("isholo");
+		return temp;
+	}
+
+
 
 	public void tryLoad(){
 		if(!loaded){

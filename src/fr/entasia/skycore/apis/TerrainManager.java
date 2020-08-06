@@ -207,16 +207,20 @@ public class TerrainManager {
 				int rem;
 				if(is.rawpoints<=0){ // security
 					is.rawpoints=0;
-					is.lvl = 0;
+					is.level = 0;
 					rem = 0;
 				}else{
 					Pair<Integer, Integer> p = calcLevel(is.rawpoints);
-					is.lvl = p.key;
+					is.level = p.key;
 					rem = p.value;
 				}
+
+				is.setHoloLevel();
+
 				if(InternalAPI.SQLEnabled()) {
-					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.lvl, is.isid.x, is.isid.z);
+					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.level, is.isid.x, is.isid.z);
 				}
+
 				new BukkitRunnable() {
 					@Override
 					public void run() {
