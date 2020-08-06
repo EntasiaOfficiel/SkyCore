@@ -225,6 +225,17 @@ public class IsCommand implements CommandExecutor {
 						}
 					}
 
+					case "bans":{
+						ArrayList<SkyPlayer> bans = link.is.getBanneds();
+						if(bans.size()==0)p.sendMessage("§cIl n'y a aucun banni sur cette île !");
+						else{
+							p.sendMessage("§cListe des bannis de cette île :");
+							for(SkyPlayer l : link.is.getBanneds()){
+								p.sendMessage("§c - "+l.name);
+							}
+						}
+						break;
+					}
 					case "ban":
 					case "unban":{
 						SkyPlayer target = IsCmdUtils.teamCheck(link, args);
@@ -232,7 +243,7 @@ public class IsCommand implements CommandExecutor {
 						if (args[0].equals("ban")) {
 							if (link.is.addBanned(target)) {
 								p.sendMessage("§cTu as banni " + target.name + " !");
-								link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§c à été bannu de l'île par " + link.getName() + "§c !");
+								link.is.sendTeamMsg("§3 " + target.name + "§c à été bannu de l'île par " + link.getName() + "§c !");
 								if(target.isOnline()){
 									if(CooManager.getIslandID(target.p.getLocation()).equals(link.is.isid)){
 										target.p.sendMessage("§cTu as été banni de cette île ! Tu as été téléporté au Spawn");
@@ -260,6 +271,10 @@ public class IsCommand implements CommandExecutor {
 						ISPLink targetLink = link.is.getMember(target.uuid);
 						if (args[0].equals("invite")) {
 							if (targetLink == null) {
+								if(link.is.isBanned(target)){
+									p.sendMessage("§cCe joueur est banni de l'île ! Utilise §4/is unban§c pour le débannir");
+									return true;
+								}
 								if (link.is.invitePlayer(target)) {
 									link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
 									if (target.p != null) {
@@ -367,7 +382,6 @@ public class IsCommand implements CommandExecutor {
 						}
 						break;
 					}
-
 
 					case "deposit":
 					case "withdraw":{

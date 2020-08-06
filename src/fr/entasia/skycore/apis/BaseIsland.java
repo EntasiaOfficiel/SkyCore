@@ -258,6 +258,7 @@ public class BaseIsland {
 	public ISPLink addMember(SkyPlayer sp){
 		ISPLink link = getMember(sp.uuid);
 		if(link==null){
+			if(isBanned(sp))return null;
 			link = new ISPLink(this, sp, MemberRank.RECRUE);
 			members.add(link);
 			sp.islands.add(link);
@@ -395,6 +396,10 @@ public class BaseIsland {
 		bank = m;
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET bank=? WHERE x=? and z=?", m, isid.x, isid.z);
 		return true;
+
+	}
+
+	public void trySetHolo(){
 
 	}
 
