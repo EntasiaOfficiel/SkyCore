@@ -120,7 +120,7 @@ public class IsMenus {
 				}else{
 					chosen.sp.setDefaultIS(chosen.is.isid);
 					e.player.closeInventory();
-					e.player.sendMessage("§aÎle par défaut choisie avec succès !");
+					e.player.sendMessage("§aîle par défaut choisie avec succès !");
 				}
 			}
 		}

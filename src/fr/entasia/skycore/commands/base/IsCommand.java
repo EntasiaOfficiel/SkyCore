@@ -174,6 +174,7 @@ public class IsCommand implements CommandExecutor {
 					}
 
 					case "setname":{
+						if(link.getRank()==MemberRank.RECRUE)p.sendMessage("§cTu es une recrue, tu ne peux pas changer le nom de l'île !");
 						if(args.length==1){
 							p.sendMessage("§cMet un nom d'île !");
 							return true;
@@ -181,6 +182,7 @@ public class IsCommand implements CommandExecutor {
 						String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 						link.is.setName(name);
 						p.sendMessage("§aNouveau nom d'île : §d"+name);
+						break;
 					}
 
 					case "c":

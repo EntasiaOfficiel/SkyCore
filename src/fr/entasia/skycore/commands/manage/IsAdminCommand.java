@@ -17,7 +17,7 @@ public class IsAdminCommand implements CommandExecutor {
 		sender.sendMessage("§c- infop");
 		sender.sendMessage("§c- deletep");
 		sender.sendMessage("§c- resetgen");
-		sender.sendMessage("§4Îles :");
+		sender.sendMessage("§4îles :");
 		sender.sendMessage("§c- infois");
 		sender.sendMessage("§c- tp");
 		sender.sendMessage("§c- deleteis");
