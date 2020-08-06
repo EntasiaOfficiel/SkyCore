@@ -223,8 +223,8 @@ public class BaseIsland {
 	}
 
 	public void teleportHome(Player p){
-		p.teleport(home);
 		p.setFallDistance(0);
+		p.teleport(home);
 	}
 
 	public void setHome(Location home){

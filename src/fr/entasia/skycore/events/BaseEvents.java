@@ -48,7 +48,7 @@ public class BaseEvents implements Listener {
 
 				ISPLink link = sp.referentIsland(false);
 				if(link==null)sp.p.teleport(Utils.spawn);
-				else sp.p.teleport(link.is.getHome());
+				else link.is.teleportHome(sp.p);
 
 			}catch(Exception e2){
 				e2.printStackTrace();
@@ -79,7 +79,16 @@ public class BaseEvents implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
+			if(e.getEntity().getLocation().getWorld()==Utils.spawnWorld){
+				e.setCancelled(true);
+				return;
+			}
 			Player p = (Player) e.getEntity();
+			if (e.getCause() == EntityDamageEvent.DamageCause.VOID){
+				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
+				if(is==null)p.teleport(Utils.spawn);
+				else is.teleportHome(p);
+			}
 			if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
 			if (e.getFinalDamage() >= p.getHealth()) {
 				e.setCancelled(true);
@@ -87,6 +96,7 @@ public class BaseEvents implements Listener {
 				for (PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());
 				}
+
 				p.setFireTicks(0);
 				p.setFallDistance(0);
 				p.setMaxHealth(20);
@@ -113,7 +123,7 @@ public class BaseEvents implements Listener {
 						}
 					}
 				}
-				p.teleport(is.getHome());
+				is.teleportHome(p);
 			}
 		}else if(e.getEntity() instanceof Snowman){
 			if(e.getCause()==EntityDamageEvent.DamageCause.MELTING){

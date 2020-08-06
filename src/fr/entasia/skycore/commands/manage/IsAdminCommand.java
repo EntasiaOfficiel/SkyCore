@@ -178,7 +178,7 @@ public class IsAdminCommand implements CommandExecutor {
 					case "tp":{
 						BaseIsland is = getIS(sender, args);
 						if(is==null)return true;
-						p.teleport(is.getHome());
+						is.teleportHome(p);
 						p.sendMessage("§aSuccès !");
 						break;
 					}

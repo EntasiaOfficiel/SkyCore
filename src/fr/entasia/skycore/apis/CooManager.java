@@ -18,9 +18,9 @@ public class CooManager {
 		return new ISID(applyTr(x), applyTr(z));
 	}
 
-	public static boolean areSameIsland(int xa, int za, int xb, int zb){
-		return new ISID(applyTr(xa), applyTr(za)).equals(new ISID(applyTr(xb), applyTr(zb)));
-	}
+//	public static boolean areSameIsland(int xa, int za, int xb, int zb){ // ne sert nulle part ?
+//		return new ISID(applyTr(xa), applyTr(za)).equals(new ISID(applyTr(xb), applyTr(zb)));
+//	}
 
 //	public static ISID findFreeSpot() {
 //		return new ISID(0, 0);

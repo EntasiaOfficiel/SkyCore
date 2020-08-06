@@ -190,7 +190,7 @@ public class IsMenus {
 				}
 				default:{
 					if(e.item.getType()==link.is.type.door){
-						e.player.teleport(link.is.getHome());
+						link.is.teleportHome(e.player);
 						e.player.sendMessage("§eTu as été téléporté à ton île !");
 					}else e.player.sendMessage("§cCette option n'est pas encore prête !");
 					break;

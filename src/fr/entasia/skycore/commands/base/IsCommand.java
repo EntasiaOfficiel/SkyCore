@@ -100,7 +100,7 @@ public class IsCommand implements CommandExecutor {
 							if (is.isid.equals(isid)) {
 								if (is.cancelInvite(sp) && is.addMember(sp) != null) {
 									p.sendMessage("§aInvitation acceptée ! Bienvenue, §dRecrue§a !");
-									p.teleport(is.getHome());
+									is.teleportHome(p);
 								} else p.sendMessage("§cUne erreur s'est produite lors de l'acceptation de l'invitation !");
 								return true;
 							}
@@ -149,8 +149,7 @@ public class IsCommand implements CommandExecutor {
 										p.sendMessage("§cAucune île ne correspond à ce numéro d'île !");
 									else {
 										ISPLink newLink = list.get(index - 1);
-										p.setFallDistance(0);
-										p.teleport(newLink.is.getHome());
+										newLink.is.teleportHome(p);
 										p.sendMessage("§6Tu as été téléporté à ton île n° " + index + " !");
 									}
 								}
@@ -158,8 +157,7 @@ public class IsCommand implements CommandExecutor {
 								p.sendMessage("§cCe numéro d'île est invalide !");
 							}
 						} else {
-							p.setFallDistance(0);
-							p.teleport(link.is.getHome());
+							link.is.teleportHome(p);
 							p.sendMessage("§6Tu as été téléporté à ton île !");
 						}
 						break;
@@ -355,7 +353,7 @@ public class IsCommand implements CommandExecutor {
 									return true;
 								}
 							}
-							p.teleport(targetLink.is.getHome());
+							targetLink.is.teleportHome(p);
 							p.sendMessage("§aTéléportation à l'île de §2"+target.name+" §a!");
 						}
 						break;

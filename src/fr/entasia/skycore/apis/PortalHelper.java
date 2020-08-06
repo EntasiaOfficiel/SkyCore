@@ -63,7 +63,7 @@ public class PortalHelper {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						if(in== Dimensions.OVERWORLD)p.teleport(is.getHome());
+						if(in== Dimensions.OVERWORLD)p.teleport(is.isid.getMiddleLoc(Dimensions.OVERWORLD));
 						else if(in== Dimensions.NETHER) p.teleport(is.isid.getMiddleLoc(Dimensions.NETHER));
 						else InternalAPI.warn("Dimension invalide !", true);
 					}
@@ -119,7 +119,7 @@ public class PortalHelper {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						if(in== Dimensions.OVERWORLD)p.teleport(is.getHome());
+						if(in==Dimensions.OVERWORLD)p.teleport(is.isid.getMiddleLoc(Dimensions.OVERWORLD));
 						else if(in== Dimensions.END)p.teleport(is.isid.getMiddleLoc(Dimensions.END));
 						else InternalAPI.warn("Dimension invalide ! "+in, true);
 					}

@@ -64,15 +64,13 @@ public class IslandEvents implements Listener {
 			Block b = e.getClickedBlock();
 			if(e.getAction()==Action.RIGHT_CLICK_BLOCK) {
 				Material m = b.getType();
-				// f*cking cake check
-				if(m==Material.CAKE_BLOCK) { // f*cking shulker check
+
+				if(m==Material.CAKE_BLOCK) { // f*cking cake check
 					if (isBlockDenied(p, b)) e.setCancelled(true);
-				} else if (ntmShulker(m.getId())) { // f*cking container check
+				} else if (ntmShulker(m.getId())) { // f*cking shulker check
 					if (isBlockDenied(p, b)) e.setCancelled(true);
-				}else {
-					if (containers.contains(m)) {
-						if (isBlockDenied(p, b)) e.setCancelled(true);
-					}
+				}else if (containers.contains(m)) { // f*cking container check
+					if (isBlockDenied(p, b)) e.setCancelled(true);
 				}
 			}else if(e.getAction()==Action.LEFT_CLICK_BLOCK) {
 				// f*cking fire check
@@ -116,14 +114,6 @@ public class IslandEvents implements Listener {
 	@EventHandler
 	public void blockPlace(BlockPlaceEvent e){
 		if(isBlockDenied(e.getPlayer(), e.getBlock()))e.setCancelled(true);
-	}
-
-	@EventHandler
-	public void damageEvent(EntityDamageEvent e){
-		if(e.getEntity() instanceof Player){
-			if(e.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(Utils.spawnWorld.getName())) e.setCancelled(true);
-		}
-
 	}
 
 	@EventHandler

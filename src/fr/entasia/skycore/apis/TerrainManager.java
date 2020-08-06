@@ -122,7 +122,7 @@ public class TerrainManager {
 								public void run(Integer rem) {
 									link.is.setMalus((int) link.is.rawpoints);
 									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
-									sp.p.teleport(link.is.getHome());
+									link.is.teleportHome(sp.p);
 								}
 							});
 						}
