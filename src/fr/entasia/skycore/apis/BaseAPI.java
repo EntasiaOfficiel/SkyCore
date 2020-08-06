@@ -85,7 +85,13 @@ public class BaseAPI {
 //		ps.setInt(3, is.isid.z);
 //		ps.execute();
 
-		is.addMember(sp, MemberRank.CHEF);
+
+		ISPLink link = new ISPLink(is, sp, MemberRank.CHEF);
+		is.members.add(link);
+		is.owner = link;
+		sp.islands.add(link);
+		sp.ownerIsland = link;
+		link.setRank(MemberRank.CHEF);
 
 		Utils.islandCache.add(is);
 	}
@@ -106,10 +112,12 @@ public class BaseAPI {
 		int minz = is.isid.getMinZTotal();
 		int maxz = is.isid.getMaxZTotal();
 
+		if(is.owner!=null)is.owner.sp.ownerIsland = null;
 		for (ISPLink link : is.getMembers()) {
 			link.rank = MemberRank.DEFAULT;
 			link.sp.islands.remove(link);
 		}
+
 		is.members.clear();
 
 		Utils.islandCache.remove(is);

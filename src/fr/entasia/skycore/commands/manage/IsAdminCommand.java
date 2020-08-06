@@ -61,12 +61,12 @@ public class IsAdminCommand implements CommandExecutor {
 						else {
 							SkyPlayer target = InternalAPI.getArgSP(p, args[1], false);
 							if(target==null)return true;
-							p.sendMessage("Joueur : " + target.name);
-							p.sendMessage("îles :");
+							p.sendMessage("§8Joueur : §b" + target.name);
+							p.sendMessage("§8îles :");
 							for(ISPLink ll : target.getIslands()){
-								p.sendMessage("- île "+ll.is.isid.str()+" ("+ll.getRank().color+ll.getRank().name+"§f)");
+								p.sendMessage("§8- île §b"+ll.is.isid.str()+" §8(§b"+ll.getRank().getName()+"§8)");
 							}
-							p.sendMessage("Monnaie : " + target.getMoney());
+							p.sendMessage("§7Monnaie : §b" + target.getMoney());
 						}
 						break;
 					}
@@ -195,8 +195,8 @@ public class IsAdminCommand implements CommandExecutor {
 									switch(args[0]){
 										case "join":{
 											if(targetLink==null){
-												if(is.addMember(target, MemberRank.RECRUE))p.sendMessage("§aSuccès !");
-												else p.sendMessage("§cUne erreur est survenue !");
+												if(is.addMember(target)==null) p.sendMessage("§cUne erreur est survenue !");
+												else p.sendMessage("§aSuccès !");
 											}else p.sendMessage("§cCe joueur est déja membre sur cette île !");
 											break;
 										}
@@ -205,7 +205,7 @@ public class IsAdminCommand implements CommandExecutor {
 												p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
 												return true;
 											}
-											if(is.removeMember(targetLink))p.sendMessage("§aSuccès !");
+											if(targetLink.removeMember())p.sendMessage("§aSuccès !");
 											else p.sendMessage("§cUne erreur est survenue !");
 											break;
 										}
@@ -228,8 +228,10 @@ public class IsAdminCommand implements CommandExecutor {
 													MemberRank r = MemberRank.valueOf(args[3].toUpperCase());
 													if(r==MemberRank.DEFAULT)p.sendMessage("§cUtilise /is kick pour exclure un membre de l'île !");
 													else{
-														targetLink.setRank(r);
-														p.sendMessage("§aSuccès !");
+														byte ret = targetLink.setRank(r);
+														if(ret==0)p.sendMessage("§aSuccès !");
+														else if(ret==1)p.sendMessage("§cCe joueur est déja chef d'une île !");
+														else p.sendMessage("§cUne erreur est survenue !");
 													}
 												}catch(IllegalArgumentException ignore){
 													p.sendMessage("§cCe rôle n'existe pas ! Liste des rôles :");

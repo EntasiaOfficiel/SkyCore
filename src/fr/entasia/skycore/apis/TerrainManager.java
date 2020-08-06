@@ -84,13 +84,13 @@ public class TerrainManager {
 
 
 	public static void generateIsland(SkyPlayer sp, IslandType type){
-		if(sp.getIslands().size()>5) {
+		if(sp.getIslands().size()>=5) {
 			sp.p.sendMessage("§cTu as déja trop d'îles ! Quitte en pour pouvoir en créer une");
 			return;
 		}
 		int ts = (int) (System.currentTimeMillis()/1000);
-		int a = 60*60*24*3-(ts-sp.lastGenerated);
-		if(a>0){ // 3 jours
+		int a = 60*60*24*5-(ts-sp.lastGenerated);
+		if(a>0){ // 5 jours
 			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
 			return;
 		}

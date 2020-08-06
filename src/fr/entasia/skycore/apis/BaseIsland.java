@@ -255,34 +255,16 @@ public class BaseIsland {
 		return null;
 	}
 
-	public boolean addMember(SkyPlayer sp, MemberRank rank){
-		if(rank==MemberRank.DEFAULT)InternalAPI.warn("Utilise removeMember() pour supprimer un joueur de l'île !", true);
-		else{
-			ISPLink link = getMember(sp.uuid);
-			if(link==null){
-				link = new ISPLink(this, sp, rank);
-				if(rank==MemberRank.CHEF){
-					if(owner!=null) owner.rank = MemberRank.ADJOINT;
-					owner = link;
-				}
-				members.add(link);
-				sp.islands.add(link);
-				if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", rank.id, isid.x, isid.z, sp.uuid);
-				return true;
-			}else InternalAPI.warn("Le joueur est déja sur l'île !", true);
-		}
-		return false;
-	}
-
-	public boolean removeMember(ISPLink link){
-		if(link.is.equals(this)){
-			link.rank = MemberRank.DEFAULT;
-			members.remove(link);
-			link.sp.islands.remove(link);
-			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("DELETE FROM sky_pis WHERE x=? and z=? and uuid=?", isid.x, isid.z, link.sp.uuid);
-			return true;
-		} else InternalAPI.warn("L'île fournie ne correspond pas", true);
-		return false;
+	public ISPLink addMember(SkyPlayer sp){
+		ISPLink link = getMember(sp.uuid);
+		if(link==null){
+			link = new ISPLink(this, sp, MemberRank.RECRUE);
+			members.add(link);
+			sp.islands.add(link);
+			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", MemberRank.RECRUE.id, isid.x, isid.z, sp.uuid);
+			return link;
+		}else InternalAPI.warn("Le joueur est déja sur l'île !", true);
+		return null;
 	}
 
 //	public boolean reRankMember(ISPLink link, MemberRank rank){
@@ -367,7 +349,7 @@ public class BaseIsland {
 		if(link==null){
 			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", 0, isid.x, isid.z, sp.uuid);
 		}else{
-			removeMember(link);
+			link.removeMember();
 			if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_pis SET rank=? where x=? and z=? and uuid=?)", 0, isid.x, isid.z, sp.uuid);
 		}
 		return true;

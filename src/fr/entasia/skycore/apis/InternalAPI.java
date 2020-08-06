@@ -74,8 +74,11 @@ public class InternalAPI {
 		long time = System.currentTimeMillis();
 
 
+		BaseIsland is = null;
+		SkyPlayer sp = null;
+		ISPLink link;
+
 		ResultSet rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_islands").executeQuery();
-		BaseIsland is=null;
 		while(rs.next()){ // BASEISLAND
 			is = new BaseIsland(new ISID(rs.getInt("x"), rs.getInt("z")), IslandType.getType(rs.getInt("type")));
 
@@ -91,7 +94,6 @@ public class InternalAPI {
 		}
 
 		rs = Main.sql.connection.prepareStatement("SELECT global.name, sky_players.* from sky_players INNER JOIN global ON sky_players.uuid = global.uuid").executeQuery();
-		SkyPlayer sp=null;
 		while(rs.next()){ // SKYPLAYER
 			sp = new SkyPlayer(UUID.fromString(rs.getString("uuid")), rs.getString("name"));
 			sp.money = rs.getLong("money");
@@ -132,8 +134,16 @@ public class InternalAPI {
 				}
 
 
-				if(rID==0)is.addBanned(sp);
-				else is.addMember(sp, MemberRank.getType(rID));
+				if(rID==0)is.banneds.add(sp);
+				else{
+					link = new ISPLink(is, sp, MemberRank.getType(rID));
+					is.members.add(link);
+					sp.islands.add(link);
+					if(link.rank==MemberRank.CHEF){
+						is.owner = link;
+						sp.ownerIsland = link;
+					}
+				}
 				if(rs.getByte("def")==1){
 					if(sp.getDefaultIS()!=null){
 						Main.main.getLogger().warning("Redéfinition de île par défaut pour "+sp.name+" !");

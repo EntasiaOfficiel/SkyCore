@@ -27,7 +27,6 @@ public class DimensionEvents implements Listener {
 
 	@EventHandler
 	public void dimension(PlayerPortalEvent e){ // gl
-//		System.out.println("portal");
 		e.setCancelled(true);
 		Location loc = e.getFrom();
 		Location loc2 = loc.clone().add(0, 1, 0);

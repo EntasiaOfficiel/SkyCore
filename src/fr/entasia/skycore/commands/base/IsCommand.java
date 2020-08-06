@@ -43,7 +43,14 @@ public class IsCommand implements CommandExecutor {
 		}
 		args[0] = args[0].toLowerCase();
 		switch (args[0]) {
-			case "dis":
+			case "create":{
+				if(sp.getOwnerIsland()!=null){
+					p.sendMessage("§cTu es déja chef d'une île !");
+					return true;
+				}
+				IsMenus.startIslandChooseOpen(sp);
+				break;
+			}
 			case "list":{
 				IsMenus.islandsListOpen(sp, false);
 				break;
@@ -54,8 +61,8 @@ public class IsCommand implements CommandExecutor {
 				if(l1.size()!=0){
 					p.sendMessage("§aTes invitations : ");
 					for(BaseIsland is : l1){
-						if(is.getName()==null) p.sendMessage("§e- §aîle "+is.isid.str()+" (Propriétaire : "+is.getOwner().sp.name+")");
-						else p.sendMessage("§e- §aîle "+is.getName()+" (ID:"+is.isid.str()+") (Propriétaire : "+is.getOwner().sp.name+")");
+						if(is.getName()==null) p.sendMessage("§e- §aîle "+is.isid.str()+" (Chef : "+is.getOwner().sp.name+")");
+						else p.sendMessage("§e- §aîle "+is.getName()+" (ID:"+is.isid.str()+") (Chef : "+is.getOwner().sp.name+")");
 						sendInviteMsg(p, is);
 						p.sendMessage(" ");
 					}
@@ -91,7 +98,7 @@ public class IsCommand implements CommandExecutor {
 						ArrayList<BaseIsland> list = sp.getInvites();
 						for (BaseIsland is : list) {
 							if (is.isid.equals(isid)) {
-								if (is.cancelInvite(sp) && is.addMember(sp, MemberRank.RECRUE)) {
+								if (is.cancelInvite(sp) && is.addMember(sp) != null) {
 									p.sendMessage("§aInvitation acceptée ! Bienvenue, §dRecrue§a !");
 									p.teleport(is.getHome());
 								} else p.sendMessage("§cUne erreur s'est produite lors de l'acceptation de l'invitation !");
@@ -210,7 +217,7 @@ public class IsCommand implements CommandExecutor {
 							p.sendMessage("§cUtilise /is setowner pour transférer la propriété de l'île");
 						}else{
 							String name = link.getName();
-							if (link.is.removeMember(link)) {
+							if (link.removeMember()) {
 								link.is.sendTeamMsg(name + "§e à quitté l'île !");
 								p.sendMessage("§cTu as quitté l'île !");
 							} else p.sendMessage("§cUne erreur s'est produite !");
@@ -282,7 +289,7 @@ public class IsCommand implements CommandExecutor {
 							case "kick": {
 								if (targetLink.getRank().id < link.getRank().id) {
 									String n = targetLink.getName();
-									if (link.is.removeMember(targetLink)) {
+									if (targetLink.removeMember()) {
 										link.is.sendTeamMsg("§7" + n + "§e à été expulsé de l'île par " + link.getName() + "§e !");
 										if (target.isOnline()) {
 											target.p.sendMessage("§cTu as été exclu de l'île par §3" + link.sp.name + "§c !");
@@ -296,9 +303,14 @@ public class IsCommand implements CommandExecutor {
 							case "promote": {
 								if (targetLink.getRank().id + 1 < link.getRank().id) {
 									MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
-									if (targetLink.setRank(nrank))
+									byte ret = targetLink.setRank(nrank);
+									if(ret==0) {
 										link.is.sendTeamMsg(targetLink.getName() + "§e à été promu par " + link.getName() + "§e !");
-									else p.sendMessage("§cUne erreur s'est produite !");
+									}else if(ret==1) {
+										p.sendMessage("§cCe joueur est déja chef d'une autre île !");
+									}else {
+										p.sendMessage("§cUne erreur s'est produite !");
+									}
 								} else {
 									p.sendMessage("§cCette personne est trop haut gradée !");
 								}
@@ -311,7 +323,7 @@ public class IsCommand implements CommandExecutor {
 										p.sendMessage("§cCette personne à déjà le rôle minimum ! Utilise §4/is kick§c pour l'exclure ");
 									else {
 										MemberRank nrank = MemberRank.getType(targetLink.getRank().id - 1);
-										if (targetLink.setRank(nrank))
+										if (targetLink.setRank(nrank)==0)
 											link.is.sendTeamMsg(targetLink.getName() + "§e à été demote par " + link.getName() + "§e !");
 										else p.sendMessage("§cUne erreur s'est produite !");
 									}
@@ -342,7 +354,7 @@ public class IsCommand implements CommandExecutor {
 								}
 							}
 							p.teleport(targetLink.is.getHome());
-							p.sendMessage("§aSuccès !");
+							p.sendMessage("§aTéléportation à l'île de §2"+target.name+" §a!");
 						}
 						break;
 					}
@@ -428,7 +440,7 @@ public class IsCommand implements CommandExecutor {
 													else if (link.sp.getIsland(is.isid) == null)
 														p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
 													else {
-														p.sendMessage("§cVeut-tu passer " + target.name + " propriétaire de cette île ? " + is.isid.str());
+														p.sendMessage("§cVeut-tu passer " + target.name + " chef de cette île ? " + is.isid.str());
 														p.sendMessage("§cTape la commande §4/" + command.getName() + " setowner " + args[1] + " confirm§c dans les 15 secondes pour confirmer.");
 														p.sendMessage("§cATTENTION : Tu ne sera plus le chef de cette île, tu deviendra Adjoint !");
 														co = new ConfirmObj(System.currentTimeMillis(), is);
@@ -439,10 +451,10 @@ public class IsCommand implements CommandExecutor {
 											} else {
 												int time = (int) (15 - (Math.ceil(System.currentTimeMillis() - co.when) / 1000f));
 												p.sendMessage("§cTape la commande §4" + command.getName() + " setowner " + args[1] + " confirm§c dans les " + time +
-														" secondes pour confirmer le changement de propriétaire de l'île " + is.isid.str());
+														" secondes pour confirmer le changement de chef de l'île " + is.isid.str());
 											}
 										}
-									} else p.sendMessage("§cTu n'es pas le propriétaire de cette île !");
+									} else p.sendMessage("§cTu n'es pas le chef de cette île !");
 								}
 							} else p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
 						}
@@ -487,7 +499,7 @@ public class IsCommand implements CommandExecutor {
 											p.sendMessage("§cTape la commande " + args[0] + " delete confirm dans les " + time + " secondes pour confirmer la suppression de l'île " + is.isid.str());
 										}
 									}
-								} else p.sendMessage("§cTu n'es pas le propriétaire de cette île !");
+								} else p.sendMessage("§cTu n'es pas le chef de cette île !");
 							}
 						} else p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
 						break;
@@ -497,6 +509,7 @@ public class IsCommand implements CommandExecutor {
 					case "help": {
 						p.sendMessage("§6Liste des sous-commandes :");
 						p.sendMessage("§bCommandes de bases :");
+						p.sendMessage(new ChatComponent("§e- create").setTextHover("§6pour créer ton île ! (Limite : 1 par joueur)").create());
 						p.sendMessage(new ChatComponent("§e- go/home [numero]").setTextHover("§6pour te téléporter à ton île").create());
 						p.sendMessage(new ChatComponent("§e- chat").setTextHover("§6pour parler avec les membres de l'île").create());
 						p.sendMessage(new ChatComponent("§e- list").setTextHover("§6voir tes îles, et choisir l'île par défaut").create());
