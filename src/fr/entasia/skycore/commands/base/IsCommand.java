@@ -199,7 +199,9 @@ public class IsCommand implements CommandExecutor {
 						int a = link.is.updateLvl(new CodePasser.Arg<Integer>() {
 							@Override
 							public void run(Integer rem) {
-								p.sendMessage("§aNiveau de l'île : " + link.is.getLevel());
+								int lvl = link.is.getLevel();
+								p.sendMessage("§aNiveau de l'île : "+lvl);
+								link.is.sendTeamMsg("§aNouveau niveau de l'île : "+lvl);
 //								p.sendMessage("§aPoints demandés pour le niveau suivant : "+rem);
 							}
 						});
@@ -292,7 +294,7 @@ public class IsCommand implements CommandExecutor {
 									if (targetLink.removeMember()) {
 										link.is.sendTeamMsg("§7" + n + "§e à été expulsé de l'île par " + link.getName() + "§e !");
 										if (target.isOnline()) {
-											target.p.sendMessage("§cTu as été exclu de l'île par §3" + link.sp.name + "§c !");
+											target.p.sendMessage("§cTu as été exclu de l'île par §3" + link.getName() + "§c !");
 											target.p.teleport(Utils.spawn);
 										}
 									} else p.sendMessage("§cUne erreur s'est produite !");

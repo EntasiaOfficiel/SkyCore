@@ -147,15 +147,15 @@ public class MiningEvents implements Listener {
 			return Material.COAL_ORE;
 		}else if(r.isInNext(5.2)){
 			return Material.IRON_ORE;
-		}else if(r.isInNext(0.4)){
+		}else if(r.isInNext(0.8)){
 			return Material.GOLD_ORE;
-		}else if(r.isInNext(1)){
+		}else if(r.isInNext(1.2)){
 			return Material.LAPIS_ORE;
 		}else if(r.isInNext(1.5)){
 			return Material.REDSTONE_ORE;
-		}else if(r.isInNext(0.25)){
+		}else if(r.isInNext(0.5)){
 			return Material.DIAMOND_ORE;
-		}else if(r.isInNext(0.1)){
+		}else if(r.isInNext(0.2)){
 			return Material.EMERALD_ORE ;
 		}else return def;
 	}

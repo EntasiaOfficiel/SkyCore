@@ -7,6 +7,7 @@ import fr.entasia.skycore.objs.enums.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.BlockIterator;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -30,13 +32,15 @@ public class IslandEvents implements Listener {
 			Material.TRAPPED_CHEST,
 
 			Material.DROPPER,
-			Material.HOPPER,
 			Material.DISPENSER,
+			Material.HOPPER,
 
 			Material.FURNACE,
 			Material.BURNING_FURNACE,
 
-			Material.BREWING_STAND);
+			Material.BREWING_STAND,
+			Material.BEACON
+	);
 
 
 	@EventHandler
@@ -49,14 +53,34 @@ public class IslandEvents implements Listener {
 		if(isBlockDenied(e.getPlayer(), e.getBlockClicked()))e.setCancelled(true);
 	}
 
+	private static boolean ntmShulker(int id){
+		return id>=219&&id<=234;
+	}
+
 	@EventHandler
 	public void interact(PlayerInteractEvent e){
 		Player p = e.getPlayer();
 		if(Dimensions.isIslandWorld(p.getWorld())&&e.hasBlock()){
 			Block b = e.getClickedBlock();
-			if(e.getAction()==Action.RIGHT_CLICK_BLOCK){
-				if(containers.contains(b.getType())){
-					if(isBlockDenied(p, b))e.setCancelled(true);
+			if(e.getAction()==Action.RIGHT_CLICK_BLOCK) {
+				Material m = b.getType();
+				// f*cking cake check
+				if(m==Material.CAKE_BLOCK) { // f*cking shulker check
+					if (isBlockDenied(p, b)) e.setCancelled(true);
+				} else if (ntmShulker(m.getId())) { // f*cking container check
+					if (isBlockDenied(p, b)) e.setCancelled(true);
+				}else {
+					if (containers.contains(m)) {
+						if (isBlockDenied(p, b)) e.setCancelled(true);
+					}
+				}
+			}else if(e.getAction()==Action.LEFT_CLICK_BLOCK) {
+				// f*cking fire check
+				for(Block lb : p.getLineOfSight(null, 5)){
+					if(lb.getType()==Material.FIRE){
+						if(isBlockDenied(p, lb))e.setCancelled(true);
+						return;
+					}
 				}
 			}
 		} // on bloque pas les interactions dans les autres mondes (pour le moment ?)
@@ -121,8 +145,7 @@ public class IslandEvents implements Listener {
 
 
 
-
-	private static String checkIs(BaseIsland is, Player p){ // temporaire ?
+	private static String checkIs(BaseIsland is, Player p){ // temporaire ? ou pas
 		if(is.getMember(p.getUniqueId())==null){
 			return "l'ile de §6"+is.getOwner().sp.name+"§f";
 		}else{
