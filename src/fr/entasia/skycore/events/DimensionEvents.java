@@ -71,7 +71,7 @@ public class DimensionEvents implements Listener {
 								}
 							}.runTaskAsynchronously(Main.main);
 						}
-					} else link.sp.p.sendMessage("§cPortail invalide !");
+					}
 
 
 				} else if (loc.getWorld()== Dimensions.NETHER.world) {
