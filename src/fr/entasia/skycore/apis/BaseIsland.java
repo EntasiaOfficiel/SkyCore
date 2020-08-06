@@ -402,7 +402,7 @@ public class BaseIsland {
 
 	public void trySetHolos(){
 		if(holo==null){
-			for(Entity ent : home.clone().add(0, 2, 0).getNearbyEntities(1, 2, 1)){
+			for(Entity ent : home.clone().add(0, 3, 0).getNearbyEntities(1, 4, 1)){
 				if(ent instanceof ArmorStand){
 					if(!ent.getScoreboardTags().contains("isholo"))return;
 					ent.remove();
@@ -435,7 +435,7 @@ public class BaseIsland {
 	}
 
 	private ArmorStand createAM(int n){
-		ArmorStand temp  = (ArmorStand) home.getWorld().spawnEntity(home.clone().add(0, 2-0.3*n, 0), EntityType.ARMOR_STAND);
+		ArmorStand temp  = (ArmorStand) home.getWorld().spawnEntity(home.clone().add(0, 3-0.3*n, 0), EntityType.ARMOR_STAND);
 		temp.setVisible(false);
 		temp.setInvulnerable(true);
 		temp.setCustomNameVisible(true);
