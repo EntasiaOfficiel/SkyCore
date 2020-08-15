@@ -92,6 +92,7 @@ public class BaseAPI {
 		sp.islands.add(link);
 		sp.ownerIsland = link;
 		link.setRank(MemberRank.CHEF);
+		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", MemberRank.CHEF.id, is.isid.x, is.isid.z, sp.uuid);
 
 		Utils.islandCache.add(is);
 	}

@@ -44,12 +44,9 @@ public class IsCommand implements CommandExecutor {
 		args[0] = args[0].toLowerCase();
 		switch (args[0]) {
 			case "create":{
-				if(sp.getOwnerIsland()!=null){
-					p.sendMessage("§cTu es déja chef d'une île !");
-					return true;
-				}
-				IsMenus.startIslandChooseOpen(sp);
-				break;
+				if(sp.getOwnerIsland()==null) p.sendMessage("§cTu es déja chef d'une île !");
+				else IsMenus.startIslandChooseOpen(sp);
+				return true;
 			}
 			case "list":{
 				IsMenus.islandsListOpen(sp, false);
