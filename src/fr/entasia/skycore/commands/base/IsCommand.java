@@ -37,8 +37,8 @@ public class IsCommand implements CommandExecutor {
 			else {
 				ISPLink link = IsCmdUtils.isCheck(sp);
 				if (link != null) IsMenus.baseIslandOpen(link);
-				return true;
 			}
+			return true;
 		}
 
 		args[0] = args[0].toLowerCase();
