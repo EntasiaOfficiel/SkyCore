@@ -400,15 +400,18 @@ public class BaseIsland {
 
 	}
 
+	protected void delHolos(){
+		for(Entity ent : home.clone().add(0, 3, 0).getNearbyEntities(1, 4, 1)){
+			if(ent instanceof ArmorStand){
+				if(!ent.getScoreboardTags().contains("isholo"))return;
+				ent.remove();
+			}
+		}
+	}
+
 	public void trySetHolos(){
 		if(holo==null){
-			for(Entity ent : home.clone().add(0, 3, 0).getNearbyEntities(1, 4, 1)){
-				if(ent instanceof ArmorStand){
-					if(!ent.getScoreboardTags().contains("isholo"))return;
-					ent.remove();
-				}
-			}
-
+			delHolos();
 			holo = new ArmorStand[5];
 			if(name!=null)setHoloName();
 			setHoloLevel();

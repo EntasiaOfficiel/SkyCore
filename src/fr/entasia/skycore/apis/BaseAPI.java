@@ -120,6 +120,8 @@ public class BaseAPI {
 
 		is.members.clear();
 
+		is.delHolos();
+
 		Utils.islandCache.remove(is);
 
 		for (Player p : Bukkit.getOnlinePlayers()) {
