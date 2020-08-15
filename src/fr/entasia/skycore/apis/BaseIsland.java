@@ -414,14 +414,12 @@ public class BaseIsland {
 	public void trySetHolos(){
 		if(holo==null){
 			delHolos();
-			holo = new ArmorStand[5];
+			holo = new ArmorStand[4];
 			if(name!=null)setHoloName();
 			setHoloLevel();
 			setHoloBank();
 			if(holo[3]==null) holo[3] = createAM(3);
 			holo[3].setCustomName("§eID : §6"+isid.str());
-			if(holo[4]==null) holo[4] = createAM(4);
-			holo[4].setCustomName("§c(Cheh wishdrow je l'ai fait)");
 
 		}
 	}
