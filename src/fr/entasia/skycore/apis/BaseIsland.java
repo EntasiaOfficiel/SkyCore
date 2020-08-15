@@ -167,11 +167,11 @@ public class BaseIsland {
 
 	// FONCTIONS RANDOM
 
-	private static final int time = 5*60*1000;
+	private static final int lvl_time = 3*60*1000;
 
 	public int updateLevel(CodePasser.Arg<Integer> code){
 		long a = System.currentTimeMillis() - lvlCooldown;
-		if(a < time)return (int) (time-a)/1000;
+		if(a < lvl_time)return (int) (lvl_time -a)/1000;
 		else {
 			lvlCooldown = System.currentTimeMillis();
 			TerrainManager.calcPoints(this, code);
