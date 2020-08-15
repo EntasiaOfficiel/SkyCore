@@ -180,8 +180,8 @@ public class IsCommand implements CommandExecutor {
 							return true;
 						}
 						String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-						link.is.setName(name);
-						p.sendMessage("§aNouveau nom d'île : §d"+name);
+						if(link.is.setName(name))p.sendMessage("§aNouveau nom d'île : §d"+name);
+						else p.sendMessage("§cCe nom est trop grand ! Maximum : 20 caractères");
 						break;
 					}
 

@@ -209,10 +209,12 @@ public class BaseIsland {
 		return name;
 	}
 
-	public void setName(String name){
+	public boolean setName(String name){
+		if(name.length()>20)return false;
 		this.name = name;
 		setHoloName();
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET name=? WHERE x=? and z=?", name, isid.x, isid.z);
+		return true;
 	}
 
 
