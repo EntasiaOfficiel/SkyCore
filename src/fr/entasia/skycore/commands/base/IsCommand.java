@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static fr.entasia.skycore.commands.base.IsCmdUtils.*;
-//import static fr.entasia.skycore.commands.base.IsCmdUtils.*;
 
 public class IsCommand implements CommandExecutor {
 
@@ -44,8 +43,8 @@ public class IsCommand implements CommandExecutor {
 		args[0] = args[0].toLowerCase();
 		switch (args[0]) {
 			case "create":{
-				if(sp.getOwnerIsland()==null) p.sendMessage("§cTu es déja chef d'une île !");
-				else IsMenus.startIslandChooseOpen(sp);
+				if(sp.getOwnerIsland()==null) IsMenus.startIslandChooseOpen(sp);
+				else p.sendMessage("§cTu es déja chef d'une île !");
 				return true;
 			}
 			case "list":{

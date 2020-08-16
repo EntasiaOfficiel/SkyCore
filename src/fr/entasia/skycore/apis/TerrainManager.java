@@ -12,7 +12,6 @@ import com.sk89q.worldedit.world.registry.WorldData;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
-import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.objs.IslandShematics;
@@ -83,18 +82,26 @@ public class TerrainManager {
 	// LE BORDEL COMMENCE ICI
 
 
-	public static void generateIsland(SkyPlayer sp, IslandType type){
+	public static void tryGenerateIsland(SkyPlayer sp, IslandType type){
+		if(sp.getOwnerIsland()!=null){
+			sp.p.sendMessage("§cTu es déja chef d'une île !");
+			return;
+		}
 		if(sp.getIslands().size()>=5) {
 			sp.p.sendMessage("§cTu as déja trop d'îles ! Quitte en pour pouvoir en créer une");
 			return;
 		}
 		int ts = (int) (System.currentTimeMillis()/1000);
-		int a = 60*60*24*5-(ts-sp.lastGenerated);
-		if(a>0){ // 5 jours
-			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
-			return;
-		}
+//		int a = 60*60*24*5-(ts-sp.lastGenerated);
+//		if(a>0){ // 5 jours
+//			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
+//			return;
+//		}
 		sp.setLastGenerated(ts);
+		generateIsland(sp, type);
+	}
+
+	protected static void generateIsland(SkyPlayer sp, IslandType type){
 		sp.p.sendMessage("§eGénération de ton île en cours.. Merci de patienter !");
 
 		new BukkitRunnable(){

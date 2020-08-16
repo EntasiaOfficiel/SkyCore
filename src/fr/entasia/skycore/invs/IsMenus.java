@@ -37,22 +37,22 @@ public class IsMenus {
 			e.player.closeInventory();
 			switch(e.item.getType()){
 				case GRASS:
-					TerrainManager.generateIsland(sp, IslandType.DEFAULT);
+					TerrainManager.tryGenerateIsland(sp, IslandType.DEFAULT);
 					break;
 				case ICE:
-					TerrainManager.generateIsland(sp, IslandType.ICE);
+					TerrainManager.tryGenerateIsland(sp, IslandType.ICE);
 					break;
 				case SAND:
-					TerrainManager.generateIsland(sp, IslandType.DESERT);
+					TerrainManager.tryGenerateIsland(sp, IslandType.DESERT);
 					break;
 				case VINE:
-					TerrainManager.generateIsland(sp, IslandType.JUNGLE);
+					TerrainManager.tryGenerateIsland(sp, IslandType.JUNGLE);
 					break;
 				case HARD_CLAY:
-					TerrainManager.generateIsland(sp, IslandType.MESA);
+					TerrainManager.tryGenerateIsland(sp, IslandType.MESA);
 					break;
 				case WATER_LILY:
-					TerrainManager.generateIsland(sp, IslandType.SWAMP);
+					TerrainManager.tryGenerateIsland(sp, IslandType.SWAMP);
 					break;
 				default:
 					e.player.sendMessage("§cErreur ! Cette ile n'a pas été correctement configurée ! Préviens un membre du Staff");
