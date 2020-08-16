@@ -412,7 +412,9 @@ public class BaseIsland {
 	}
 
 	public void trySetHolos(){
+		System.out.println("try set holos");
 		if(holo==null){
+			System.out.println("set holos");
 			delHolos();
 			holo = new ArmorStand[4];
 			if(name!=null)setHoloName();
@@ -431,6 +433,7 @@ public class BaseIsland {
 	protected void setHoloLevel(){
 		if(holo[1]==null) holo[1] = createAM(1);
 		holo[1].setCustomName("§eNiveau de l'île : §6"+level);
+		System.out.println("set level");
 	}
 	protected void setHoloBank(){
 		if(holo[2]==null) holo[2] = createAM(2);

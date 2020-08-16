@@ -70,7 +70,8 @@ public class BaseAPI {
 		return sp;
 	}
 
-	public static void registerIsland(BaseIsland is, SkyPlayer sp) throws SQLException {
+	public static ISPLink registerIsland(BaseIsland is, SkyPlayer sp) throws SQLException {
+		if(sp.getOwnerIsland()!=null)return null;
 		if(InternalAPI.SQLEnabled()){
 			Main.sql.checkConnect();
 			PreparedStatement ps = Main.sql.connection.prepareStatement("INSERT INTO sky_islands (x, z, type) VALUES (?, ?, ?)");
@@ -95,6 +96,7 @@ public class BaseAPI {
 		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("INSERT INTO sky_pis (rank, x, z, uuid) VALUES (?, ?, ?, ?)", MemberRank.CHEF.id, is.isid.x, is.isid.z, sp.uuid);
 
 		Utils.islandCache.add(is);
+		return link;
 	}
 	// DELETE
 

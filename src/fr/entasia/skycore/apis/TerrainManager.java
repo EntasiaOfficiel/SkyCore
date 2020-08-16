@@ -110,12 +110,12 @@ public class TerrainManager {
 				try {
 
 					ISID isid = CooManager.findFreeSpot();
-					ISPLink link = new ISPLink(new BaseIsland(isid, type), sp, MemberRank.CHEF);
-					BaseAPI.registerIsland(link.is, sp);
+					ISPLink link = BaseAPI.registerIsland(new BaseIsland(isid, type), sp);
+					if(link==null)return;
 
 
 					genOW(isid, type);
-					sp.p.sendMessage("§6Génération overworld terminée !");
+//					sp.p.sendMessage("§6Génération overworld terminée !");
 //					genDimension(link.is, Dimensions.NETHER.world, Dimensions.NETHER.schems);
 //					sp.p.sendMessage("§6Génération nether terminée !");
 //					genDimension(link.is, Dimensions.END.world, Dimensions.END.schems);
@@ -127,7 +127,6 @@ public class TerrainManager {
 							calcPoints(link.is, new CodePasser.Arg<Integer>() {
 								@Override
 								public void run(Integer rem) {
-									link.is.setMalus((int) link.is.rawpoints);
 									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
 									link.is.teleportHome(sp.p);
 								}
@@ -210,22 +209,27 @@ public class TerrainManager {
 						}
 					}
 				}
-				is.rawpoints = points-is.malus;
+
 				int rem;
-				if(is.rawpoints<=0){ // security
-					is.rawpoints=0;
-					is.level = 0;
+				if(is.malus==0){
+					is.malus = (int) points;
 					rem = 0;
 				}else{
-					Pair<Integer, Integer> p = levelAlg(is.rawpoints);
-					is.level = p.key;
-					rem = p.value;
-				}
+					is.rawpoints = points-is.malus;
+					if(is.rawpoints<=0){ // security
+						is.rawpoints=0;
+						is.level = 0;
+						rem = 0;
+					}else{
+						Pair<Integer, Integer> p = levelAlg(is.rawpoints);
+						is.level = p.key;
+						rem = p.value;
+					}
+					is.setHoloLevel();
 
-				if(is.malus>0)is.setHoloLevel();
-
-				if(InternalAPI.SQLEnabled()) {
-					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.level, is.isid.x, is.isid.z);
+					if(InternalAPI.SQLEnabled()) {
+						Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.level, is.isid.x, is.isid.z);
+					}
 				}
 
 				new BukkitRunnable() {

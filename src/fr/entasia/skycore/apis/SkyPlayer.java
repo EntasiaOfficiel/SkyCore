@@ -99,6 +99,7 @@ public class SkyPlayer {
 	}
 
 	public ISPLink getOwnerIsland(){
+		System.out.println("return "+ownerIsland);
 		return ownerIsland;
 	}
 
@@ -112,7 +113,7 @@ public class SkyPlayer {
 		else{
 			defaultis = link;
 			if(InternalAPI.SQLEnabled()){
-				Main.sql.fastUpdate("update sky_pis set def = IF(x=? and z=?, 1, 0) where uuid=?", link.is.isid.x, link.is.isid.z, uuid);
+				Main.sql.fastUpdate("UPDATE sky_pis SET def = IF(x=? and z=?, 1, 0) WHERE uuid=?", link.is.isid.x, link.is.isid.z, uuid);
 			}
 			return true;
 		}
