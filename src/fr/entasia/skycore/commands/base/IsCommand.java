@@ -469,7 +469,7 @@ public class IsCommand implements CommandExecutor {
 							} else {
 								byte ret = newLink.setRank(MemberRank.CHEF);
 								if (ret == 0) {
-									is.sendTeamMsg("§3Passage du chef sur cette île à §c" + link.sp.p + " §3!");
+									is.sendTeamMsg("§3Passage du chef sur cette île à §c" + target.name + " §3!");
 								} else if (ret == 1) {
 									p.sendMessage("§cCe joueur est déja chef d'une île !");
 								} else {
