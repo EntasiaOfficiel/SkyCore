@@ -12,6 +12,7 @@ import com.sk89q.worldedit.world.registry.WorldData;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
+import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.objs.IslandShematics;
@@ -91,11 +92,11 @@ public class TerrainManager {
 			return;
 		}
 		int ts = (int) (System.currentTimeMillis()/1000);
-//		int a = 60*60*24*5-(ts-sp.lastGenerated);
-//		if(a>0){ // 5 jours
-//			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
-//			return;
-//		}
+		int a = 60*60*24*5-(ts-sp.lastGenerated);
+		if(a>0){ // 5 jours
+			sp.p.sendMessage("§cTu dois encore attendre "+ TextUtils.secondsToTime(a)+" pour générer une nouvelle île !");
+			return;
+		}
 		sp.setLastGenerated(ts);
 		generateIsland(sp, type);
 	}

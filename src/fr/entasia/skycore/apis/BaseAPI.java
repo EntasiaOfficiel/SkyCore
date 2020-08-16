@@ -129,7 +129,6 @@ public class BaseAPI {
 
 		is.delHolos();
 
-		Utils.islandCache.remove(is);
 
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			Location loc = p.getLocation();
@@ -147,6 +146,7 @@ public class BaseAPI {
 				if(!TerrainManager.clearTerrain(is.isid, TerrainManager.getSession(Dimensions.OVERWORLD.world)))a = false;
 				else if(!TerrainManager.clearTerrain(is.isid, TerrainManager.getSession(Dimensions.NETHER.world)))a = false;
 				else if(!TerrainManager.clearTerrain(is.isid, TerrainManager.getSession(Dimensions.END.world)))a = false;
+				Utils.islandCache.remove(is);
 				code.run(a);
 			}
 		}.runTaskAsynchronously(Main.main);
