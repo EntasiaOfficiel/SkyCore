@@ -1,9 +1,12 @@
 package fr.entasia.skycore.events;
 
+import fr.entasia.apis.utils.PlayerUtils;
+import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowman;
@@ -19,6 +22,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
@@ -52,9 +57,9 @@ public class BaseEvents implements Listener {
 
 			}catch(Exception e2){
 				e2.printStackTrace();
-				e.getPlayer().kickPlayer("§c): Une erreur est survenue lors de la lecture de ton profil Skyblock ! Contacte un membre du Staff");
+				e.getPlayer().kickPlayer("§c): Une erreur est survenue lors de la lecture de ton profil Skyblock ! Contacte un Membre du Staff");
 			}
-		}else e.getPlayer().kickPlayer("§cLe Post-Loading du plugin Skyblock n'est pas terminé ! Si tu ne peux pas te connecter dans une minute, contacte un membre du Staff");
+		}else e.getPlayer().kickPlayer("§cLe Post-Loading du plugin Skyblock n'est pas terminé ! Si tu ne peux pas te connecter dans une minute, contacte un Membre du Staff");
 	}
 
 	@EventHandler
@@ -76,7 +81,7 @@ public class BaseEvents implements Listener {
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			if(e.getEntity().getLocation().getWorld()==Utils.spawnWorld){
@@ -85,45 +90,40 @@ public class BaseEvents implements Listener {
 			}
 			Player p = (Player) e.getEntity();
 			if (e.getCause() == EntityDamageEvent.DamageCause.VOID){
+				e.setCancelled(true);
 				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
 				if(is==null)p.teleport(Utils.spawn);
 				else is.teleportHome(p);
+				return;
 			}
 			if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
 			if (e.getFinalDamage() >= p.getHealth()) {
 				e.setCancelled(true);
-				p.sendMessage("§c§kn§cTu es mort !§kn");
+				p.sendMessage("§cTu es mort ! ):");
 				for (PotionEffect pe : p.getActivePotionEffects()) {
 					p.removePotionEffect(pe.getType());
 				}
 
-				p.setFireTicks(0);
-				p.setFallDistance(0);
-				p.setMaxHealth(20);
-				p.setSprinting(false);
-				p.setHealth(20);
-				p.setFoodLevel(20);
-
-
 				SkyPlayer sp = BaseAPI.getOnlineSP(p.getUniqueId());
 				assert sp != null;
 
-				BaseIsland is = null;
+				Location loc = Utils.spawn;
 				if (Dimensions.isIslandWorld(p.getWorld())) {
-					is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
+					BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
+					if(is!=null)loc = is.getHome();
 				}
-				if (is == null) {
-					ArrayList<ISPLink> a = sp.getIslands();
-					if (a.size() == 1) is = a.get(0).is;
-					else {
-						is = sp.getDefaultIS().is;
-						if (is == null) {
-							p.teleport(Utils.spawn);
-							return;
-						}
+
+				PlayerUtils.fakeKill(p);
+				p.setNoDamageTicks(80); // c'est pas des ticks
+				p.teleport(loc);
+
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						p.setFireTicks(0);
+						p.setVelocity(new Vector(0, 0, 0));
 					}
-				}
-				is.teleportHome(p);
+				}.runTask(Main.main);
 			}
 		}else if(e.getEntity() instanceof Snowman){
 			if(e.getCause()==EntityDamageEvent.DamageCause.MELTING){

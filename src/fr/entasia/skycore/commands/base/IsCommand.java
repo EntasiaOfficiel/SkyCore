@@ -161,23 +161,26 @@ public class IsCommand implements CommandExecutor {
 						break;
 					}
 					case "sethome": {
-						if(link.getRank()==MemberRank.RECRUE)p.sendMessage("§cTu es une recrue, tu ne peux pas redéfinir le spawn de l'île !");
-						else{
+						if (link.getRank() == MemberRank.RECRUE)
+							p.sendMessage("§cTu es une recrue, tu ne peux pas redéfinir le spawn de l'île !");
+						else {
 							link.is.setHome(p.getLocation());
 							p.sendMessage("§aLe spawn de l'île à été redéfini avec succès !");
 						}
 						break;
 					}
 
-					case "setname":{
-						if(link.getRank()==MemberRank.RECRUE)p.sendMessage("§cTu es une recrue, tu ne peux pas changer le nom de l'île !");
-						if(args.length==1){
+					case "setname": {
+						if (link.getRank() == MemberRank.RECRUE)
+							p.sendMessage("§cTu es une recrue, tu ne peux pas changer le nom de l'île !");
+						if (args.length == 1) {
 							p.sendMessage("§cMet un nom d'île !");
 							return true;
 						}
 						String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-						if(link.is.setName(name))p.sendMessage("§aNouveau nom d'île : §d"+name);
-						else p.sendMessage("§cCe nom est trop grand ! Maximum : 20 caractères ("+name.length()+" actuellement)");
+						if (link.is.setName(name)) p.sendMessage("§aNouveau nom d'île : §d" + name);
+						else
+							p.sendMessage("§cCe nom est trop grand ! Maximum : 20 caractères (" + name.length() + " actuellement)");
 						break;
 					}
 
@@ -205,7 +208,7 @@ public class IsCommand implements CommandExecutor {
 							@Override
 							public void run(Integer rem) {
 								int lvl = link.is.getLevel();
-								link.is.sendTeamMsg("§aNouveau niveau de l'île : "+lvl);
+								link.is.sendTeamMsg("§aNouveau niveau de l'île : " + lvl);
 //								p.sendMessage("§aPoints demandés pour le niveau suivant : "+rem);
 							}
 						});
@@ -218,10 +221,10 @@ public class IsCommand implements CommandExecutor {
 
 					case "leave":
 					case "quit": {
-						if(link.getRank()==MemberRank.CHEF){
+						if (link.getRank() == MemberRank.CHEF) {
 							p.sendMessage("§cTu es le chef de cette île, tu ne peux pas la quitter !");
 							p.sendMessage("§cUtilise /is setowner pour transférer la propriété de l'île");
-						}else{
+						} else {
 							String name = link.getName();
 							if (link.removeMember()) {
 								link.is.sendTeamMsg(name + "§e à quitté l'île !");
@@ -231,27 +234,27 @@ public class IsCommand implements CommandExecutor {
 						}
 					}
 
-					case "bans":{
+					case "bans": {
 						ArrayList<SkyPlayer> bans = link.is.getBanneds();
-						if(bans.size()==0)p.sendMessage("§cIl n'y a aucun banni sur cette île !");
-						else{
+						if (bans.size() == 0) p.sendMessage("§cIl n'y a aucun banni sur cette île !");
+						else {
 							p.sendMessage("§cListe des bannis de cette île :");
-							for(SkyPlayer l : link.is.getBanneds()){
-								p.sendMessage("§c - "+l.name);
+							for (SkyPlayer l : link.is.getBanneds()) {
+								p.sendMessage("§c - " + l.name);
 							}
 						}
 						break;
 					}
 					case "ban":
-					case "unban":{
+					case "unban": {
 						SkyPlayer target = IsCmdUtils.teamCheck(link, args);
 						if (target == null) return true;
 						if (args[0].equals("ban")) {
 							if (link.is.addBanned(target)) {
 								p.sendMessage("§cTu as banni " + target.name + " !");
 								link.is.sendTeamMsg("§3 " + target.name + "§c à été bannu de l'île par " + link.getName() + "§c !");
-								if(target.isOnline()){
-									if(CooManager.getIslandID(target.p.getLocation()).equals(link.is.isid)){
+								if (target.isOnline()) {
+									if (CooManager.getIslandID(target.p.getLocation()).equals(link.is.isid)) {
 										target.p.sendMessage("§cTu as été banni de cette île ! Tu as été téléporté au Spawn");
 										target.p.teleport(Utils.spawn);
 									}
@@ -259,7 +262,7 @@ public class IsCommand implements CommandExecutor {
 							} else {
 								p.sendMessage("§cCe joueur est déja banni !");
 							}
-						}else{
+						} else {
 							if (link.is.removeBanned(target)) {
 								p.sendMessage("§cTu as débanni " + target.name + " !");
 								link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été débanni de l'île par " + link.getName() + "§e !");
@@ -277,7 +280,7 @@ public class IsCommand implements CommandExecutor {
 						ISPLink targetLink = link.is.getMember(target.uuid);
 						if (args[0].equals("invite")) {
 							if (targetLink == null) {
-								if(link.is.isBanned(target)){
+								if (link.is.isBanned(target)) {
 									p.sendMessage("§cCe joueur est banni de l'île ! Utilise §4/is unban§c pour le débannir");
 									return true;
 								}
@@ -331,11 +334,11 @@ public class IsCommand implements CommandExecutor {
 								if (targetLink.getRank().id + 1 < link.getRank().id) {
 									MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
 									byte ret = targetLink.setRank(nrank);
-									if(ret==0) {
+									if (ret == 0) {
 										link.is.sendTeamMsg(targetLink.getName() + "§e à été promu par " + link.getName() + "§e !");
-									}else if(ret==1) {
+									} else if (ret == 1) {
 										p.sendMessage("§cCe joueur est déja chef d'une autre île !");
-									}else {
+									} else {
 										p.sendMessage("§cUne erreur s'est produite !");
 									}
 								} else {
@@ -350,7 +353,7 @@ public class IsCommand implements CommandExecutor {
 										p.sendMessage("§cCette personne à déjà le rôle minimum ! Utilise §4/is kick§c pour l'exclure ");
 									else {
 										MemberRank nrank = MemberRank.getType(targetLink.getRank().id - 1);
-										if (targetLink.setRank(nrank)==0)
+										if (targetLink.setRank(nrank) == 0)
 											link.is.sendTeamMsg(targetLink.getName() + "§e à été demote par " + link.getName() + "§e !");
 										else p.sendMessage("§cUne erreur s'est produite !");
 									}
@@ -361,176 +364,191 @@ public class IsCommand implements CommandExecutor {
 						break;
 					}
 
-					case "warp":{
-						if(args.length==1)p.sendMessage("§cMet un nom de joueur !");
-						else{
+					case "warp": {
+						if (args.length == 1) p.sendMessage("§cMet un nom de joueur !");
+						else {
 							SkyPlayer target = InternalAPI.getArgSP(sender, args[1], false);
-							if(target==null)return true;
+							if (target == null) return true;
 							ArrayList<ISPLink> list = target.getIslands();
 							ISPLink targetLink;
-							if(list.size()==0){
+							if (list.size() == 0) {
 								p.sendMessage("§cCe joueur n'a aucune île !");
 								return true;
-							}
-							else if(list.size()==1)targetLink = list.get(0);
-							else{
+							} else if (list.size() == 1) targetLink = list.get(0);
+							else {
 								targetLink = target.getOwnerIsland();
-								if(targetLink==null){
+								if (targetLink == null) {
 									p.sendMessage("§cCe joueur à plusieurs îles !");
 									return true;
 								}
 							}
-							if(targetLink.is.isBanned(sp))p.sendMessage("§cTu es banni de cette île !");
-							else{
+							if (targetLink.is.isBanned(sp)) p.sendMessage("§cTu es banni de cette île !");
+							else {
 								targetLink.is.teleportHome(p);
-								p.sendMessage("§aTéléportation à l'île de §2"+target.name+" §a!");
+								p.sendMessage("§aTéléportation à l'île de §2" + target.name + " §a!");
 							}
 						}
 						break;
 					}
 
 					case "deposit":
-					case "withdraw":{
-						if(link.getRank()==MemberRank.RECRUE){
+					case "withdraw": {
+						if (link.getRank() == MemberRank.RECRUE) {
 							p.sendMessage("§cTu es seulement une recrue ! Tu ne peux pas intéragir à la banque d'île");
 							return true;
 						}
-						if(args.length==1)p.sendMessage("§cMet un chiffre !");
-						else{
-							try{
+						if (args.length == 1) p.sendMessage("§cMet un chiffre !");
+						else {
+							try {
 								int n = Integer.parseInt(args[1]);
-								if(args[0].equals("withdraw")){
-									if(link.is.withdrawBank(n)){
+								if (args[0].equals("withdraw")) {
+									if (link.is.withdrawBank(n)) {
 										sp.addMoney(n);
-										p.sendMessage("§aTu as retiré §2"+Utils.formatMoney(n)+"§a de la banque d'île !");
-									}else{
+										p.sendMessage("§aTu as retiré §2" + Utils.formatMoney(n) + "§a de la banque d'île !");
+									} else {
 										p.sendMessage("§cIl n'y a pas assez d'argent dans la banque d'île !");
 									}
-								}else{
-									if(sp.withdrawMoney(n)){
+								} else {
+									if (sp.withdrawMoney(n)) {
 										link.is.addBank(n);
-										p.sendMessage("§aTu as ajouté §2"+Utils.formatMoney(n)+"§a à la banque d'île !");
-									}else p.sendMessage("§cTu n'as pas assez d'argent !");
+										p.sendMessage("§aTu as ajouté §2" + Utils.formatMoney(n) + "§a à la banque d'île !");
+									} else p.sendMessage("§cTu n'as pas assez d'argent !");
 
 								}
 
-							}catch(NumberFormatException ignore){
-								p.sendMessage("§cLe chiffre §4"+args[1]+"§c est invalide !");
+							} catch (NumberFormatException ignore) {
+								p.sendMessage("§cLe chiffre §4" + args[1] + "§c est invalide !");
 							}
 						}
 						break;
 					}
 					case "bank":
 					case "money": {
-						p.sendMessage("§eValeur de la banque d'île actuellement : §6"+Utils.formatMoney(link.is.getBank()));
+						p.sendMessage("§eValeur de la banque d'île actuellement : §6" + Utils.formatMoney(link.is.getBank()));
 						break;
 					}
 
 					case "setowner": {
-						if (args.length < 2) p.sendMessage("§cMet un joueur en argument !");
-						else {
-							if (link.sp.p.getWorld() == Dimensions.OVERWORLD.world) {
-								BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
-								if (is == null) p.sendMessage("§cTu n'es sur aucune île !");
-								else {
-									if (is.getOwner().sp.equals(link.sp)) {
-										ConfirmObj co = confirmPassOwner.get(p);
-										if (args.length == 2 && args[1].equals("confirm")) {
-											if (co == null || (System.currentTimeMillis() - co.when > 10000)){
-												p.sendMessage("§cLe temps de confirmation est écoulé !");
-											}else {
-												co.task.cancel();
-												confirmPassOwner.remove(p);
-												if (co.is.isid.equals(is.isid)) {
-													SkyPlayer target = InternalAPI.getArgSP(link.sp.p, args[1], true);
-													if (target != null) {
-														if (target.equals(link.sp))
-															p.sendMessage("§cCe joueur est.. toi-même ?");
-														else {
-															ISPLink newLink = link.sp.getIsland(is.isid);
-															if (newLink == null)
-																p.sendMessage("§cCe joueur n'est plus membre sur cette île !");
-															else {
-																is.sendTeamMsg("§3Passage du chef sur cette île à §c" + link.sp.p + " §3!");
-																newLink.setRank(MemberRank.CHEF);
-															}
-														}
-													}
-												} else{
-													p.sendMessage("§cL'île sur laquelle tu es n'est pas la même que celle ou tu as fait la première commande ! Annulation");
-												}
-											}
-										} else {
-											if (co == null) {
-												SkyPlayer target = InternalAPI.getArgSP(p, args[1], true);
-												if (target != null) {
-													if (target.equals(link.sp))
-														p.sendMessage("§cCe joueur est.. toi-même ?");
-													else if (link.sp.getIsland(is.isid) == null)
-														p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
-													else {
-														p.sendMessage("§cVeut-tu passer " + target.name + " chef de cette île ? " + is.isid.str());
-														p.sendMessage("§cTape la commande §4/" + command.getName() + " setowner " + args[1] + " confirm§c dans les 15 secondes pour confirmer.");
-														p.sendMessage("§cATTENTION : Tu ne sera plus le chef de cette île, tu deviendra Adjoint !");
-														co = new ConfirmObj(System.currentTimeMillis(), is);
-														co.task = new WaitConfirm(p, confirmPassOwner).runTaskLaterAsynchronously(Main.main, 300); // 15*20 = 300 ticks
-														confirmPassOwner.put(p, co);
-													}
-												}
-											} else {
-												int time = (int) (15 - (Math.ceil(System.currentTimeMillis() - co.when) / 1000f));
-												p.sendMessage("§cTape la commande §4" + command.getName() + " setowner " + args[1] + " confirm§c dans les " + time +
-														" secondes pour confirmer le changement de chef de l'île " + is.isid.str());
-											}
-										}
-									} else p.sendMessage("§cTu n'es pas le chef de cette île !");
+						if (args.length < 2) {
+							p.sendMessage("§cMet un joueur en argument !");
+							return true;
+						}
+						if (link.sp.p.getWorld() != Dimensions.OVERWORLD.world) {
+							p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
+						}
+						BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
+						if (is == null) {
+							p.sendMessage("§cTu n'es sur aucune île !");
+							return true;
+						}
+						if (is.getOwner() != link) {
+							p.sendMessage("§cTu n'es pas le chef de cette île !");
+							return true;
+						}
+						ConfirmObj co = confirmPassOwner.get(p);
+						if (args.length == 3 && args[2].equals("confirm")) {
+							if (co == null || (System.currentTimeMillis() - co.when > 10000)) {
+								p.sendMessage("§cLe temps de confirmation est écoulé !");
+								return true;
+							}
+							co.task.cancel();
+							confirmPassOwner.remove(p);
+							if (!co.is.isid.equals(is.isid)) {
+								p.sendMessage("§cL'île sur laquelle tu es n'est pas la même que celle ou tu as fait la première commande ! Annulation");
+								return true;
+							}
+							if (!args[1].equals(co.info)) {
+								p.sendMessage("§cCe joueur n'est pas le même que celui de ta première commande ! Annulation");
+								return true;
+							}
+							SkyPlayer target = InternalAPI.getArgSP(link.sp.p, args[1], true);
+							if (target == null) return true;
+							ISPLink newLink = target.getIsland(is.isid);
+							if (newLink == null) {
+								p.sendMessage("§cCe joueur n'est plus membre sur cette île !");
+							} else {
+								byte ret = newLink.setRank(MemberRank.CHEF);
+								if (ret == 0) {
+									is.sendTeamMsg("§3Passage du chef sur cette île à §c" + link.sp.p + " §3!");
+								} else if (ret == 1) {
+									p.sendMessage("§cCe joueur est déja chef d'une île !");
+								} else {
+									p.sendMessage("§cUne erreur est survenue ! Contacte un Membre du Staff");
 								}
-							} else p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
+							}
+						} else {
+							if (co == null) {
+								SkyPlayer target = InternalAPI.getArgSP(p, args[1], true);
+								if (target == null) return true;
+								if (target.equals(link.sp)) {
+									p.sendMessage("§cCe joueur est.. toi-même ?");
+								} else if (target.getIsland(is.isid) == null) {
+									p.sendMessage("§cCe joueur n'est pas membre sur cette île !");
+								} else if (target.getOwnerIsland() == null) {
+									p.sendMessage("§cVeut-tu passer " + target.name + " chef de cette île ? " + is.isid.str());
+									p.sendMessage("§cTape la commande §4/" + command.getName() + " setowner " + args[1] + " confirm§c dans les 15 secondes pour confirmer.");
+									p.sendMessage("§cATTENTION : Tu ne sera plus le chef de cette île, tu deviendra Adjoint !");
+									co = startConfirm(p, is);
+									co.info = args[1];
+									confirmPassOwner.put(p, co);
+								} else {
+									p.sendMessage("§cCe joueur est déja chef d'une île !");
+								}
+							} else {
+								int time = (int) (15 - (Math.ceil(System.currentTimeMillis() - co.when) / 1000f));
+								p.sendMessage("§cTape la commande §4/" + command.getName() + " setowner " + args[1] + " confirm§c dans les " + time +
+										" secondes pour confirmer le changement de chef de l'île " + is.isid.str());
+							}
 						}
 						break;
 					}
 
 
 					case "delete": {
-						if (link.sp.p.getWorld() == Dimensions.OVERWORLD.world) {
-							BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
-							if (is == null) p.sendMessage("§cTu n'es sur aucune île !");
-							else {
-								if (is.getOwner().sp.equals(link.sp)) {
-									ConfirmObj co = confirmDelete.get(p);
-									if (args.length == 2 && args[1].equals("confirm")) {
-										if (co == null || (System.currentTimeMillis() - co.when > 10000))
-											p.sendMessage("§cLe temps de confirmation est écoulé !");
-										else {
-											co.task.cancel();
-											confirmDelete.remove(p);
-											if (co.is.isid.equals(is.isid)) {
-												p.sendMessage("§cSuppression de l'île " + is.isid.x + ";" + is.isid.z + " en cours...");
-												BaseAPI.deleteIsland(is, new CodePasser.Arg<Boolean>() {
-													@Override
-													public void run(Boolean err) {
-														if(err)p.sendMessage("§cîle supprimée avec succès !");
-														else p.sendMessage("§cUne erreur est survenue !");
-													}
-												});
-											} else p.sendMessage("§cL'île sur laquelle tu es n'est pas la même que celle ou tu as fait la première commande ! Annulation");
-										}
-									} else {
-										if (co == null) {
-											p.sendMessage("§cVeut tu supprimer cette île ? " + is.isid.str());
-											p.sendMessage("§cTape la commande §4/" + command.getName() + " delete confirm§c dans les 15 secondes pour confirmer.");
-											p.sendMessage("§cATTENTION : La suppression est instantanée et sans espoir de retour !");
-											co = new ConfirmObj(System.currentTimeMillis(), is);
-											confirmDelete.put(p, co);
-											co.task = new WaitConfirm(p, confirmDelete).runTaskLaterAsynchronously(Main.main, 300); // 15*20 = 300 ticks
-										} else {
-											int time = (int) (15 - Math.floor((System.currentTimeMillis() - co.when) / 1000f));
-											p.sendMessage("§cTape la commande " + args[0] + " delete confirm dans les " + time + " secondes pour confirmer la suppression de l'île " + is.isid.str());
-										}
-									}
-								} else p.sendMessage("§cTu n'es pas le chef de cette île !");
+						if (link.sp.p.getWorld() != Dimensions.OVERWORLD.world) {
+							p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
+							return true;
+						}
+						BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
+						if (is == null) {
+							p.sendMessage("§cTu n'es sur aucune île !");
+							return true;
+						}
+						if (is.getOwner() != link) {
+							p.sendMessage("§cTu n'es pas le chef de cette île !");
+							return true;
+						}
+						ConfirmObj co = confirmDelete.get(p);
+						if (args.length == 2 && args[1].equals("confirm")) {
+							if (co == null || (System.currentTimeMillis() - co.when > 10000)) {
+								p.sendMessage("§cLe temps de confirmation est écoulé !");
+								return true;
 							}
-						} else p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
+							co.task.cancel();
+							confirmDelete.remove(p);
+							if (co.is.isid.equals(is.isid)) {
+								p.sendMessage("§cSuppression de l'île " + is.isid.x + ";" + is.isid.z + " en cours...");
+								BaseAPI.deleteIsland(is, new CodePasser.Arg<Boolean>() {
+									@Override
+									public void run(Boolean err) {
+										if (err) p.sendMessage("§cîle supprimée avec succès !");
+										else p.sendMessage("§cUne erreur est survenue !");
+									}
+								});
+							} else
+								p.sendMessage("§cL'île sur laquelle tu es n'est pas la même que celle ou tu as fait la première commande ! Annulation");
+						} else {
+							if (co == null) {
+								p.sendMessage("§cVeut tu supprimer cette île ? " + is.isid.str());
+								p.sendMessage("§cTape la commande §4/" + command.getName() + " delete confirm§c dans les 15 secondes pour confirmer.");
+								p.sendMessage("§cATTENTION : La suppression est instantanée et sans espoir de retour !");
+								co = startConfirm(p, is);
+								confirmDelete.put(p, co);
+							} else {
+								int time = (int) (15 - Math.floor((System.currentTimeMillis() - co.when) / 1000f));
+								p.sendMessage("§cTape la commande §4/" + command.getName() + " delete confirm§c dans les " + time + " secondes pour confirmer la suppression de l'île " + is.isid.str());
+							}
+						}
 						break;
 					}
 

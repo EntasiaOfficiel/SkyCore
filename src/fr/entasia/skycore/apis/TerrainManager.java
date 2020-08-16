@@ -136,7 +136,7 @@ public class TerrainManager {
 
 				}catch(Throwable e){
 					e.printStackTrace();
-					sp.p.sendMessage("§cUne erreur s'est produite lors de la création de ton île ! Contacte un membre du Staff");
+					sp.p.sendMessage("§cUne erreur s'est produite lors de la création de ton île ! Contacte un Membre du Staff");
 				}
 			}
 		}.runTaskAsynchronously(Main.main);

@@ -45,7 +45,7 @@ public class SkyPlayer {
 	// FONCTIONS UTILES
 
 	@Nullable
-	public ISPLink referentIsland(boolean checkLoc){
+	public ISPLink  referentIsland(boolean checkLoc){
 		if (islands.size() == 1) return islands.get(0);
 
 		if(checkLoc){
@@ -99,7 +99,6 @@ public class SkyPlayer {
 	}
 
 	public ISPLink getOwnerIsland(){
-		System.out.println("return "+ownerIsland);
 		return ownerIsland;
 	}
 

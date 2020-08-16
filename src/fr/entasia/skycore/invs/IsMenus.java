@@ -55,7 +55,7 @@ public class IsMenus {
 					TerrainManager.tryGenerateIsland(sp, IslandType.SWAMP);
 					break;
 				default:
-					e.player.sendMessage("§cErreur ! Cette ile n'a pas été correctement configurée ! Préviens un membre du Staff");
+					e.player.sendMessage("§cErreur ! Cette ile n'a pas été correctement configurée ! Préviens un Membre du Staff");
 			}
 			e.player.closeInventory();
 		}

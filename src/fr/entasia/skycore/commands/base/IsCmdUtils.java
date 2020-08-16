@@ -1,6 +1,7 @@
 package fr.entasia.skycore.commands.base;
 
 import fr.entasia.apis.other.ChatComponent;
+import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.InternalAPI;
@@ -50,11 +51,18 @@ public class IsCmdUtils {
 		public long when;
 		public BaseIsland is;
 		public BukkitTask task;
+		public String info;
 
 		public ConfirmObj(long when, BaseIsland is){
 			this.when = when;
 			this.is = is;
 		}
+	}
+
+	protected static ConfirmObj startConfirm(Player p, BaseIsland is){
+		ConfirmObj co = new ConfirmObj(System.currentTimeMillis(), is);
+		co.task = new WaitConfirm(p, confirmPassOwner).runTaskLaterAsynchronously(Main.main, 300); // 15*20 = 300 ticks
+		return co;
 	}
 
 	protected static HashMap<Player, ConfirmObj> confirmDelete = new HashMap<>();
