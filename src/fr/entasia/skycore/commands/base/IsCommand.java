@@ -3,7 +3,6 @@ package fr.entasia.skycore.commands.base;
 import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.TextUtils;
-import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.invs.IsMenus;
@@ -436,7 +435,7 @@ public class IsCommand implements CommandExecutor {
 						if (link.sp.p.getWorld() != Dimensions.OVERWORLD.world) {
 							p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
 						}
-						BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
+						BaseIsland is = BaseAPI.getIsland(link.sp.p.getLocation());
 						if (is == null) {
 							p.sendMessage("§cTu n'es sur aucune île !");
 							return true;
@@ -509,7 +508,7 @@ public class IsCommand implements CommandExecutor {
 							p.sendMessage("§cTu n'es pas dans l'overworld des îles !");
 							return true;
 						}
-						BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(link.sp.p.getLocation()));
+						BaseIsland is = BaseAPI.getIsland(link.sp.p.getLocation());
 						if (is == null) {
 							p.sendMessage("§cTu n'es sur aucune île !");
 							return true;

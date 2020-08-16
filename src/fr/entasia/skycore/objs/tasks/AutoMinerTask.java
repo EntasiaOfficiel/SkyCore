@@ -4,7 +4,6 @@ import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
-import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.objs.AutoMiner;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -93,7 +92,7 @@ public class AutoMinerTask extends BukkitRunnable {
 
 							if(!am.hopper.getRelative(BlockFace.DOWN).getType().isSolid()){
 								Location loc = am.hopper.getLocation();
-								BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(loc));
+								BaseIsland is = BaseAPI.getIsland(loc);
 								String sloc = "§cxyz : §6"+loc.getBlockX()+"§c;§6"+loc.getBlockY()+"§c;§6"+loc.getBlockZ();
 								if(is==null){
 									ServerUtils.permMsg("log.autominer", "§cUn Autominer à un block transparent au dessous de lui !"+

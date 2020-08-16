@@ -17,7 +17,6 @@ import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.objs.IslandShematics;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import fr.entasia.skycore.objs.enums.IslandType;
-import fr.entasia.skycore.objs.enums.MemberRank;
 import fr.entasia.skycore.objs.isutils.BlockType;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;

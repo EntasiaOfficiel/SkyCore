@@ -1,13 +1,15 @@
 package fr.entasia.skycore.events;
 
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.apis.*;
+import fr.entasia.skycore.apis.BaseAPI;
+import fr.entasia.skycore.apis.BaseIsland;
+import fr.entasia.skycore.apis.ISPLink;
+import fr.entasia.skycore.apis.OthersAPI;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import fr.entasia.skycore.objs.enums.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -15,12 +17,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.util.BlockIterator;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -87,7 +87,7 @@ public class IslandEvents implements Listener {
 	private static boolean isBlockDenied(Player p, Block b){
 		if(Utils.masterEditors.contains(p)&&p.getGameMode()==GameMode.CREATIVE)return false;
 		if(Dimensions.isIslandWorld(p.getWorld())) {
-			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(b.getLocation()));
+			BaseIsland is = BaseAPI.getIsland(b.getLocation());
 			if (is != null) {
 				ISPLink link = is.getMember(p.getUniqueId());
 				if (link == null) p.sendMessage("§cTu n'est pas membre de cette ile !");
@@ -147,8 +147,8 @@ public class IslandEvents implements Listener {
 	public void onMove(PlayerMoveEvent e){
 		Player p = e.getPlayer();
 		if(Dimensions.isIslandWorld(p.getWorld())){
-			BaseIsland fr = BaseAPI.getIsland(CooManager.getIslandID(e.getFrom()));
-			BaseIsland to = BaseAPI.getIsland(CooManager.getIslandID(e.getTo()));
+			BaseIsland fr = BaseAPI.getIsland(e.getFrom());
+			BaseIsland to = BaseAPI.getIsland(e.getTo());
 			if(fr==to){ // on est sur la même île
 				if(fr!=null){
 					int ext = (fr.getExtension()+1)*50;

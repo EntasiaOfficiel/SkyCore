@@ -25,6 +25,10 @@ public class BaseAPI {
 
 	// GET
 
+	public static BaseIsland getIsland(Location loc) {
+		return getIsland(CooManager.getIslandID(loc));
+	}
+
 	public static BaseIsland getIsland(ISID isid) {
 		for(BaseIsland bis : Utils.islandCache){
 			if(bis.isid.equals(isid))return bis;

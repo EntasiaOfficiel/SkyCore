@@ -5,7 +5,6 @@ import fr.entasia.apis.utils.Serialization;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
-import fr.entasia.skycore.apis.CooManager;
 import fr.entasia.skycore.apis.OthersAPI;
 import fr.entasia.skycore.objs.AutoMiner;
 import fr.entasia.skycore.objs.enums.Dimensions;
@@ -46,7 +45,7 @@ public class MiningEvents implements Listener {
 			ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
 			if(pickaxes.contains(item.getType())){
 
-				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getClickedBlock().getLocation()));
+				BaseIsland is = BaseAPI.getIsland(e.getClickedBlock().getLocation());
 				if(is==null)return;
 				if(is.getMember(e.getPlayer().getUniqueId())==null&&!OthersAPI.isMasterEdit(e.getPlayer())){
 					e.getPlayer().sendMessage("§cTu n'es pas membre de cette île !");
@@ -93,7 +92,7 @@ public class MiningEvents implements Listener {
 	public void a(BlockBreakEvent e){
 		if(e.getBlock().getType()==Material.HOPPER){
 			AutoMiner.deleteAMByBlock(e.getBlock());
-			BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(e.getBlock().getLocation()));
+			BaseIsland is = BaseAPI.getIsland(e.getBlock().getLocation());
 			if(is==null)return;
 			is.autominers.removeIf(am -> {
 				if(e.getBlock().equals(am.hopper)){

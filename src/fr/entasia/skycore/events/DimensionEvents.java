@@ -3,7 +3,10 @@ package fr.entasia.skycore.events;
 import com.destroystokyo.paper.event.entity.EntityTeleportEndGatewayEvent;
 import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent;
 import fr.entasia.skycore.Main;
-import fr.entasia.skycore.apis.*;
+import fr.entasia.skycore.apis.BaseAPI;
+import fr.entasia.skycore.apis.BaseIsland;
+import fr.entasia.skycore.apis.ISPLink;
+import fr.entasia.skycore.apis.InternalAPI;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,7 +33,7 @@ public class DimensionEvents implements Listener {
 		e.setCancelled(true);
 		Location loc = e.getFrom();
 		Location loc2 = loc.clone().add(0, 1, 0);
-		BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(loc));
+		BaseIsland is = BaseAPI.getIsland(loc);
 		if(is!=null){
 			ISPLink link = is.getMember(e.getPlayer().getUniqueId());
 			if(link!=null){

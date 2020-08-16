@@ -25,8 +25,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-
 public class BaseEvents implements Listener {
 
 
@@ -91,7 +89,7 @@ public class BaseEvents implements Listener {
 			Player p = (Player) e.getEntity();
 			if (e.getCause() == EntityDamageEvent.DamageCause.VOID){
 				e.setCancelled(true);
-				BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
+				BaseIsland is = BaseAPI.getIsland(p.getLocation());
 				if(is==null)p.teleport(Utils.spawn);
 				else is.teleportHome(p);
 				return;
@@ -109,7 +107,7 @@ public class BaseEvents implements Listener {
 
 				Location loc = Utils.spawn;
 				if (Dimensions.isIslandWorld(p.getWorld())) {
-					BaseIsland is = BaseAPI.getIsland(CooManager.getIslandID(p.getLocation()));
+					BaseIsland is = BaseAPI.getIsland(p.getLocation());
 					if(is!=null)loc = is.getHome();
 				}
 
