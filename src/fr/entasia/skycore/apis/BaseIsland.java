@@ -137,13 +137,13 @@ public class BaseIsland {
 
 	public boolean teleportEnd(Player p) {
 		if (hasEnd) {
-			if (endPortal == null ||
-					(endPortal.getBlock().getType() != Material.ENDER_PORTAL)) {
+			if (endPortal == null || (endPortal.getBlock().getType() != Material.ENDER_PORTAL)) {
 				PortalHelper.findEndPortal(this, p, Dimensions.END);
 			} else p.teleport(endPortal);
 		}else return false;
 		return true;
 	}
+
 
 	// FONCTIONS A AVOIR
 

@@ -25,7 +25,7 @@ public class IsCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 		if(!(sender instanceof Player))return true;
 		Player p = ((Player)sender);
-		SkyPlayer sp = BaseAPI.getOnlineSP(p.getUniqueId());
+		SkyPlayer sp = BaseAPI.getOnlineSP(p);
 		if(sp==null){
 			p.sendMessage("§cTon profil est mal chargé ! Contacte un Membre du Staff");
 			return true;

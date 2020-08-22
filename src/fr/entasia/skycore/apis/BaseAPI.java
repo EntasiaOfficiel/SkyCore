@@ -36,6 +36,9 @@ public class BaseAPI {
 		return null;
 	}
 
+	public static SkyPlayer getOnlineSP(Player p){ // TODO FAIRE METADATA
+		return getOnlineSP(p.getUniqueId());
+	}
 	public static SkyPlayer getOnlineSP(UUID uuid){
 		for(SkyPlayer sp : Utils.onlineSPCache){
 			if(sp.uuid.equals(uuid))return sp;

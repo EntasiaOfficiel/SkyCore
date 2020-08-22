@@ -62,12 +62,10 @@ public class BaseEvents implements Listener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		SkyPlayer sp = BaseAPI.getOnlineSP(e.getPlayer().getUniqueId());
-		assert sp != null;
-		Utils.onlineSPCache.removeIf(aaa->aaa.uuid.equals(sp.uuid));
+		Utils.onlineSPCache.removeIf(osp->osp.uuid.equals(e.getPlayer().getUniqueId()));
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public static void onDamage(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player)) return;
 		Player p = (Player) e.getEntity();
@@ -79,14 +77,15 @@ public class BaseEvents implements Listener {
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
-			if(e.getEntity().getLocation().getWorld()==Utils.spawnWorld){
+			Player p = (Player) e.getEntity();
+			if(p.getLocation().getWorld()==Utils.spawnWorld){
+				p.teleport(Utils.spawn);
 				e.setCancelled(true);
 				return;
 			}
-			Player p = (Player) e.getEntity();
 			if (e.getCause() == EntityDamageEvent.DamageCause.VOID){
 				e.setCancelled(true);
 				BaseIsland is = BaseAPI.getIsland(p.getLocation());
@@ -150,6 +149,7 @@ public class BaseEvents implements Listener {
 			default:
 				return;
 		}
+		Main.main.getLogger().info("loaded "+e.getWorld().getName());
 		for(Dimensions d : Dimensions.values()){
 			if(d.world==null)return;
 		}

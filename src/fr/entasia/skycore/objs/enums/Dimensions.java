@@ -18,8 +18,7 @@ public enum Dimensions {
 	Dimensions(int id){
 		this.id = id;
 	}
-
-	@Nonnull
+	
 	public static Dimensions getDimension(World w){
 		for(Dimensions d : Dimensions.values()){
 			if(d.world==w)return d;
