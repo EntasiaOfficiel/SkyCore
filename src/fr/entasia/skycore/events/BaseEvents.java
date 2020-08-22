@@ -77,13 +77,15 @@ public class BaseEvents implements Listener {
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler()
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player) e.getEntity();
-			if(p.getLocation().getWorld()==Utils.spawnWorld){
-				p.teleport(Utils.spawn);
+			if(p.getLocation().getWorld()==Utils.spawnWorld) {
 				e.setCancelled(true);
+				if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+					p.teleport(Utils.spawn);
+				}
 				return;
 			}
 			if (e.getCause() == EntityDamageEvent.DamageCause.VOID){
@@ -91,9 +93,18 @@ public class BaseEvents implements Listener {
 				BaseIsland is = BaseAPI.getIsland(p.getLocation());
 				if(is==null)p.teleport(Utils.spawn);
 				else is.teleportHome(p);
-				return;
+			}else if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
+		}else if(e.getEntity() instanceof Snowman){
+			if(e.getCause()==EntityDamageEvent.DamageCause.MELTING){
+				e.setCancelled(true);
 			}
-			if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setDamage(e.getDamage() / 2);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public static void antiKill(EntityDamageEvent e) {
+		if (e.getEntity() instanceof Player) {
+			Player p = (Player) e.getEntity();
 			if (e.getFinalDamage() >= p.getHealth()) {
 				e.setCancelled(true);
 				p.sendMessage("§cTu es mort ! ):");
@@ -107,7 +118,7 @@ public class BaseEvents implements Listener {
 				Location loc = Utils.spawn;
 				if (Dimensions.isIslandWorld(p.getWorld())) {
 					BaseIsland is = BaseAPI.getIsland(p.getLocation());
-					if(is!=null)loc = is.getHome();
+					if (is != null) loc = is.getHome();
 				}
 
 				PlayerUtils.fakeKill(p);
@@ -121,10 +132,6 @@ public class BaseEvents implements Listener {
 						p.setVelocity(new Vector(0, 0, 0));
 					}
 				}.runTask(Main.main);
-			}
-		}else if(e.getEntity() instanceof Snowman){
-			if(e.getCause()==EntityDamageEvent.DamageCause.MELTING){
-				e.setCancelled(true);
 			}
 		}
 	}
