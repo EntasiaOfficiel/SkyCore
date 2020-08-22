@@ -10,6 +10,7 @@ import fr.entasia.skycore.objs.enums.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -130,6 +132,13 @@ public class IslandEvents implements Listener {
 				}
 				e.setUseInteractedBlock(Event.Result.DENY);
 			}
+		}
+	}
+
+	@EventHandler
+	public void WitherEatBlocks(EntityChangeBlockEvent e) {
+		if(Dimensions.isIslandWorld(e.getBlock().getWorld())){
+			e.setCancelled(true);
 		}
 	}
 
