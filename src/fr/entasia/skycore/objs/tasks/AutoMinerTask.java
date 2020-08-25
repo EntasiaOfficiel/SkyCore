@@ -104,7 +104,7 @@ public class AutoMinerTask extends BukkitRunnable {
 							}
 
 							if (toMine.contains(am.toBreak.getType())) {
-								am.toBreak.breakNaturally(am.pickaxe);
+								am.toBreak.breakNaturally(am.pickaxe); // TODO ENCHANTS NOT APPLIED
 								//							CraftBlock b;
 								//							b.setType();
 

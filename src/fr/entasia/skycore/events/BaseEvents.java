@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -65,6 +66,13 @@ public class BaseEvents implements Listener {
 		Utils.onlineSPCache.removeIf(osp->osp.uuid.equals(e.getPlayer().getUniqueId()));
 	}
 
+	@EventHandler
+	public static void antiSpawn(EntitySpawnEvent e){
+		if(e.getLocation().getWorld()==Utils.spawnWorld){
+			e.setCancelled(true);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public static void onDamage(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player)) return;
@@ -77,17 +85,20 @@ public class BaseEvents implements Listener {
 		if (e.getDamager() instanceof Firework) e.setCancelled(true);
 	}
 
-	@EventHandler()
+	@EventHandler
 	public static void onDamage(EntityDamageEvent e){
-		if(e.getEntity() instanceof Player){
-			Player p = (Player) e.getEntity();
-			if(p.getLocation().getWorld()==Utils.spawnWorld) {
+		if(e.getEntity().getWorld()==Utils.spawnWorld) {
+			if(e.getEntity() instanceof Player) {
 				e.setCancelled(true);
 				if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-					p.teleport(Utils.spawn);
+					e.getEntity().teleport(Utils.spawn);
 				}
-				return;
 			}
+//			}else e.getEntity().remove();
+			return;
+		}
+		if(e.getEntity() instanceof Player){
+			Player p = (Player) e.getEntity();
 			if (e.getCause() == EntityDamageEvent.DamageCause.VOID){
 				e.setCancelled(true);
 				BaseIsland is = BaseAPI.getIsland(p.getLocation());
