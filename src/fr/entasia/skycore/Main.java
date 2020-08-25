@@ -60,7 +60,7 @@ public class Main extends JavaPlugin {
 					sql = new SQLConnection(main.getConfig().getString("sqluser"), "playerdata");
 				}
 			}
-			sqlite = new SQLConnection().sqlite("plugins/"+getName()+"/database.db");
+			sqlite = SQLConnection.sqlite("plugins/"+getName()+"/database.db");
 			sqlite.unsafeConnect();
 
 			getServer().getPluginManager().registerEvents(new BaseEvents(), this);

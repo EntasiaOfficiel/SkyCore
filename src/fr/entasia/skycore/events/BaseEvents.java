@@ -7,6 +7,7 @@ import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowman;
@@ -65,6 +66,7 @@ public class BaseEvents implements Listener {
 	@EventHandler
 	public static void antiSpawn(EntitySpawnEvent e){
 		if(e.getLocation().getWorld()==Utils.spawnWorld){
+			if(e.getEntityType()== EntityType.DROPPED_ITEM)return;
 			e.setCancelled(true);
 		}
 	}
