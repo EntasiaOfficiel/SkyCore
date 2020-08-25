@@ -25,7 +25,7 @@ public class PayCommand implements CommandExecutor {
 			if(money==0)sender.sendMessage("§cMet un nombre invalide !");
 			else {
 				if (money < 0) money = -money;
-				SkyPlayer sp = BaseAPI.getOnlineSP(((Player) sender).getUniqueId());
+				SkyPlayer sp = BaseAPI.getOnlineSP(((Player) sender));
 				if (sp == null){
 					sender.sendMessage("§cUne erreur s'est produite lors du chargement du ton profil Skyblock ! Contacte un Membre du Staff");
 				} else {

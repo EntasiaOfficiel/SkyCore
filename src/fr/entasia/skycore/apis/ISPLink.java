@@ -21,7 +21,6 @@ public class ISPLink {
 	2 autre erreur
 	 */
 
-	// TODO créer setOwner() ?
 	public byte setRank(MemberRank rank){
 		if(rank==MemberRank.DEFAULT){
 			InternalAPI.warn("Utilise remove() pour supprimer un joueur de l'île !", true);

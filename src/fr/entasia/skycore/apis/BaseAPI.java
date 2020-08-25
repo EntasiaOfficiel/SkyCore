@@ -10,10 +10,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 import static fr.entasia.skycore.Utils.playerCache;
@@ -37,13 +39,9 @@ public class BaseAPI {
 	}
 
 	public static SkyPlayer getOnlineSP(Player p){ // TODO FAIRE METADATA
-		return getOnlineSP(p.getUniqueId());
-	}
-	public static SkyPlayer getOnlineSP(UUID uuid){
-		for(SkyPlayer sp : Utils.onlineSPCache){
-			if(sp.uuid.equals(uuid))return sp;
-		}
-		return null;
+		List<MetadataValue> meta = p.getMetadata("SkyPlayer");
+		if(meta.size()==0)return null;
+		else return (SkyPlayer) meta.get(0).value();
 	}
 
 	public static SkyPlayer getSkyPlayer(UUID uuid){

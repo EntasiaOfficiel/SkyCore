@@ -19,7 +19,6 @@ public class Utils {
 
 	public static ArrayList<BaseIsland> islandCache = new ArrayList<>();
 	public static ArrayList<SkyPlayer> playerCache = new ArrayList<>();
-	public static ArrayList<SkyPlayer> onlineSPCache = new ArrayList<>();
 
 
 	public static String formatMoney(long money){

@@ -130,11 +130,9 @@ public class MiningEvents implements Listener {
 					if (nop) return;
 					e.setCancelled(true);
 					e.getToBlock().setType(genBlock(Material.COBBLESTONE));
-					// TODO SET BLOCK
 				} else if (e.getToBlock().getType() == Material.STATIONARY_WATER) { // stone
 					e.setCancelled(true);
 					e.getToBlock().setType(genBlock(Material.STONE));
-					// TODO SET BLOCK
 				}
 			}
 		}

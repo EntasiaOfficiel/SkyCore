@@ -84,7 +84,6 @@ public class AutoMinerTask extends BukkitRunnable {
 				@Override
 				public void run() {
 					temp.removeIf((am) -> { // boucle
-						// TODO ADD DIRECT AU HOPPER
 
 						if (am.pickaxe == null) return true;
 						else if (am.hopper.getType() == Material.HOPPER) {

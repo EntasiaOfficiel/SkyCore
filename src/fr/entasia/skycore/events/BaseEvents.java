@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -29,7 +30,7 @@ import org.bukkit.util.Vector;
 public class BaseEvents implements Listener {
 
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onJoin(PlayerJoinEvent e) {
 		if(InternalAPI.isFullyEnabled()){
 			try{
@@ -43,7 +44,7 @@ public class BaseEvents implements Listener {
 					link.is.tryLoad();
 				}
 
-				Utils.onlineSPCache.add(sp);
+				sp.p.setMetadata("SkyPlayer", new FixedMetadataValue(Main.main, sp));
 
 				if(!InternalAPI.enableIGSQL&&sp.p.hasPermission("errorlog")){
 					sp.p.sendMessage("§cATTENTION : Les sauvegardes SQL sont désactivées ! Fait §4/isadmin sql enable§C pour les activer");
@@ -59,11 +60,6 @@ public class BaseEvents implements Listener {
 				e.getPlayer().kickPlayer("§c): Une erreur est survenue lors de la lecture de ton profil Skyblock ! Contacte un Membre du Staff");
 			}
 		}else e.getPlayer().kickPlayer("§cLe Post-Loading du plugin Skyblock n'est pas terminé ! Si tu ne peux pas te connecter dans une minute, contacte un Membre du Staff");
-	}
-
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
-		Utils.onlineSPCache.removeIf(osp->osp.uuid.equals(e.getPlayer().getUniqueId()));
 	}
 
 	@EventHandler
@@ -123,7 +119,7 @@ public class BaseEvents implements Listener {
 					p.removePotionEffect(pe.getType());
 				}
 
-				SkyPlayer sp = BaseAPI.getOnlineSP(p.getUniqueId());
+				SkyPlayer sp = BaseAPI.getOnlineSP(p);
 				assert sp != null;
 
 				Location loc = Utils.spawn;

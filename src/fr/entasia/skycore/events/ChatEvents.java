@@ -11,7 +11,7 @@ public class ChatEvents implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e){
-		SkyPlayer sp  = BaseAPI.getOnlineSP(e.getPlayer().getUniqueId());
+		SkyPlayer sp  = BaseAPI.getOnlineSP(e.getPlayer());
 		assert sp != null;
 		ISPLink link = sp.referentIsland(false);
 		if(link!=null){
