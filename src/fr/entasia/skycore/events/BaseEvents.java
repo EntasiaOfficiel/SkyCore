@@ -7,10 +7,7 @@ import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowman;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -64,10 +62,16 @@ public class BaseEvents implements Listener {
 	}
 
 	@EventHandler
+	public static void onDamage(PlayerArmorStandManipulateEvent e){
+		if(e.getRightClicked().getWorld()==Utils.spawnWorld){
+			e.setCancelled(true);
+		}
+	}
+
+	@EventHandler
 	public static void antiSpawn(EntitySpawnEvent e){
 		if(e.getLocation().getWorld()==Utils.spawnWorld){
-			if(e.getEntityType()== EntityType.DROPPED_ITEM)return;
-			e.setCancelled(true);
+			if(e.getEntity() instanceof Creature)e.setCancelled(true);
 		}
 	}
 
@@ -86,13 +90,12 @@ public class BaseEvents implements Listener {
 	@EventHandler
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity().getWorld()==Utils.spawnWorld) {
+			e.setCancelled(true);
 			if(e.getEntity() instanceof Player) {
-				e.setCancelled(true);
 				if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
 					e.getEntity().teleport(Utils.spawn);
 				}
 			}
-//			}else e.getEntity().remove();
 			return;
 		}
 		if(e.getEntity() instanceof Player){
