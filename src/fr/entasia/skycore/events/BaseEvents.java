@@ -95,7 +95,7 @@ public class BaseEvents implements Listener {
 				if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
 					e.getEntity().teleport(Utils.spawn);
 				}
-			}
+			}else if(e.getEntity() instanceof Creature)e.getEntity().remove();
 			return;
 		}
 		if(e.getEntity() instanceof Player){
