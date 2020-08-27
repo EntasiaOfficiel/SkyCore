@@ -63,7 +63,7 @@ public class InternalAPI {
 			}
 		}catch(Throwable e){
 			e.printStackTrace();
-			if(!Main.enableDev){
+			if(!Main.dev){
 				Main.main.getLogger().severe("Erreur lors du chargement POST du plugin ! ARRET DU SERVEUR");
 				Main.main.getServer().shutdown();
 			}

@@ -1,5 +1,6 @@
 package fr.entasia.skycore.events;
 
+import fr.entasia.apis.utils.Internal;
 import fr.entasia.apis.utils.PlayerUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
@@ -64,6 +65,7 @@ public class BaseEvents implements Listener {
 	@EventHandler
 	public static void onDamage(PlayerArmorStandManipulateEvent e){
 		if(e.getRightClicked().getWorld()==Utils.spawnWorld){
+			if(OthersAPI.isMasterEdit(e.getPlayer()))return;
 			e.setCancelled(true);
 		}
 	}
@@ -95,7 +97,7 @@ public class BaseEvents implements Listener {
 				if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
 					e.getEntity().teleport(Utils.spawn);
 				}
-			}else if(e.getEntity() instanceof Creature)e.getEntity().remove();
+			}
 			return;
 		}
 		if(e.getEntity() instanceof Player){

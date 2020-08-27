@@ -36,7 +36,7 @@ public class Main extends JavaPlugin {
 	 */
 
 	public static Main main;
-	public static boolean enableDev;
+	public static boolean dev;
 
 	public static SQLConnection sql;
 	public static SQLConnection sqlite;
@@ -51,17 +51,12 @@ public class Main extends JavaPlugin {
 			getLogger().info("Activation du plugin méga-badass");
 			Utils.spawnWorld = Bukkit.getWorlds().get(0);
 
-			enableDev = main.getConfig().getBoolean("dev", false);
+			dev = main.getConfig().getBoolean("dev", false);
 
 			loadConfigs();
 
-			if(!enableDev){
-				if(getConfig().getString("sqluser")!=null){
-					sql = new SQLConnection(main.getConfig().getString("sqluser"), "playerdata");
-				}
-			}
-			sqlite = SQLConnection.sqlite("plugins/"+getName()+"/database.db");
-			sqlite.unsafeConnect();
+			sql = new SQLConnection(dev).sql(main.getConfig().getString("sqluser"), "playerdata");
+			sqlite = new SQLConnection(dev).sqlite("plugins/"+getName()+"/database.db");
 
 			getServer().getPluginManager().registerEvents(new BaseEvents(), this);
 			getServer().getPluginManager().registerEvents(new IslandEvents(), this);
@@ -88,7 +83,7 @@ public class Main extends JavaPlugin {
 
 		}catch(Throwable e){
 			e.printStackTrace();
-			if(!enableDev){
+			if(!dev){
 				getLogger().severe("Erreur lors du chargement du plugin ! ARRET DU SERVEUR");
 				getServer().shutdown();
 			}
