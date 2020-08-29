@@ -55,7 +55,7 @@ public class Main extends JavaPlugin {
 
 			loadConfigs();
 
-			sql = new SQLConnection(dev).mariadb(main.getConfig().getString("sqluser"), "playerdata");
+			sql = new SQLConnection(dev).mariadb("skycore", "playerdata");
 			sqlite = new SQLConnection(dev).sqlite("plugins/"+getName()+"/database.db");
 
 			getServer().getPluginManager().registerEvents(new BaseEvents(), this);
