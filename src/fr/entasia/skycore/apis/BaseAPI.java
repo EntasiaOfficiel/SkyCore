@@ -62,14 +62,6 @@ public class BaseAPI {
 		playerCache.add(sp);
 		if(InternalAPI.SQLEnabled()){
 			Main.sql.fastUpdateUnsafe("INSERT INTO sky_players (uuid) VALUES (?)", p.getUniqueId());
-
-			// A DEL
-
-			try {
-				Main.sql.fastUpdateUnsafe("INSERT IGNORE INTO global (uuid, name) VALUES (?, ?)", p.getUniqueId().toString(), p.getName());
-			}catch(SQLException ignore){
-
-			}
 		}
 
 		return sp;
