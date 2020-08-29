@@ -231,8 +231,10 @@ public class BaseIsland {
 
 	public void setHome(Location home){
 		this.home = home;
-		if(InternalAPI.SQLEnabled())Main.sql.fastUpdate("UPDATE sky_islands SET home_w=?, home_x=?, home_y=?, home_z=? where x =? and z=?",
-				Dimensions.getDimension(home.getWorld()).id, home.getBlockX(), home.getBlockY(), home.getBlockZ(), isid.x, isid.z);
+		if(InternalAPI.SQLEnabled()){
+			Main.sql.fastUpdate("UPDATE sky_islands SET home_w=?, home_x=?, home_y=?, home_z=? where x =? and z=?",
+					Dimensions.getDimension(home.getWorld()).id, home.getBlockX(), home.getBlockY(), home.getBlockZ(), isid.x, isid.z);
+		}
 	}
 
 

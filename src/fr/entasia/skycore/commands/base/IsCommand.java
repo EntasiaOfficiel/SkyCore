@@ -6,6 +6,7 @@ import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.invs.IsMenus;
+import fr.entasia.skycore.invs.OtherMenus;
 import fr.entasia.skycore.objs.enums.Dimensions;
 import fr.entasia.skycore.objs.enums.MemberRank;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -48,6 +49,10 @@ public class IsCommand implements CommandExecutor {
 			}
 			case "list":{
 				IsMenus.islandsListOpen(sp, false);
+				break;
+			}
+			case "tp":{
+				OtherMenus.topRankOpen(p);
 				break;
 			}
 
@@ -212,8 +217,9 @@ public class IsCommand implements CommandExecutor {
 							}
 						});
 						if (a == 0) p.sendMessage("§aCalcul du niveau de l'île en cours...");
-						else
+						else{
 							p.sendMessage("§cTu dois encore attendre " + TextUtils.secondsToTime(a) + " avant de recalculer le niveau de l'île !");
+						}
 
 						break;
 					}
@@ -329,7 +335,7 @@ public class IsCommand implements CommandExecutor {
 								break;
 							}
 
-							case "promote": {
+							case "promote": { // TODO FAIRE GAFFE AU FUTUR, POUR PROMOTE
 								if (targetLink.getRank().id + 1 < link.getRank().id) {
 									MemberRank nrank = MemberRank.getType(targetLink.getRank().id + 1);
 									byte ret = targetLink.setRank(nrank);
