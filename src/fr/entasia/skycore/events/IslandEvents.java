@@ -1,5 +1,6 @@
 package fr.entasia.skycore.events;
 
+import fr.entasia.apis.other.ItemBuilder;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
@@ -11,14 +12,17 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -43,6 +47,20 @@ public class IslandEvents implements Listener {
 			Material.BREWING_STAND,
 			Material.BEACON
 	);
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public static void onDamage(EntityDamageByEntityEvent e) {
+		if (e.getEntity() instanceof Player){
+			Player p = (Player) e.getEntity();
+			if (Dimensions.isIslandWorld(p.getWorld())){
+				if (e.getDamager() instanceof Player) {
+					e.setCancelled(true);
+					return;
+				}
+				if (e.getDamager() instanceof Firework) e.setCancelled(true);
+			}
+		}
+	}
 
 
 	@EventHandler

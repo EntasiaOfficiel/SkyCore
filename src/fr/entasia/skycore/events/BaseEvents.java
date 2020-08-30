@@ -77,18 +77,6 @@ public class BaseEvents implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public static void onDamage(EntityDamageByEntityEvent e) {
-		if (!(e.getEntity() instanceof Player)) return;
-		Player p = (Player) e.getEntity();
-		if (e.getDamager() instanceof Player) {
-			e.setCancelled(true);
-			return;
-		}
-		if (!Dimensions.isIslandWorld(p.getWorld())) return;
-		if (e.getDamager() instanceof Firework) e.setCancelled(true);
-	}
-
 	@EventHandler
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity().getWorld()==Utils.spawnWorld) {
