@@ -42,6 +42,10 @@ public class DimensionEvents implements Listener {
 						if(is.hasDimension(Dimensions.NETHER)){
 							is.teleportNether(link.sp.p);
 						}else{
+							if(is.getLevel()<500){
+								link.sp.p.sendMessage("§cTon île doit avoir au minimum le niveau 500 pour débloquer le nether !");
+								return;
+							}
 							if(link.is.dimGen)return;
 							link.is.dimGen = true;
 							new BukkitRunnable() {
