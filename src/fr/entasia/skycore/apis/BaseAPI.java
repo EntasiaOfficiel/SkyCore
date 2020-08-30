@@ -38,6 +38,11 @@ public class BaseAPI {
 		return null;
 	}
 
+	public static SkyPlayer getOnlineSP(UUID uuid){ // TODO FAIRE METADATA
+		Player p = Bukkit.getPlayer(uuid);
+		if(p==null)return null;
+		else return getOnlineSP(p);
+	}
 	public static SkyPlayer getOnlineSP(Player p){ // TODO FAIRE METADATA
 		List<MetadataValue> meta = p.getMetadata("SkyPlayer");
 		if(meta.size()==0)return null;
