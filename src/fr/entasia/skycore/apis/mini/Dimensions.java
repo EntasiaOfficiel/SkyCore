@@ -1,9 +1,7 @@
-package fr.entasia.skycore.objs.enums;
+package fr.entasia.skycore.apis.mini;
 
 import fr.entasia.skycore.objs.IslandShematics;
 import org.bukkit.World;
-
-import javax.annotation.Nonnull;
 
 public enum Dimensions {
 	OVERWORLD(0),

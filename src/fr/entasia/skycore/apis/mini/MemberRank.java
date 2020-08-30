@@ -1,4 +1,4 @@
-package fr.entasia.skycore.objs.enums;
+package fr.entasia.skycore.apis.mini;
 
 // rien/ban = 0 (plugin/Base SQL)
 // recrue = 1

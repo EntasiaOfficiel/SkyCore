@@ -1,6 +1,5 @@
-package fr.entasia.skycore.objs.enums;
+package fr.entasia.skycore.objs;
 
-import fr.entasia.skycore.objs.IslandShematics;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 

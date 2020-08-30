@@ -7,7 +7,7 @@ import fr.entasia.skycore.apis.BaseAPI;
 import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.InternalAPI;
-import fr.entasia.skycore.objs.enums.Dimensions;
+import fr.entasia.skycore.apis.mini.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

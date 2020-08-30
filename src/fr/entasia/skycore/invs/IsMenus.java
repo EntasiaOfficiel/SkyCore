@@ -11,7 +11,7 @@ import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.SkyPlayer;
 import fr.entasia.skycore.apis.TerrainManager;
-import fr.entasia.skycore.objs.enums.IslandType;
+import fr.entasia.skycore.objs.IslandType;
 import fr.entasia.skycore.objs.isutils.Extensions;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;

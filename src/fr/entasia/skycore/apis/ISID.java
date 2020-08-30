@@ -1,7 +1,7 @@
 package fr.entasia.skycore.apis;
 
 import fr.entasia.skycore.Utils;
-import fr.entasia.skycore.objs.enums.Dimensions;
+import fr.entasia.skycore.apis.mini.Dimensions;
 import org.bukkit.Location;
 
 public class ISID {
