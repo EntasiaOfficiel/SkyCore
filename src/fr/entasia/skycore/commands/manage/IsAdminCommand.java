@@ -108,6 +108,7 @@ public class IsAdminCommand implements CommandExecutor {
 									p.sendMessage("§8- §b"+ll.getName());
 								}
 								p.sendMessage("§7Points purs : §b" + is.getRawpoints());
+								p.sendMessage("§7Malus : §b" + is.getMalus());
 								p.sendMessage("§7Niveau : §b" + is.getLevel());
 								p.sendMessage("§8Dimensions :");
 								p.sendMessage("§7Nether : §b"+is.hasDimension(Dimensions.NETHER));
