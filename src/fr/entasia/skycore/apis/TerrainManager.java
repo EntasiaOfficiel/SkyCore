@@ -294,18 +294,6 @@ public class TerrainManager {
 		// FILL
 		clearTerrain(isid, session);
 
-
-
-		// GENERATION ILE NORMALE
-
-		loc.mutX(isid.getMiddleX());
-		loc.mutZ(isid.getMiddleZ());
-		isc.island.paste(session, loc, false); // ca marche
-
-		session.setBlock(loc.setY(65), bedrockBlock);
-
-		session.flushQueue();
-
 		// GENERATION MINI ILES
 
 		int j = 0;
@@ -319,6 +307,16 @@ public class TerrainManager {
 			j++;
 			if (j == isc.miniIslands.length)j = 0;
 		}
+		session.flushQueue();
+
+		// GENERATION ILE NORMALE
+
+		loc.mutX(isid.getMiddleX());
+		loc.mutZ(isid.getMiddleZ());
+		isc.island.paste(session, loc, false); // ca marche
+
+		session.setBlock(loc.setY(65), bedrockBlock);
+
 		session.flushQueue();
 
 	}
