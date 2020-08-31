@@ -10,6 +10,7 @@ import fr.entasia.skycore.apis.mini.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -154,7 +155,9 @@ public class IslandEvents implements Listener {
 	@EventHandler
 	public void WitherEatBlocks(EntityChangeBlockEvent e) {
 		if(Dimensions.isIslandWorld(e.getBlock().getWorld())){
-			e.setCancelled(true);
+			if(e.getEntityType()== EntityType.WITHER){
+				e.setCancelled(true);
+			}
 		}
 	}
 
