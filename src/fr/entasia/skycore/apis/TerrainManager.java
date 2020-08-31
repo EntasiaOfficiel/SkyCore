@@ -313,7 +313,7 @@ public class TerrainManager {
 
 		loc.mutX(isid.getMiddleX());
 		loc.mutZ(isid.getMiddleZ());
-		isc.island.paste(session, loc, false); // ca marche
+		isc.island.paste(session, loc, true); // ca marche
 
 		session.setBlock(loc.setY(65), bedrockBlock);
 
