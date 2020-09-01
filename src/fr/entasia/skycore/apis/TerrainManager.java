@@ -41,10 +41,13 @@ public class TerrainManager {
 	public static HashMap<Material, BlockType> blockValues = new HashMap<>();
 	private static final Random r = new Random();
 
+
 	private static int getRandom() {
-		int possibilities = Utils.ISSIZE - 30 - 20;
-		int a = r.nextInt(possibilities); // 0-349 = 350 possibilités
-		if (a >= possibilities /2) a += 30;
+		int radius = 20;
+
+		int possibilities = Utils.ISSIZE - radius*2;
+		int a = r.nextInt(possibilities);
+		if (a >= possibilities /2) a += radius;
 		return a+10;
 	}
 
