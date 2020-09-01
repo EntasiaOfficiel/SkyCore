@@ -43,7 +43,7 @@ public class TerrainManager {
 
 
 	private static int getRandom() {
-		int radius = 20;
+		int radius = 15;
 
 		int possibilities = Utils.ISSIZE - radius*2;
 		int a = r.nextInt(possibilities);
