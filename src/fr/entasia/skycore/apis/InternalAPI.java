@@ -54,7 +54,7 @@ public class InternalAPI {
 				postenable=1;
 				Main.main.getLogger().info("Activation POST du plugin méga-badass");
 
-				if(Main.sql!=null)loadIslands();
+				if(Main.sql!=null) loadData();
 
 				new AutoMinerTask().runTaskTimerAsynchronously(Main.main, 0, 20*6); // full cycle
 				new RankTask().runTaskTimerAsynchronously(Main.main, 0, 20*60*5); // full cycle
@@ -70,7 +70,7 @@ public class InternalAPI {
 		}
 	}
 
-	public static void loadIslands() throws Throwable{
+	public static void loadData() throws Throwable{
 		long time = System.currentTimeMillis();
 
 
@@ -150,7 +150,6 @@ public class InternalAPI {
 					}
 					sp.setDefaultIS(isid);
 				}
-
 			}
 		}
 		Main.main.getLogger().info("Données chargées en "+(System.currentTimeMillis()-time)+"ms :");

@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="spigot-1.12.2-2" level="project" />
+    <orderEntry type="library" name="paper-1.12.2" level="project" />
     <orderEntry type="library" name="FAWE" level="project" />
     <orderEntry type="library" name="Libraries" level="project" />
     <orderEntry type="library" name="WorldEdit" level="project" />

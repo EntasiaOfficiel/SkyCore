@@ -62,7 +62,7 @@ public class BaseEvents implements Listener {
 	}
 
 	@EventHandler
-	public static void onDamage(PlayerArmorStandManipulateEvent e){
+	public static void a(PlayerArmorStandManipulateEvent e){
 		if(e.getRightClicked().getWorld()==Utils.spawnWorld){
 			if(OthersAPI.isMasterEdit(e.getPlayer()))return;
 			e.setCancelled(true);
@@ -76,7 +76,7 @@ public class BaseEvents implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public static void onDamage(EntityDamageEvent e){
 		if(e.getEntity().getWorld()==Utils.spawnWorld) {
 			e.setCancelled(true);
