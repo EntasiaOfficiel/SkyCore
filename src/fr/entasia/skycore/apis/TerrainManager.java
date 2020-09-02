@@ -215,6 +215,7 @@ public class TerrainManager {
 
 				int rem;
 				if(is.malus==0){
+					Main.sql.fastUpdate("UPDATE sky_islands SET malus = ? WHERE x=? and z=?", points, is.isid.x, is.isid.z);
 					is.malus = (int) points;
 					rem = 0;
 				}else{
