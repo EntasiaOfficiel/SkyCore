@@ -114,12 +114,12 @@ public class BaseIsland {
 
 	public void teleportOW(Dimensions from, Player p) {
 		if(from==Dimensions.NETHER) {
-			if(OWNetherPortal==null||OWNetherPortal.getBlock().getType()!= Material.PORTAL){
+			if(OWNetherPortal==null||OWNetherPortal.getBlock().getType()!= Material.NETHER_PORTAL){
 				PortalHelper.findNetherPortal(this, p, Dimensions.OVERWORLD);
 			}else p.teleport(OWNetherPortal);
 		}else if(from==Dimensions.END){
 			if(OWEndPortal==null||
-					(OWEndPortal.getBlock().getType()!= Material.ENDER_PORTAL&&OWEndPortal.getBlock().getType()!= Material.END_GATEWAY)){
+					(OWEndPortal.getBlock().getType()!= Material.END_PORTAL&&OWEndPortal.getBlock().getType()!= Material.END_GATEWAY)){
 					PortalHelper.findEndPortal(this, p, Dimensions.OVERWORLD);
 			}else p.teleport(OWEndPortal);
 		}
@@ -127,7 +127,7 @@ public class BaseIsland {
 
 	public boolean teleportNether(Player p) {
 		if(hasNether){
-			if(netherPortal==null||netherPortal.getBlock().getType()!= Material.PORTAL) {
+			if(netherPortal==null||netherPortal.getBlock().getType()!= Material.NETHER_PORTAL) {
 				PortalHelper.findNetherPortal(this, p, Dimensions.NETHER);
 			} else
 				p.teleport(netherPortal);
@@ -137,7 +137,7 @@ public class BaseIsland {
 
 	public boolean teleportEnd(Player p) {
 		if (hasEnd) {
-			if (endPortal == null || (endPortal.getBlock().getType() != Material.ENDER_PORTAL)) {
+			if (endPortal == null || (endPortal.getBlock().getType() != Material.END_PORTAL)) {
 				PortalHelper.findEndPortal(this, p, Dimensions.END);
 			} else p.teleport(endPortal);
 		}else return false;

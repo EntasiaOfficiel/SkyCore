@@ -1,7 +1,9 @@
 package fr.entasia.skycore;
 
-import com.boydti.fawe.object.schematic.Schematic;
+import com.destroystokyo.paper.MaterialTags;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import fr.entasia.apis.sql.SQLConnection;
 import fr.entasia.skycore.apis.TerrainManager;
 import fr.entasia.skycore.apis.mini.Dimensions;
@@ -10,20 +12,19 @@ import fr.entasia.skycore.commands.manage.*;
 import fr.entasia.skycore.events.*;
 import fr.entasia.skycore.objs.IslandShematics;
 import fr.entasia.skycore.objs.IslandType;
-import fr.entasia.skycore.objs.isutils.BlockType;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nullable;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 public class Main extends JavaPlugin {
@@ -48,7 +49,7 @@ public class Main extends JavaPlugin {
 	public void onEnable(){
 		try{
 			main = this;
-			getLogger().info("Activation du plugin méga-badass");
+			getLogger().info("Activation du plugin méga-badass...");
 			Utils.spawnWorld = Bukkit.getWorlds().get(0);
 
 			dev = main.getConfig().getBoolean("dev", false);
@@ -93,13 +94,13 @@ public class Main extends JavaPlugin {
 	public static class VoidGenerator extends ChunkGenerator {
 
 		@Override
-		public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
+		public ChunkData generateChunkData(@Nullable World world, @Nullable Random random, int chunkX, int chunkZ, @Nullable BiomeGrid biome) {
 			return createChunkData(world);
 		}
 	}
 
 	@Override
-	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+	public ChunkGenerator getDefaultWorldGenerator(@Nullable String worldName, String id) {
 		return new VoidGenerator();
 	}
 
@@ -115,32 +116,30 @@ public class Main extends JavaPlugin {
 		Utils.spawn = new Location(Utils.spawnWorld, sec.getInt("x")+0.5, sec.getInt("y") + 0.2,
 				sec.getInt("z")+0.5, sec.getInt("yaw"), sec.getInt("pitch"));
 
-		Object o;
 		Material m;
-		BlockType bt;
-		for(String k : blockValues.getKeys(false)){
-			o = blockValues.get(k);
-			m = Material.getMaterial(k);
+		for(Map.Entry<String, Object> e : blockValues.getConfigurationSection("blocks").getValues(false).entrySet()){
+			m = Material.getMaterial(e.getKey());
 			if(m==null){
-				main.getLogger().warning("Material invalide : "+k);
+				main.getLogger().warning("Material invalide : "+e.getKey());
 				continue;
 			}
-			if(o instanceof ConfigurationSection){
-				bt = new BlockType();
-				sec = (ConfigurationSection)o;
-				for(String k2 : sec.getKeys(false)){
-					if(k2.equals("other")){
-						bt.others = sec.getInt("other");
-					}else{
-						bt.prices.put(Integer.parseInt(k2), sec.getInt(k2));
-					}
-				}
-				TerrainManager.blockValues.put(m, bt);
-			}else{
-				TerrainManager.blockValues.put(m, new BlockType(Integer.parseInt(o.toString())));
-			}
+			TerrainManager.blockValues.put(m, (int) e.getValue());
 		}
 
+		Field f;
+		for(Map.Entry<String, Object> e : blockValues.getConfigurationSection("categories").getValues(false).entrySet()) {
+			try {
+				f = Tag.class.getDeclaredField(e.getKey());
+			} catch (NoSuchFieldException ignore) {
+				try {
+					f = MaterialTags.class.getDeclaredField(e.getKey());
+				} catch (NoSuchFieldException ignore2) {
+					main.getLogger().warning("Catégorie invalide : " + e.getKey());
+					continue;
+				}
+			}
+			TerrainManager.catValues.put((Tag<Material>) f.get(null), (int) e.getValue());
+		}
 	}
 
 	public void loadIslandStructs() throws Exception {
@@ -173,27 +172,35 @@ public class Main extends JavaPlugin {
 			File f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name);
 			if(f.isDirectory()){
 
+				ClipboardFormat format = null;
+				for(ClipboardFormat i : ClipboardFormats.getAll()){
+					if(i.getName().equals("SCHEMATIC")){
+						format = i;
+						break;
+					}
+				}
+
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/ile.schematic");
-				if(f.exists()) isc.island = ClipboardFormat.SCHEMATIC.load(f);
+				if(f.exists()) isc.island = format.load(f);
 				else throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/minis");
 				File[] fi = f.listFiles();
 				if(fi==null)throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
-				isc.miniIslands = new Schematic[fi.length];
+				isc.miniIslands = new Clipboard[fi.length];
 				for (int i=0;i<fi.length;i++) {
-					isc.miniIslands[i] = ClipboardFormat.SCHEMATIC.load(fi[i]);
+					isc.miniIslands[i] = format.load(fi[i]);
 				}
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/structures");
 				fi = f.listFiles();
 				if(fi==null)throw new Exception("Pas de structures dans l'ile "+isc.name);
-				isc.structures = new Schematic[isc.plans.length];
+				isc.structures = new Clipboard[isc.plans.length];
 				for (File f2 : fi) {
 					String a = f2.getName().split("\\.")[0].toLowerCase();
 					int id = isc.indexOf(a);
 					if(id==-1)throw new Exception("Structure "+a+" inconnue pour l'ile "+isc.name);
-					isc.structures[id] = ClipboardFormat.SCHEMATIC.load(f2);
+					isc.structures[id] = format.load(f2);
 				}
 
 				for(int i=0;i<isc.structures.length;i++){

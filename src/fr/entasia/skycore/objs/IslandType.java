@@ -4,12 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 
 public enum IslandType {
-	DEFAULT(0, Biome.PLAINS, Material.WOOD_DOOR),
-	ICE(1, Biome.ICE_FLATS, Material.SPRUCE_DOOR_ITEM),
-	DESERT(2, Biome.DESERT, Material.BIRCH_DOOR_ITEM),
-	JUNGLE(3, Biome.JUNGLE, Material.JUNGLE_DOOR_ITEM),
-	MESA(4, Biome.MESA, Material.ACACIA_DOOR_ITEM),
-	SWAMP(5, Biome.SWAMPLAND, Material.DARK_OAK_DOOR_ITEM);
+	DEFAULT(0, Biome.PLAINS, Material.OAK_DOOR),
+	ICE(1, Biome.SNOWY_TUNDRA, Material.SPRUCE_DOOR),
+	DESERT(2, Biome.DESERT, Material.BIRCH_DOOR),
+	JUNGLE(3, Biome.JUNGLE, Material.JUNGLE_DOOR),
+	MESA(4, Biome.BADLANDS, Material.ACACIA_DOOR),
+	SWAMP(5, Biome.SWAMP, Material.DARK_OAK_DOOR);
 
 	public int id;
 	public IslandShematics schems;

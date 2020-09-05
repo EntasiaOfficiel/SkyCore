@@ -41,7 +41,7 @@ public class IslandEvents implements Listener {
 			Material.HOPPER,
 
 			Material.FURNACE,
-			Material.BURNING_FURNACE,
+			Material.BLAST_FURNACE,
 
 			Material.BREWING_STAND,
 			Material.BEACON
@@ -84,7 +84,7 @@ public class IslandEvents implements Listener {
 			if(e.getAction()==Action.RIGHT_CLICK_BLOCK) {
 				Material m = b.getType();
 
-				if(m==Material.CAKE_BLOCK) { // f*cking cake check
+				if(m==Material.CAKE) { // f*cking cake check
 					if (isBlockDenied(p, b)) e.setCancelled(true);
 				} else if (ntmShulker(m.getId())) { // f*cking shulker check
 					if (isBlockDenied(p, b)) e.setCancelled(true);

@@ -29,7 +29,7 @@ public class IsMenus {
 
 	// MENU CHOISIR UNE ILE DE DEPART
 
-	private static final MenuCreator startIslandChooseMenu = new MenuCreator(null, null) {
+	private static final MenuCreator startIslandChooseMenu = new MenuCreator() {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -48,10 +48,10 @@ public class IsMenus {
 				case VINE:
 					TerrainManager.tryGenerateIsland(sp, IslandType.JUNGLE);
 					break;
-				case HARD_CLAY:
+				case TERRACOTTA:
 					TerrainManager.tryGenerateIsland(sp, IslandType.MESA);
 					break;
-				case WATER_LILY:
+				case LILY_PAD:
 					TerrainManager.tryGenerateIsland(sp, IslandType.SWAMP);
 					break;
 				default:
@@ -89,13 +89,13 @@ public class IsMenus {
 		item.setItemMeta(meta);
 		inv.setItem(14, item);
 
-		item = new ItemStack(Material.HARD_CLAY);
+		item = new ItemStack(Material.TERRACOTTA);
 		meta = item.getItemMeta();
 		meta.setDisplayName("§6Ile Mesa");
 		item.setItemMeta(meta);
 		inv.setItem(24, item);
 
-		item = new ItemStack(Material.WATER_LILY);
+		item = new ItemStack(Material.LILY_PAD);
 		meta = item.getItemMeta();
 		meta.setDisplayName("§2Ile des Marais");
 		item.setItemMeta(meta);
@@ -107,7 +107,7 @@ public class IsMenus {
 	// MENU CHOISIR IS PAR DEFAUT
 
 
-	private static final MenuCreator islandsListMenu = new MenuCreator(null, null) {
+	private static final MenuCreator islandsListMenu = new MenuCreator() {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
@@ -145,7 +145,7 @@ public class IsMenus {
 		int j = 10;
 		ArrayList<String> list;
 		for(ISPLink link : sp.getIslands()){
-			ItemStack item = new ItemStack(Material.SAPLING);
+			ItemStack item = new ItemStack(Material.OAK_SAPLING);
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName("§aIle ");
 			list = new ArrayList<>();
@@ -172,14 +172,14 @@ public class IsMenus {
 
 	// MENU IS DE BASE DE L'ILE
 
-	private static final MenuCreator baseIslandMenu = new MenuCreator(null, null) {
+	private static final MenuCreator baseIslandMenu = new MenuCreator() {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
 			ISPLink link  = (ISPLink)e.data;
 			e.player.closeInventory();
 			switch(e.item.getType()){
-				case SKULL_ITEM:{
+				case PLAYER_HEAD:{
 					manageTeamOpen(link);
 					break;
 				}
@@ -204,14 +204,14 @@ public class IsMenus {
 
 		Inventory inv = baseIslandMenu.createInv(5, "§6Menu principal de l'île :", link);
 
-		ItemStack item = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
+		ItemStack item = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
 		for (int i = 0; i < 45; i += 9) {
 			inv.setItem(i, item);
 			inv.setItem(i + 8, item);
 		}
 		for (int i = 36; i < 45; i++) inv.setItem(i, item);
 
-		item = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
+		item = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 		for (int i = 1; i < 8; i++) inv.setItem(i, item);
 
 
@@ -238,11 +238,11 @@ public class IsMenus {
 		item.setItemMeta(meta);
 		inv.setItem(19, item);
 
-		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta smeta = (SkullMeta) skull.getItemMeta();
 		smeta.setDisplayName("§eVoir l'équipe de ton île");
 		skull.setItemMeta(smeta);
-		ItemUtils.placeSkullAsync(inv, 20, skull, link.sp.p, Main.main);
+		ItemUtils.placeSkullAsync(inv, 20, skull, link.sp.p);
 
 		item = new ItemStack(Material.BOOK);
 		meta = item.getItemMeta();
@@ -263,12 +263,12 @@ public class IsMenus {
 	// MENU DE TEAM
 
 
-	private static final MenuCreator manageTeamMenu = new MenuCreator(null, null) {
+	private static final MenuCreator manageTeamMenu = new MenuCreator() {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
 			ISPLink link = (ISPLink)e.data;
-			if(e.item.getType()==Material.BOOK_AND_QUILL) baseIslandOpen(link);
+			if(e.item.getType()==Material.WRITABLE_BOOK) baseIslandOpen(link);
 		}
 	};
 
@@ -278,28 +278,28 @@ public class IsMenus {
 		int i = 0;
 		for(ISPLink ll : link.is.getSortedMembers()){
 
-			ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+			ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta smeta = (SkullMeta) item.getItemMeta();
 
 			smeta.setDisplayName(ll.getName());
 			if(ll.equals(link))smeta.setLore(Collections.singletonList("§aC'est toi !"));
 			item.setItemMeta(smeta);
-			ItemUtils.placeSkullAsync(inv, i, item, ll.sp.name, Main.main);
+			ItemUtils.placeSkullAsync(inv, i, item, ll.sp.name);
 			i++;
 		}
 
-		ItemBuilder item = new ItemBuilder(Material.BOOK_AND_QUILL).name("§cRetour au menu précédent");
+		ItemBuilder item = new ItemBuilder(Material.WRITABLE_BOOK).name("§cRetour au menu précédent");
 		inv.setItem(26, item.build());
 
 		link.sp.p.openInventory(inv);
 	}
 
-	private static final MenuCreator upgradeMenu = new MenuCreator(null, null) {
+	private static final MenuCreator upgradeMenu = new MenuCreator() {
 
 		@Override
 		public void onMenuClick(MenuClickEvent e) {
 			ISPLink link = (ISPLink)e.data;
-			if(e.item.getType()==Material.BOOK_AND_QUILL) baseIslandOpen(link);
+			if(e.item.getType()==Material.WRITABLE_BOOK) baseIslandOpen(link);
 			else{
 				e.player.closeInventory();
 				Extensions[] list = Extensions.values();
@@ -350,7 +350,7 @@ public class IsMenus {
 			inv.setItem(list[i].slot, item.build());
 		}
 
-		item = new ItemBuilder(Material.BOOK_AND_QUILL).name("§cRetour au menu précédent");
+		item = new ItemBuilder(Material.WRITABLE_BOOK).name("§cRetour au menu précédent");
 		inv.setItem(35, item.build());
 
 		link.sp.p.openInventory(inv);

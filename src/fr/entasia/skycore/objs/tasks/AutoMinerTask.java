@@ -32,7 +32,7 @@ public class AutoMinerTask extends BukkitRunnable {
 		toMine.add(Material.REDSTONE_ORE);
 		toMine.add(Material.DIAMOND_ORE);
 		toMine.add(Material.EMERALD_ORE);
-		toMine.add(Material.QUARTZ_ORE);
+		toMine.add(Material.NETHER_QUARTZ_ORE);
 		toMine.add(Material.NETHERRACK);
 	}
 

@@ -1,14 +1,14 @@
 package fr.entasia.skycore.apis;
 
 import com.boydti.fawe.FaweAPI;
-import com.boydti.fawe.FaweCache;
 import com.boydti.fawe.util.EditSessionBuilder;
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.math.BlockVector3Imp;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.world.registry.WorldData;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
@@ -18,16 +18,13 @@ import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.mini.Dimensions;
 import fr.entasia.skycore.objs.IslandShematics;
 import fr.entasia.skycore.objs.IslandType;
-import fr.entasia.skycore.objs.isutils.BlockType;
-import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 	/*
@@ -36,9 +33,10 @@ import java.util.Random;
 
 public class TerrainManager {
 
-	private static final BaseBlock bedrockBlock = FaweCache.getBlock(7, 0);
-	private static final BaseBlock airBlock = FaweCache.getBlock(0, 0);
-	public static HashMap<Material, BlockType> blockValues = new HashMap<>();
+	public static BaseBlock bedrockBlock = new BaseBlock(BlockTypes.BEDROCK.getDefaultState());
+	public static BaseBlock airBlock = new BaseBlock(BlockTypes.AIR.getDefaultState());
+	public static HashMap<Material, Integer> blockValues = new HashMap<>();
+	public static HashMap<Tag<Material>, Integer> catValues = new HashMap<>();
 	private static final Random r = new Random();
 
 
@@ -52,7 +50,7 @@ public class TerrainManager {
 	}
 
 	public static EditSession getSession(World w){
-		return new EditSessionBuilder(w.getName()).fastmode(true).allowedRegionsEverywhere().build();
+		return new EditSessionBuilder(FaweAPI.getWorld(w.getName())).fastmode(true).allowedRegionsEverywhere().build();
 	}
 
 	protected static ArrayList<ChunkSnapshot> getChunks(BaseIsland is, Dimensions dim){
@@ -145,47 +143,48 @@ public class TerrainManager {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	public static void genOW(ISID isid, IslandType type) throws Exception {
+	public static void genOW(ISID isid, IslandType type) {
 		EditSession session = getSession(Dimensions.OVERWORLD.world);
-		genBaseDimension(isid, session, Dimensions.OVERWORLD.world, type.schems);
+		genBaseDimension(isid, session, type.schems);
 		setBiome(isid, Dimensions.OVERWORLD.world, type.biome);
 
 		// Ile géante
 
-		Vector loc = new Vector(isid.getMinXTotal(), 70, isid.getMinZTotal());
+		int x = isid.getMinXTotal();
+		int z = isid.getMinZTotal();
 		switch (r.nextInt(4)) {
 			case 0:
-				loc.mutX(loc.getX() + 50);
-				loc.mutZ(loc.getZ() + r.nextInt(Utils.ISSIZE-100)+50);
+				x+=50;
+				z+= r.nextInt(Utils.ISSIZE-100)+50;
 				break;
 			case 1:
-				loc.mutX(loc.getX() + Utils.ISSIZE - 50);
-				loc.mutZ(loc.getZ() + r.nextInt(Utils.ISSIZE-100)+50);
+				x+= Utils.ISSIZE - 50;
+				z+= r.nextInt(Utils.ISSIZE-100)+50;
 				break;
 			case 2:
-				loc.mutX(loc.getX() + r.nextInt(Utils.ISSIZE-100)+50);
-				loc.mutZ(loc.getZ() + 50);
+				x+= r.nextInt(Utils.ISSIZE-100)+50;
+				z+= 50;
 				break;
 			case 3:
-				loc.mutX(loc.getX() + r.nextInt(Utils.ISSIZE-100)+50);
-				loc.mutZ(loc.getZ() + Utils.ISSIZE - 50);
+				x+= r.nextInt(Utils.ISSIZE-100)+50;
+				z+= Utils.ISSIZE - 50;
 				break;
 		}
-		type.schems.structures[0].paste(session, loc, false);
+		type.schems.structures[0].paste(session, BlockVector3Imp.at(x, 70, z), false);
 		session.flushQueue();
 
 	}
 
-	public static void genNether(ISID isid) throws Exception {
+	public static void genNether(ISID isid) {
 		EditSession session = getSession(Dimensions.NETHER.world);
-		genBaseDimension(isid, session, Dimensions.NETHER.world, Dimensions.NETHER.schems);
+		genBaseDimension(isid, session, Dimensions.NETHER.schems);
 
 
 	}
 
-	public static void genEnd(ISID isid) throws Exception {
+	public static void genEnd(ISID isid) {
 		EditSession session = getSession(Dimensions.END.world);
-		genBaseDimension(isid, session, Dimensions.END.world, Dimensions.END.schems);
+		genBaseDimension(isid, session, Dimensions.END.schems);
 	}
 
 	protected static void calcPoints(BaseIsland is, CodePasser.Arg<Integer> code){
@@ -196,6 +195,7 @@ public class TerrainManager {
 			@Override
 			public void run() {
 				Material m;
+				Integer i;
 				long points = 0;
 				for (ChunkSnapshot cs : chunks) {
 					for (int x = 0; x < 16; x++) {
@@ -203,10 +203,15 @@ public class TerrainManager {
 							for (int z = 0; z < 16; z++) {
 								m = cs.getBlockType(x, y, z);
 								if (m != Material.AIR) {
-									BlockType bt = blockValues.get(m);
-									if(bt!=null){
-										points+=bt.getPrice(cs.getBlockData(x, y, z));
-									}
+									i = blockValues.get(m);
+									if(i==null){
+										for(Map.Entry<Tag<Material>, Integer> e : catValues.entrySet()){
+											if(e.getKey().isTagged(m)){
+												points+=e.getValue();
+												break;
+											}
+										}
+									}else points+=i;
 								}
 							}
 						}
@@ -264,9 +269,10 @@ public class TerrainManager {
 	public static boolean clearTerrain(ISID isid, EditSession editSession){
 		ServerUtils.wantChildThread();
 		try{
-			editSession.setBlocks(new CuboidRegion(
-					new Vector(isid.getMinXTotal(), 0, isid.getMinZTotal()),
-					new Vector(isid.getMaxXTotal(), 255, isid.getMaxZTotal())), airBlock);
+			editSession.setBlocks((Region) new CuboidRegion(
+					BlockVector3Imp.at(isid.getMinXTotal(), 0, isid.getMinZTotal()),
+					BlockVector3Imp.at(isid.getMaxXTotal(), 255, isid.getMaxZTotal())
+			), airBlock);
 			editSession.flushQueue();
 			return true;
 		}catch(Exception e){
@@ -281,19 +287,21 @@ public class TerrainManager {
 		int minz = isid.getMinZTotal();
 		int maxz = isid.getMaxZTotal();
 
-		for(int x=minx;x<=maxx;x++){
-			for(int z=minz;z<=maxz;z++){
-				w.setBiome(x, z, biome);
+		for(int x=minx;x<=maxx;x++) {
+			for (int y = minx; y < 256; y++) {
+				for (int z = minz; z <= maxz; z++) {
+					w.setBiome(x, y, z, biome);
+				}
 			}
 		}
 	}
 
 
-	protected static void genBaseDimension(ISID isid, EditSession session, World w, IslandShematics isc) throws Exception {
+	protected static void genBaseDimension(ISID isid, EditSession session, IslandShematics isc) {
 		ServerUtils.wantChildThread();
 
-		Vector bloc = new Vector(isid.getMinXTotal(), 70, isid.getMinZTotal());
-		Vector loc = new Vector(bloc);
+		int x = isid.getMinXTotal();
+		int z = isid.getMinZTotal();
 
 		// FILL
 		clearTerrain(isid, session);
@@ -301,25 +309,25 @@ public class TerrainManager {
 		// GENERATION MINI ILES
 
 		int j = 0;
-		WorldData wd = FaweAPI.getWorld(w.getName()).getWorldData();
 		AffineTransform transform = new AffineTransform();
+		BlockVector3Imp loc;
 		for (int i = 0; i < 50; i++) {
-			loc.mutX(bloc.getX() + getRandom());
-			loc.mutZ(bloc.getZ() + getRandom());
+			loc = BlockVector3Imp.at(x + getRandom(),70, z);
 
-			isc.miniIslands[j].paste(session, wd, loc, false, transform.rotateY(90*r.nextInt(4)));
+			isc.miniIslands[j].paste(session, loc, false, transform.rotateY(90*r.nextInt(4)));
 			j++;
 			if (j == isc.miniIslands.length)j = 0;
 		}
 		session.flushQueue();
 
 		// GENERATION ILE NORMALE
+		x = isid.getMiddleX();
+		z = isid.getMiddleZ();
 
-		loc.mutX(isid.getMiddleX());
-		loc.mutZ(isid.getMiddleZ());
+		loc = BlockVector3Imp.at(x, 70, z);
 		isc.island.paste(session, loc, true); // ca marche
 
-		session.setBlock(loc.setY(65), bedrockBlock);
+		session.setBlock(x, 65, z, bedrockBlock);
 
 		session.flushQueue();
 

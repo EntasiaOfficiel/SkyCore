@@ -32,9 +32,9 @@ public class OtherMenus {
 			re = RankTask.list[i];
 			if(re.is==null||re.lvl<=0)break;
 			se = entries[i];
-			item = new ItemBuilder(Material.SKULL_ITEM).damage(3).name(se.color+"Top "+(i+1)).lore(re.is.getName(), "§aNiveau : "+
+			item = new ItemBuilder(Material.PLAYER_HEAD).damage(3).name(se.color+"Top "+(i+1)).lore(re.is.getName(), "§aNiveau : "+
 					re.lvl, "§cChef §6: "+re.is.getOwner().sp.name).build();
-			ItemUtils.placeSkullAsync(inv, se.slot, item, re.is.getOwner().sp.name, Main.main);
+			ItemUtils.placeSkullAsync(inv, se.slot, item, re.is.getOwner().sp.name);
 		}
 
 		p.openInventory(inv);
