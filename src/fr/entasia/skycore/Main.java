@@ -1,5 +1,7 @@
 package fr.entasia.skycore;
 
+import com.boydti.fawe.config.Settings;
+import com.destroystokyo.paper.MaterialSetTag;
 import com.destroystokyo.paper.MaterialTags;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -21,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -117,6 +120,10 @@ public class Main extends JavaPlugin {
 				sec.getInt("z")+0.5, sec.getInt("yaw"), sec.getInt("pitch"));
 
 		Material m;
+
+		TerrainManager.blockValues.clear();
+		TerrainManager.catValues.clear();
+
 		for(Map.Entry<String, Object> e : blockValues.getConfigurationSection("blocks").getValues(false).entrySet()){
 			m = Material.getMaterial(e.getKey());
 			if(m==null){
@@ -140,6 +147,26 @@ public class Main extends JavaPlugin {
 			}
 			TerrainManager.catValues.put((Tag<Material>) f.get(null), (int) e.getValue());
 		}
+
+		ArrayList<String> tag = new ArrayList<>();
+		for(Material m2 : Material.values()){
+			tag.clear();
+
+			// pas forcément besoin
+//			i = TerrainManager.blockValues.get(m);
+//			if(i!=null)tag.add("Normal");
+
+			for(Map.Entry<Tag<Material>, Integer> e : TerrainManager.catValues.entrySet()){
+				if(e.getKey().isTagged(m2)){
+					tag.add(e.getKey().getKey().toString());
+				}
+			}
+			if(tag.size()>1){
+				main.getLogger().warning("Material "+m2+" représenté plusieurs fois :");
+				System.out.println(tag);
+			}
+		}
+
 	}
 
 	public void loadIslandStructs() throws Exception {
@@ -172,16 +199,9 @@ public class Main extends JavaPlugin {
 			File f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name);
 			if(f.isDirectory()){
 
-				ClipboardFormat format = null;
-				for(ClipboardFormat i : ClipboardFormats.getAll()){
-					if(i.getName().equals("SCHEMATIC")){
-						format = i;
-						break;
-					}
-				}
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/ile.schematic");
-				if(f.exists()) isc.island = format.load(f);
+				if(f.exists()) isc.island = loadFile(f);
 				else throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/minis");
@@ -189,7 +209,7 @@ public class Main extends JavaPlugin {
 				if(fi==null)throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
 				isc.miniIslands = new Clipboard[fi.length];
 				for (int i=0;i<fi.length;i++) {
-					isc.miniIslands[i] = format.load(fi[i]);
+					isc.miniIslands[i] = loadFile(fi[i]);
 				}
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/structures");
@@ -200,7 +220,7 @@ public class Main extends JavaPlugin {
 					String a = f2.getName().split("\\.")[0].toLowerCase();
 					int id = isc.indexOf(a);
 					if(id==-1)throw new Exception("Structure "+a+" inconnue pour l'ile "+isc.name);
-					isc.structures[id] = format.load(f2);
+					isc.structures[id] = loadFile(f2);
 				}
 
 				for(int i=0;i<isc.structures.length;i++){
@@ -211,5 +231,10 @@ public class Main extends JavaPlugin {
 			}else throw new Exception("Pas de dossier pour l'ile "+isc.name);
 			getLogger().info("Ile "+isc.name+" chargée avec succès !");
 		}
+	}
+
+	public static Clipboard loadFile(File f) throws IOException {
+		ClipboardFormat format = ClipboardFormats.findByFile(f);
+		return format.load(f);
 	}
 }
