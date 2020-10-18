@@ -14,12 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class OtherMenus {
 
-	public static MenuCreator topRankMenu = new MenuCreator() {
-		@Override
-		public void onMenuClick(MenuClickEvent e) {
-
-		}
-	};
+	public static MenuCreator topRankMenu = new MenuCreator();
 	public static void topRankOpen(Player p){
 
 		Inventory inv = topRankMenu.createInv(6, "§6Top 10 des niveau d'îles :");
