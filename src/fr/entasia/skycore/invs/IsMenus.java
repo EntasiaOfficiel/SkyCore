@@ -6,7 +6,6 @@ import fr.entasia.apis.other.InstantFirework;
 import fr.entasia.apis.other.ItemBuilder;
 import fr.entasia.apis.utils.ItemUtils;
 import fr.entasia.apis.utils.TextUtils;
-import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.ISPLink;
 import fr.entasia.skycore.apis.SkyPlayer;

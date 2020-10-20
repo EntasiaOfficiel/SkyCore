@@ -1,7 +1,5 @@
 package fr.entasia.skycore;
 
-import com.boydti.fawe.config.Settings;
-import com.destroystokyo.paper.MaterialSetTag;
 import com.destroystokyo.paper.MaterialTags;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -26,9 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Main extends JavaPlugin {
 
@@ -92,6 +88,40 @@ public class Main extends JavaPlugin {
 				getServer().shutdown();
 			}
 		}
+	}
+
+	public static void main(String[] args){
+		List<String> list = Collections.synchronizedList(new ArrayList<>());
+
+		new Thread(){
+			@Override
+			public void run() {
+				System.out.println("debut add");
+				for(int i=0;i<Math.pow(10, 5);i++){
+					list.add("a");
+				}
+				System.out.println("fin add");
+			}
+		}.start();
+
+		new Thread(){
+			@Override
+			public void run() {
+				System.out.println("debut rem");
+				for(int i=0;i<Math.pow(10, 5);i++) {
+					list.remove(0);
+				}
+				System.out.println("fin rem");
+			}
+		}.start();
+
+		list.removeIf(i->{
+			i.length();
+			return false;
+		});
+//		for(String i : list){
+//			i.length();
+//		}
 	}
 
 	public static class VoidGenerator extends ChunkGenerator {

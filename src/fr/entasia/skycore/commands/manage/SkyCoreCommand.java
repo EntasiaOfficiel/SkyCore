@@ -2,16 +2,9 @@ package fr.entasia.skycore.commands.manage;
 
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.apis.InternalAPI;
-import fr.entasia.skycore.apis.TerrainManager;
-import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class SkyCoreCommand implements CommandExecutor {
 

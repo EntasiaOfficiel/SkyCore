@@ -24,10 +24,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.UUID;
+import java.util.*;
 
 public class BaseIsland {
 
@@ -56,7 +53,7 @@ public class BaseIsland {
 	// online stuff
 	public boolean loaded = false;
 	protected long lvlCooldown = 10000;
-	public ArrayList<AutoMiner> autominers = new ArrayList<>();
+	public List<AutoMiner> autominers;
 	public boolean dimGen = false;
 
 	protected ArmorStand[] holo;
@@ -455,6 +452,8 @@ public class BaseIsland {
 	public void tryLoad(){
 		if(!loaded){
 			loaded = true;
+			autominers = Collections.synchronizedList(new ArrayList<>());
+
 			try{
 				ResultSet rs = Main.sqlite.fastSelectUnsafe("SELECT * FROM autominers WHERE is_x=? and is_z=? ", isid.x, isid.z);
 				Block b;
