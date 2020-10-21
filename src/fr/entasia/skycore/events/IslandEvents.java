@@ -9,6 +9,7 @@ import fr.entasia.skycore.apis.mini.Dimensions;
 import fr.entasia.skycore.apis.mini.MemberRank;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -72,27 +73,23 @@ public class IslandEvents implements Listener {
 		if(isBlockDenied(e.getPlayer(), e.getBlockClicked()))e.setCancelled(true);
 	}
 
-	private static boolean ntmShulker(int id){
-		return id>=219&&id<=234;
-	}
-
 	@EventHandler
 	public void interact(PlayerInteractEvent e){
 		Player p = e.getPlayer();
 		if(Dimensions.isIslandWorld(p.getWorld())&&e.hasBlock()){
-			Block b = e.getClickedBlock();
 			if(e.getAction()==Action.RIGHT_CLICK_BLOCK) {
+				Block b = e.getClickedBlock();
 				Material m = b.getType();
 
-				if(m==Material.CAKE) { // f*cking cake check
+				if(m==Material.CAKE) {
 					if (isBlockDenied(p, b)) e.setCancelled(true);
-				} else if (ntmShulker(m.getId())) { // f*cking shulker check
+				} else if (Tag.SHULKER_BOXES.isTagged(m)){
 					if (isBlockDenied(p, b)) e.setCancelled(true);
-				}else if (containers.contains(m)) { // f*cking container check
+				}else if (containers.contains(m)) {
 					if (isBlockDenied(p, b)) e.setCancelled(true);
 				}
 			}else if(e.getAction()==Action.LEFT_CLICK_BLOCK) {
-				// f*cking fire check
+				// fire check
 				for(Block lb : p.getLineOfSight(null, 5)){
 					if(lb.getType()==Material.FIRE){
 						if(isBlockDenied(p, lb))e.setCancelled(true);
