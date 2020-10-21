@@ -78,7 +78,7 @@ public class InternalAPI {
 		SkyPlayer sp = null;
 		ISPLink link;
 
-		ResultSet rs = Main.sql.connection.prepareStatement("SELECT * FROM sky_islands").executeQuery();
+		ResultSet rs = Main.sql.fastSelectUnsafe("SELECT * FROM sky_islands");
 		while(rs.next()){ // BASEISLAND
 			is = new BaseIsland(new ISID(rs.getInt("x"), rs.getInt("z")), IslandType.getType(rs.getInt("type")));
 

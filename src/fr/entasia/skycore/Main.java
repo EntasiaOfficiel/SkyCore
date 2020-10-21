@@ -1,7 +1,9 @@
 package fr.entasia.skycore;
 
-import com.boydti.fawe.object.schematic.Schematic;
+import com.destroystokyo.paper.MaterialTags;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import fr.entasia.apis.sql.SQLConnection;
 import fr.entasia.skycore.apis.TerrainManager;
 import fr.entasia.skycore.apis.mini.Dimensions;
@@ -10,21 +12,19 @@ import fr.entasia.skycore.commands.manage.*;
 import fr.entasia.skycore.events.*;
 import fr.entasia.skycore.objs.IslandShematics;
 import fr.entasia.skycore.objs.IslandType;
-import fr.entasia.skycore.objs.isutils.BlockType;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nullable;
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class Main extends JavaPlugin {
 
@@ -48,7 +48,7 @@ public class Main extends JavaPlugin {
 	public void onEnable(){
 		try{
 			main = this;
-			getLogger().info("Activation du plugin méga-badass");
+			getLogger().info("Activation du plugin méga-badass...");
 			Utils.spawnWorld = Bukkit.getWorlds().get(0);
 
 			dev = main.getConfig().getBoolean("dev", false);
@@ -90,16 +90,50 @@ public class Main extends JavaPlugin {
 		}
 	}
 
+	public static void main(String[] args){
+		List<String> list = Collections.synchronizedList(new ArrayList<>());
+
+		new Thread(){
+			@Override
+			public void run() {
+				System.out.println("debut add");
+				for(int i=0;i<Math.pow(10, 5);i++){
+					list.add("a");
+				}
+				System.out.println("fin add");
+			}
+		}.start();
+
+		new Thread(){
+			@Override
+			public void run() {
+				System.out.println("debut rem");
+				for(int i=0;i<Math.pow(10, 5);i++) {
+					list.remove(0);
+				}
+				System.out.println("fin rem");
+			}
+		}.start();
+
+		list.removeIf(i->{
+			i.length();
+			return false;
+		});
+//		for(String i : list){
+//			i.length();
+//		}
+	}
+
 	public static class VoidGenerator extends ChunkGenerator {
 
 		@Override
-		public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
+		public ChunkData generateChunkData(@Nullable World world, @Nullable Random random, int chunkX, int chunkZ, @Nullable BiomeGrid biome) {
 			return createChunkData(world);
 		}
 	}
 
 	@Override
-	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+	public ChunkGenerator getDefaultWorldGenerator(@Nullable String worldName, String id) {
 		return new VoidGenerator();
 	}
 
@@ -115,29 +149,51 @@ public class Main extends JavaPlugin {
 		Utils.spawn = new Location(Utils.spawnWorld, sec.getInt("x")+0.5, sec.getInt("y") + 0.2,
 				sec.getInt("z")+0.5, sec.getInt("yaw"), sec.getInt("pitch"));
 
-		Object o;
 		Material m;
-		BlockType bt;
-		for(String k : blockValues.getKeys(false)){
-			o = blockValues.get(k);
-			m = Material.getMaterial(k);
+
+		TerrainManager.blockValues.clear();
+		TerrainManager.catValues.clear();
+
+		for(Map.Entry<String, Object> e : blockValues.getConfigurationSection("blocks").getValues(false).entrySet()){
+			m = Material.getMaterial(e.getKey());
 			if(m==null){
-				main.getLogger().warning("Material invalide : "+k);
+				main.getLogger().warning("Material invalide : "+e.getKey());
 				continue;
 			}
-			if(o instanceof ConfigurationSection){
-				bt = new BlockType();
-				sec = (ConfigurationSection)o;
-				for(String k2 : sec.getKeys(false)){
-					if(k2.equals("other")){
-						bt.others = sec.getInt("other");
-					}else{
-						bt.prices.put(Integer.parseInt(k2), sec.getInt(k2));
-					}
+			TerrainManager.blockValues.put(m, (int) e.getValue());
+		}
+
+		Field f;
+		for(Map.Entry<String, Object> e : blockValues.getConfigurationSection("categories").getValues(false).entrySet()) {
+			try {
+				f = Tag.class.getDeclaredField(e.getKey());
+			} catch (NoSuchFieldException ignore) {
+				try {
+					f = MaterialTags.class.getDeclaredField(e.getKey());
+				} catch (NoSuchFieldException ignore2) {
+					main.getLogger().warning("Catégorie invalide : " + e.getKey());
+					continue;
 				}
-				TerrainManager.blockValues.put(m, bt);
-			}else{
-				TerrainManager.blockValues.put(m, new BlockType(Integer.parseInt(o.toString())));
+			}
+			TerrainManager.catValues.put((Tag<Material>) f.get(null), (int) e.getValue());
+		}
+
+		ArrayList<String> tag = new ArrayList<>();
+		for(Material m2 : Material.values()){
+			tag.clear();
+
+			// pas forcément besoin
+//			i = TerrainManager.blockValues.get(m);
+//			if(i!=null)tag.add("Normal");
+
+			for(Map.Entry<Tag<Material>, Integer> e : TerrainManager.catValues.entrySet()){
+				if(e.getKey().isTagged(m2)){
+					tag.add(e.getKey().getKey().toString());
+				}
+			}
+			if(tag.size()>1){
+				main.getLogger().warning("Material "+m2+" représenté plusieurs fois :");
+				System.out.println(tag);
 			}
 		}
 
@@ -173,27 +229,28 @@ public class Main extends JavaPlugin {
 			File f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name);
 			if(f.isDirectory()){
 
+
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/ile.schematic");
-				if(f.exists()) isc.island = ClipboardFormat.SCHEMATIC.load(f);
+				if(f.exists()) isc.island = loadFile(f);
 				else throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/minis");
 				File[] fi = f.listFiles();
 				if(fi==null)throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
-				isc.miniIslands = new Schematic[fi.length];
+				isc.miniIslands = new Clipboard[fi.length];
 				for (int i=0;i<fi.length;i++) {
-					isc.miniIslands[i] = ClipboardFormat.SCHEMATIC.load(fi[i]);
+					isc.miniIslands[i] = loadFile(fi[i]);
 				}
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/structures");
 				fi = f.listFiles();
 				if(fi==null)throw new Exception("Pas de structures dans l'ile "+isc.name);
-				isc.structures = new Schematic[isc.plans.length];
+				isc.structures = new Clipboard[isc.plans.length];
 				for (File f2 : fi) {
 					String a = f2.getName().split("\\.")[0].toLowerCase();
 					int id = isc.indexOf(a);
 					if(id==-1)throw new Exception("Structure "+a+" inconnue pour l'ile "+isc.name);
-					isc.structures[id] = ClipboardFormat.SCHEMATIC.load(f2);
+					isc.structures[id] = loadFile(f2);
 				}
 
 				for(int i=0;i<isc.structures.length;i++){
@@ -204,5 +261,10 @@ public class Main extends JavaPlugin {
 			}else throw new Exception("Pas de dossier pour l'ile "+isc.name);
 			getLogger().info("Ile "+isc.name+" chargée avec succès !");
 		}
+	}
+
+	public static Clipboard loadFile(File f) throws IOException {
+		ClipboardFormat format = ClipboardFormats.findByFile(f);
+		return format.load(f);
 	}
 }

@@ -1,10 +1,8 @@
 package fr.entasia.skycore.invs;
 
-import fr.entasia.apis.menus.MenuClickEvent;
 import fr.entasia.apis.menus.MenuCreator;
 import fr.entasia.apis.other.ItemBuilder;
 import fr.entasia.apis.utils.ItemUtils;
-import fr.entasia.skycore.Main;
 import fr.entasia.skycore.objs.tasks.RankTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,12 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class OtherMenus {
 
-	public static MenuCreator topRankMenu = new MenuCreator() {
-		@Override
-		public void onMenuClick(MenuClickEvent e) {
-
-		}
-	};
+	public static MenuCreator topRankMenu = new MenuCreator();
 	public static void topRankOpen(Player p){
 
 		Inventory inv = topRankMenu.createInv(6, "§6Top 10 des niveau d'îles :");
@@ -32,9 +25,9 @@ public class OtherMenus {
 			re = RankTask.list[i];
 			if(re.is==null||re.lvl<=0)break;
 			se = entries[i];
-			item = new ItemBuilder(Material.SKULL_ITEM).damage(3).name(se.color+"Top "+(i+1)).lore(re.is.getName(), "§aNiveau : "+
+			item = new ItemBuilder(Material.PLAYER_HEAD).damage(3).name(se.color+"Top "+(i+1)).lore(re.is.getName(), "§aNiveau : "+
 					re.lvl, "§cChef §6: "+re.is.getOwner().sp.name).build();
-			ItemUtils.placeSkullAsync(inv, se.slot, item, re.is.getOwner().sp.name, Main.main);
+			ItemUtils.placeSkullAsync(inv, se.slot, item, re.is.getOwner().sp.name);
 		}
 
 		p.openInventory(inv);

@@ -26,7 +26,7 @@ public class PortalHelper {
 						for (int y = 0; y < 256; y += 3) {
 							for (int z = 0; z <= 16; z++) {
 								type = cs.getBlockType(x, y, z);
-								if (type == Material.PORTAL) { // PORTAIL TROUVE : DETECTION SENS
+								if (type == Material.NETHER_PORTAL) { // PORTAIL TROUVE : DETECTION SENS
 									int finalX = x;
 									int finalY = y;
 									int finalZ = z;
@@ -41,7 +41,7 @@ public class PortalHelper {
 												yaw += 90;
 												finalLoc.setYaw(yaw);
 											}
-											while (finalLoc.getBlock().getType() == Material.PORTAL) {
+											while (finalLoc.getBlock().getType() == Material.NETHER_PORTAL) {
 												finalLoc = finalLoc.add(0, -1, 0);
 											}
 											finalLoc = finalLoc.add(0.5, 1.2, 0.5);
@@ -83,17 +83,17 @@ public class PortalHelper {
 						for (int y = 0; y < 256; y += 3) {
 							for (int z = 0; z <= 16; z++) {
 								type = cs.getBlockType(x, y, z);
-								if (type == Material.ENDER_PORTAL) {
+								if (type == Material.END_PORTAL) {
 									Location loc = new Location(in.world, cs.getX() * 16 + x, y, cs.getZ() * 16 + z,
 											p.getLocation().getYaw(), p.getLocation().getPitch());
 
-									if(loc.clone().add(1, 0, 0).getBlock().getType()==Material.ENDER_PORTAL_FRAME){
+									if(loc.clone().add(1, 0, 0).getBlock().getType()==Material.END_PORTAL_FRAME){
 										loc.add(-1, 0, 0);
-									}else if(loc.clone().add(-1, 0, 0).getBlock().getType()==Material.ENDER_PORTAL_FRAME) {
+									}else if(loc.clone().add(-1, 0, 0).getBlock().getType()==Material.END_PORTAL_FRAME) {
 										loc.add(1, 0, 0);
 									}
 
-									while(loc.getBlock().getType()==Material.ENDER_PORTAL){
+									while(loc.getBlock().getType()==Material.END_PORTAL){
 										loc.add(0, 0, 1);
 									}
 

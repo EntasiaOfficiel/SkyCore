@@ -38,7 +38,7 @@ public class DimensionEvents implements Listener {
 			ISPLink link = is.getMember(e.getPlayer().getUniqueId());
 			if(link!=null){
 				if (loc.getWorld()== Dimensions.OVERWORLD.world) {
-					if (loc.getBlock().getType() == Material.PORTAL||loc2.getBlock().getType()==Material.PORTAL){ // TP NETHER
+					if (loc.getBlock().getType() == Material.NETHER_PORTAL||loc2.getBlock().getType()==Material.NETHER_PORTAL){ // TP NETHER
 						if(is.hasDimension(Dimensions.NETHER)){
 							is.teleportNether(link.sp.p);
 						}else{
@@ -60,7 +60,7 @@ public class DimensionEvents implements Listener {
 								}
 							}.runTaskAsynchronously(Main.main);
 						}
-					} else if (loc.getBlock().getType() == Material.ENDER_PORTAL||loc2.getBlock().getType()==Material.ENDER_PORTAL){ // TP END
+					} else if (loc.getBlock().getType() == Material.END_PORTAL||loc2.getBlock().getType()==Material.END_PORTAL){ // TP END
 						if(is.hasDimension(Dimensions.END)){
 							is.teleportEnd(link.sp.p);
 						}else{
@@ -82,12 +82,12 @@ public class DimensionEvents implements Listener {
 
 
 				} else if (loc.getWorld()== Dimensions.NETHER.world) {
-					if (loc.getBlock().getType() == Material.PORTAL||loc2.getBlock().getType()==Material.PORTAL){
+					if (loc.getBlock().getType() == Material.NETHER_PORTAL||loc2.getBlock().getType()==Material.NETHER_PORTAL){
 						is.teleportOW(Dimensions.NETHER, link.sp.p);
 					} else link.sp.p.sendMessage("§cPortail invalide !");
 				} else if (loc.getWorld()== Dimensions.END.world) {
 					if(link.is.hasDimension(Dimensions.END)){
-						if (loc.getBlock().getType() == Material.ENDER_PORTAL||loc2.getBlock().getType()==Material.ENDER_PORTAL){
+						if (loc.getBlock().getType() == Material.END_PORTAL||loc2.getBlock().getType()==Material.END_PORTAL){
 							is.teleportOW(Dimensions.END, link.sp.p);
 						}else link.sp.p.sendMessage("§cPortail invalide !");
 					}

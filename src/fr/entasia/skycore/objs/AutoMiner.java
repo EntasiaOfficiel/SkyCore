@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -93,7 +94,7 @@ public class AutoMiner {
 			armorStands[i].setBasePlate(false);
 			armorStands[i].setRightArmPose(AutoMinerTask.baseAngle);
 
-			armorStands[i].setItemInHand(pickaxe);
+			armorStands[i].setItem(EquipmentSlot.HAND, pickaxe);
 		}
 	}
 }

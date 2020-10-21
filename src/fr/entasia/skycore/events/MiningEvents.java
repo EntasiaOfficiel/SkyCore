@@ -32,10 +32,10 @@ public class MiningEvents implements Listener {
 
 	static {
 		pickaxes.add(Material.DIAMOND_PICKAXE);
-		pickaxes.add(Material.GOLD_PICKAXE);
+		pickaxes.add(Material.GOLDEN_PICKAXE);
 		pickaxes.add(Material.IRON_PICKAXE);
 		pickaxes.add(Material.STONE_PICKAXE);
-		pickaxes.add(Material.WOOD_PICKAXE);
+		pickaxes.add(Material.WOODEN_PICKAXE);
 	}
 
 
@@ -56,7 +56,7 @@ public class MiningEvents implements Listener {
 							e.getPlayer().getInventory().setItemInMainHand(am.pickaxe);
 							am.pickaxe = item;
 							for(ArmorStand as : am.armorStands){
-								as.setItemInHand(am.pickaxe);
+								as.getEquipment().setItemInMainHand(am.pickaxe);
 							}
 							return;
 						}
@@ -116,13 +116,13 @@ public class MiningEvents implements Listener {
 	@EventHandler
 	public void a(BlockFromToEvent e) {
 		if (Dimensions.isIslandWorld(e.getBlock().getWorld())) {
-			if (e.getBlock().getType() == Material.STATIONARY_LAVA) {
+			if (e.getBlock().getType() == Material.LAVA) {
 				if (e.getToBlock().getType() == Material.AIR) { // cobblestone - a verif
 					boolean nop = true;
 					Material m;
 					for (BlockFace bf : directions) {
 						m = e.getToBlock().getRelative(bf).getType();
-						if (m == Material.WATER || m == Material.STATIONARY_WATER) {
+						if (m == Material.WATER) {
 							nop = false;
 							break;
 						}
@@ -130,7 +130,7 @@ public class MiningEvents implements Listener {
 					if (nop) return;
 					e.setCancelled(true);
 					e.getToBlock().setType(genBlock(Material.COBBLESTONE));
-				} else if (e.getToBlock().getType() == Material.STATIONARY_WATER) { // stone
+				} else if (e.getToBlock().getType() == Material.WATER) { // stone
 					e.setCancelled(true);
 					e.getToBlock().setType(genBlock(Material.STONE));
 				}

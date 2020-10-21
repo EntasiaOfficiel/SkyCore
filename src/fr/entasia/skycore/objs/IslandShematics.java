@@ -1,14 +1,15 @@
 package fr.entasia.skycore.objs;
 
-import com.boydti.fawe.object.schematic.Schematic;
+
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 
 public class IslandShematics {
 
 	public String name;
-	public Schematic island;
+	public Clipboard island;
 	public String[] plans;
-	public Schematic[] structures;
-	public Schematic[] miniIslands;
+	public Clipboard[] structures;
+	public Clipboard[] miniIslands;
 
 
 	public int indexOf(String a){
