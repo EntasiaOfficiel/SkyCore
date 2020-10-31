@@ -230,9 +230,9 @@ public class Main extends JavaPlugin {
 			if(f.isDirectory()){
 
 
-				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/ile.schematic");
+				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/ile.schem");
 				if(f.exists()) isc.island = loadFile(f);
-				else throw new Exception("Pas de mini-iles dans l'ile "+isc.name);
+				else throw new Exception("Pas d'ile principale dans l'ile "+isc.name);
 
 				f = new File(Main.main.getDataFolder()+"/islands/schems/"+isc.name+"/minis");
 				File[] fi = f.listFiles();
