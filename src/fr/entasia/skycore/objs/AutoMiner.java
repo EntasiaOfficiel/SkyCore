@@ -37,10 +37,14 @@ public class AutoMiner {
 	}
 
 
-	public void fullDelete(){
+	public void deleteFull() {
 		AutoMinerTask.miners.remove(this);
 		is.autominers.remove(this);
 		deleteAM();
+		deleteVars();
+	}
+
+	public void deleteVars(){
 		pickaxe = null;
 		toBreak = null;
 		hopper = null;

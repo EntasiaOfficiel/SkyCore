@@ -8,6 +8,7 @@ import fr.entasia.skycore.apis.BaseIsland;
 import fr.entasia.skycore.apis.OthersAPI;
 import fr.entasia.skycore.apis.mini.Dimensions;
 import fr.entasia.skycore.objs.AutoMiner;
+import fr.entasia.skycore.objs.tasks.AutoMinerTask;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MiningEvents implements Listener {
 
@@ -94,13 +96,18 @@ public class MiningEvents implements Listener {
 			AutoMiner.deleteAMByBlock(e.getBlock());
 			BaseIsland is = BaseAPI.getIsland(e.getBlock().getLocation());
 			if(is==null)return;
-			is.autominers.removeIf(am -> {
+			Iterator<AutoMiner> ite = is.autominers.iterator();
+			AutoMiner am;
+			while(ite.hasNext()){
+				am = ite.next();
 				if(e.getBlock().equals(am.hopper)){
 					am.toBreak.getWorld().dropItem(am.toBreak.getLocation(), am.pickaxe);
-					am.fullDelete();
-					return true;
-				}else return false;
-			});
+					am.deleteVars();
+					AutoMinerTask.miners.remove(am);
+					ite.remove();
+					break;
+				}
+			}
 		}
 	}
 

@@ -109,14 +109,14 @@ public class AutoMinerTask extends BukkitRunnable {
 
 								short dura = (short) (am.pickaxe.getDurability() + 2);
 								if (dura > am.pickaxe.getType().getMaxDurability()) {
-									am.fullDelete();
+									am.deleteFull();
 									return true;
 								} else am.pickaxe.setDurability(dura);
 								return false;
 							} else return false;
 						} else {
 							am.hopper.getWorld().dropItem(am.hopper.getLocation(), am.pickaxe);
-							am.fullDelete();
+							am.deleteFull();
 							return true;
 						}
 					});
