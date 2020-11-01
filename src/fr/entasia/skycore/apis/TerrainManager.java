@@ -223,7 +223,7 @@ public class TerrainManager {
 				if (p.rawpoints <= 0) { // security
 					p.rawpoints = 0;
 					p.level = 0;
-					p.remaning = 0;
+					p.remaning = 50;
 				} else {
 					levelAlg(p);
 				}
