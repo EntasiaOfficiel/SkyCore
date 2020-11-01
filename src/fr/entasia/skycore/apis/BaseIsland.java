@@ -4,6 +4,7 @@ package fr.entasia.skycore.apis;
 import fr.entasia.apis.other.ChatComponent;
 import fr.entasia.apis.other.CodePasser;
 import fr.entasia.apis.utils.Serialization;
+import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
 import fr.entasia.skycore.Utils;
 import fr.entasia.skycore.apis.mini.Dimensions;
@@ -166,14 +167,22 @@ public class BaseIsland {
 
 	private static final int lvl_time = 3*60*1000;
 
-	public int updateLevel(CodePasser.Arg<Integer> code){
+	public void recalcLvl(Player p) {
 		long a = System.currentTimeMillis() - lvlCooldown;
-		if(a < lvl_time)return (int) (lvl_time -a)/1000;
-		else {
-			lvlCooldown = System.currentTimeMillis();
-			TerrainManager.calcPoints(this, code);
-			return 0;
+		if (a < lvl_time) {
+			p.sendMessage("§cTu dois encore attendre " + TextUtils.secondsToTime((int) a/1000) + " avant de recalculer le niveau de l'île !");
+			return;
 		}
+		lvlCooldown = System.currentTimeMillis();
+		p.sendMessage("§aCalcul du niveau de l'île en cours...");
+		TerrainManager.calcPoints(this, new CodePasser.Arg<TerrainManager.Points>() {
+			@Override
+			public void run(TerrainManager.Points points) {
+				Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", points.rawpoints, points.level, isid.x, isid.z);
+				sendTeamMsg("§aNouveau niveau de l'île : " + points.level);
+				p.sendMessage("§aPoints demandés pour le niveau suivant : " + points.remaning);
+			}
+		});
 	}
 
 	public boolean hasDimension(Dimensions dim){

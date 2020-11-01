@@ -207,20 +207,7 @@ public class IsCommand implements CommandExecutor {
 					case "calc":
 					case "level":
 					case "lvl": {
-
-						int a = link.is.updateLevel(new CodePasser.Arg<Integer>() {
-							@Override
-							public void run(Integer rem) {
-								int lvl = link.is.getLevel();
-								link.is.sendTeamMsg("§aNouveau niveau de l'île : " + lvl);
-//								p.sendMessage("§aPoints demandés pour le niveau suivant : "+rem);
-							}
-						});
-						if (a == 0) p.sendMessage("§aCalcul du niveau de l'île en cours...");
-						else{
-							p.sendMessage("§cTu dois encore attendre " + TextUtils.secondsToTime(a) + " avant de recalculer le niveau de l'île !");
-						}
-
+						link.is.recalcLvl(p);
 						break;
 					}
 

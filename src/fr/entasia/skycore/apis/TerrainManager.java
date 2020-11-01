@@ -10,7 +10,6 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import fr.entasia.apis.other.CodePasser;
-import fr.entasia.apis.other.Pair;
 import fr.entasia.apis.utils.ServerUtils;
 import fr.entasia.apis.utils.TextUtils;
 import fr.entasia.skycore.Main;
@@ -125,9 +124,10 @@ public class TerrainManager {
 					new BukkitRunnable() {
 						@Override
 						public void run() {
-							calcPoints(link.is, new CodePasser.Arg<Integer>() {
+							calcPoints(link.is, new CodePasser.Arg<Points>() {
 								@Override
-								public void run(Integer rem) {
+								public void run(Points p) {
+									link.is.setMalus((int)p.rawpoints);
 									sp.p.sendMessage("§aFin de création de ton île ! Téléportation au cours.. §eBonne aventure !");
 									link.is.teleportHome(sp.p);
 								}
@@ -178,8 +178,6 @@ public class TerrainManager {
 	public static void genNether(ISID isid) {
 		EditSession session = getSession(Dimensions.NETHER.world);
 		genBaseDimension(isid, session, Dimensions.NETHER.schems);
-
-
 	}
 
 	public static void genEnd(ISID isid) {
@@ -187,7 +185,7 @@ public class TerrainManager {
 		genBaseDimension(isid, session, Dimensions.END.schems);
 	}
 
-	protected static void calcPoints(BaseIsland is, CodePasser.Arg<Integer> code){
+	protected static void calcPoints(BaseIsland is, CodePasser.Arg<Points> code){
 		ServerUtils.wantMainThread();
 		ArrayList<ChunkSnapshot> chunks = getChunks(is.isid, Dimensions.OVERWORLD);
 
@@ -204,49 +202,43 @@ public class TerrainManager {
 								m = cs.getBlockType(x, y, z);
 								if (m != Material.AIR) {
 									i = blockValues.get(m);
-									if(i==null){
-										for(Map.Entry<Tag<Material>, Integer> e : catValues.entrySet()){
-											if(e.getKey().isTagged(m)){
-												points+=e.getValue();
+									if (i == null) {
+										for (Map.Entry<Tag<Material>, Integer> e : catValues.entrySet()) {
+											if (e.getKey().isTagged(m)) {
+												points += e.getValue();
 												break;
 											}
 										}
-									}else points+=i;
+									} else points += i;
 								}
 							}
 						}
 					}
 				}
 
-				int rem;
-				if(is.malus==0){
-					Main.sql.fastUpdate("UPDATE sky_islands SET malus = ? WHERE x=? and z=?", points, is.isid.x, is.isid.z);
-					is.malus = (int) points;
-					rem = 0;
-				}else{
-					is.rawpoints = points-is.malus;
-					if(is.rawpoints<=0){ // security
-						is.rawpoints=0;
-						is.level = 0;
-						rem = 0;
-					}else{
-						Pair<Integer, Integer> p = levelAlg(is.rawpoints);
-						is.level = p.key;
-						rem = p.value;
-					}
-					is.setHoloLevel();
+				Points p = new Points();
+				p.rawpoints = points - is.malus;
+				is.rawpoints = points - is.malus;
+				System.out.println(is.rawpoints);
+				if (p.rawpoints <= 0) { // security
+					p.rawpoints = 0;
+					p.level = 0;
+					p.remaning = 0;
+				} else {
+					levelAlg(p);
+				}
 
-					if(InternalAPI.SQLEnabled()) {
-						Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.level, is.isid.x, is.isid.z);
-					}
+				is.setHoloLevel();
+				if (InternalAPI.SQLEnabled()) {
+					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.level, is.isid.x, is.isid.z);
 				}
 
 				new BukkitRunnable() {
 					@Override
 					public void run() {
 						try {
-							code.run(rem);
-						}catch(Throwable e){
+							code.run(p);
+						} catch (Throwable e) {
 							e.printStackTrace();
 						}
 					}
@@ -255,16 +247,26 @@ public class TerrainManager {
 		}.runTaskAsynchronously(Main.main);
 	}
 
-	public static Pair<Integer, Integer> levelAlg(long raw){
-		int lvl = -1;
+	public static void levelAlg(Points p){
+		p.level = -1;
 		int rem = 50;
+		long raw = p.rawpoints;
 		while(raw>0){
-			lvl++;
+			p.level++;
 			raw-=rem;
-			if(lvl%100==0) rem*=1.1;
+			if(p.level %100==0) rem*=1.1;
 		}
-		return new Pair<>(lvl, (int)-raw);
+		p.remaning = (int)-raw;
 	}
+
+
+	public static class Points{
+		public long rawpoints;
+		public int remaning;
+		public int level;
+	}
+
+
 
 	public static boolean clearTerrain(ISID isid, EditSession editSession){
 		ServerUtils.wantChildThread();
