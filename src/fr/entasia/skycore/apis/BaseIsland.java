@@ -178,9 +178,13 @@ public class BaseIsland {
 		TerrainManager.calcPoints(this, new CodePasser.Arg<TerrainManager.Points>() {
 			@Override
 			public void run(TerrainManager.Points points) {
+				rawpoints = points.rawpoints;
+				level = points.level;
 				Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", points.rawpoints, points.level, isid.x, isid.z);
+
 				sendTeamMsg("§aNouveau niveau de l'île : " + points.level);
 				p.sendMessage("§aPoints demandés pour le niveau suivant : " + points.remaning);
+				setHoloLevel();
 			}
 		});
 	}

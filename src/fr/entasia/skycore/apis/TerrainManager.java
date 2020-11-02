@@ -220,17 +220,12 @@ public class TerrainManager {
 				p.rawpoints = points - is.malus;
 				is.rawpoints = points - is.malus;
 				System.out.println(is.rawpoints);
-				if (p.rawpoints <= 0) { // security
+				if (p.rawpoints < 0) { // security
 					p.rawpoints = 0;
 					p.level = 0;
 					p.remaning = 50;
 				} else {
 					levelAlg(p);
-				}
-
-				is.setHoloLevel();
-				if (InternalAPI.SQLEnabled()) {
-					Main.sql.fastUpdate("UPDATE sky_islands SET rawpoints = ?, lvl = ? WHERE x=? and z=?", is.rawpoints, is.level, is.isid.x, is.isid.z);
 				}
 
 				new BukkitRunnable() {
