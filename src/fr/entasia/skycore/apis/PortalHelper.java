@@ -22,9 +22,9 @@ public class PortalHelper {
 
 				Material type;
 				for (ChunkSnapshot cs : chunks) {
-					for (int x = 0; x <= 16; x++) {
+					for (int x = 0; x <= 15; x++) {
 						for (int y = 0; y < 256; y += 3) {
-							for (int z = 0; z <= 16; z++) {
+							for (int z = 0; z <= 15; z++) {
 								type = cs.getBlockType(x, y, z);
 								if (type == Material.NETHER_PORTAL) { // PORTAIL TROUVE : DETECTION SENS
 									int finalX = x;
@@ -79,9 +79,9 @@ public class PortalHelper {
 			public void run() {
 				Material type;
 				for (ChunkSnapshot cs : chunks) {
-					for (int x = 0; x <= 16; x++) {
+					for (int x = 0; x <= 15; x++) {
 						for (int y = 0; y < 256; y += 3) {
-							for (int z = 0; z <= 16; z++) {
+							for (int z = 0; z <= 15; z++) {
 								type = cs.getBlockType(x, y, z);
 								if (type == Material.END_PORTAL) {
 									Location loc = new Location(in.world, cs.getX() * 16 + x, y, cs.getZ() * 16 + z,

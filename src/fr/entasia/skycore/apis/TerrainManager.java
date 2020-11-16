@@ -309,7 +309,7 @@ public class TerrainManager {
 		AffineTransform transform = new AffineTransform();
 		BlockVector3Imp loc;
 		for (int i = 0; i < 50; i++) {
-			loc = BlockVector3Imp.at(x + getRandom(),70, z);
+			loc = BlockVector3Imp.at(x + getRandom(),70, z + getRandom());
 
 			isc.miniIslands[j].paste(session, loc, false, transform.rotateY(90*r.nextInt(4)));
 			j++;
