@@ -116,19 +116,25 @@ public class BaseEvents implements Listener {
 				SkyPlayer sp = BaseAPI.getOnlineSP(p);
 				assert sp != null;
 
-				Location loc = Utils.spawn;
+				/*Location loc = Utils.spawn;
 				if (Dimensions.isIslandWorld(p.getWorld())) {
 					BaseIsland is = BaseAPI.getIsland(p.getLocation());
 					if (is != null) loc = is.getHome();
-				}
+				}*/
 
-				PlayerUtils.fakeKill(p);
+				PlayerUtils.reset(p);
 				p.setNoDamageTicks(80); // c'est pas des ticks
-				p.teleport(loc);
+
 
 				new BukkitRunnable() {
 					@Override
 					public void run() {
+						Location loc = Utils.spawn;
+						if (Dimensions.isIslandWorld(p.getWorld())) {
+							BaseIsland is = BaseAPI.getIsland(p.getLocation());
+							if (is != null) loc = is.getHome();
+						}
+						p.teleport(loc);
 						p.setFireTicks(0);
 						p.setVelocity(new Vector(0, 0, 0));
 					}

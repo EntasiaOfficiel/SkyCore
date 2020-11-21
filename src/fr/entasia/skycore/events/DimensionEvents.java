@@ -92,6 +92,8 @@ public class DimensionEvents implements Listener {
 						}else link.sp.p.sendMessage("§cPortail invalide !");
 					}
 				}
+			}else{
+				e.getPlayer().sendMessage("§cTu n'es pas membre de cette ile !");
 			}
 		}
 	}
