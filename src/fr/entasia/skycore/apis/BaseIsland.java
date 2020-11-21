@@ -417,8 +417,9 @@ public class BaseIsland {
 	protected void delHolos(){
 		for(Entity ent : home.clone().add(0, 3, 0).getNearbyEntities(1, 4, 1)){
 			if(ent instanceof ArmorStand){
-				if(!ent.getScoreboardTags().contains("isholo"))return;
-				ent.remove();
+				if(ent.getScoreboardTags().contains("isholo")){
+					ent.remove();
+				}
 			}
 		}
 	}
