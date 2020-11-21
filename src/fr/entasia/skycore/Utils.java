@@ -15,7 +15,6 @@ public class Utils {
 	public static World spawnWorld;
 	public static Location spawn;
 
-	public static Location endWaitLoc;
 
 	public static ArrayList<Player> masterEditors = new ArrayList<>();
 

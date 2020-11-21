@@ -6,6 +6,7 @@ import fr.entasia.skycore.apis.mini.Dimensions;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -74,7 +75,8 @@ public class PortalHelper {
 	}
 
 	protected static void findEndPortal(BaseIsland is, Player p, Dimensions in) {
-		p.teleport(Utils.endWaitLoc);
+		World w = Utils.spawnWorld;
+		p.teleport(new Location(w , 2000, 1000, 2000));
 		ArrayList<ChunkSnapshot> chunks = TerrainManager.getChunks(is, in);
 		new BukkitRunnable() {
 			@Override
