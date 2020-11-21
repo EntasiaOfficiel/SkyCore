@@ -51,6 +51,11 @@ public class Main extends JavaPlugin {
 			getLogger().info("Activation du plugin méga-badass...");
 			Utils.spawnWorld = Bukkit.getWorlds().get(0);
 
+
+
+
+
+
 			dev = main.getConfig().getBoolean("dev", false);
 
 			loadConfigs();

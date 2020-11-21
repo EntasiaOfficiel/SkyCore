@@ -15,6 +15,7 @@ public class Utils {
 	public static World spawnWorld;
 	public static Location spawn;
 
+
 	public static ArrayList<Player> masterEditors = new ArrayList<>();
 
 	public static ArrayList<BaseIsland> islandCache = new ArrayList<>();

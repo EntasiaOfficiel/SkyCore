@@ -7,9 +7,7 @@ import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.apis.mini.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowman;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -74,6 +72,10 @@ public class BaseEvents implements Listener {
 		if(e.getLocation().getWorld()==Utils.spawnWorld){
 			if(e.getEntity() instanceof Creature)e.setCancelled(true);
 		}
+
+		if(e.getEntity().getType() == EntityType.ENDER_DRAGON){
+			e.getEntity().remove();
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -116,19 +118,25 @@ public class BaseEvents implements Listener {
 				SkyPlayer sp = BaseAPI.getOnlineSP(p);
 				assert sp != null;
 
-				Location loc = Utils.spawn;
+				/*Location loc = Utils.spawn;
 				if (Dimensions.isIslandWorld(p.getWorld())) {
 					BaseIsland is = BaseAPI.getIsland(p.getLocation());
 					if (is != null) loc = is.getHome();
-				}
+				}*/
 
-				PlayerUtils.fakeKill(p);
+				PlayerUtils.reset(p);
 				p.setNoDamageTicks(80); // c'est pas des ticks
-				p.teleport(loc);
+
 
 				new BukkitRunnable() {
 					@Override
 					public void run() {
+						Location loc = Utils.spawn;
+						if (Dimensions.isIslandWorld(p.getWorld())) {
+							BaseIsland is = BaseAPI.getIsland(p.getLocation());
+							if (is != null) loc = is.getHome();
+						}
+						p.teleport(loc);
 						p.setFireTicks(0);
 						p.setVelocity(new Vector(0, 0, 0));
 					}
