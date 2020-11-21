@@ -7,9 +7,7 @@ import fr.entasia.skycore.apis.*;
 import fr.entasia.skycore.apis.mini.Dimensions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowman;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -73,6 +71,10 @@ public class BaseEvents implements Listener {
 	public static void antiSpawn(EntitySpawnEvent e){
 		if(e.getLocation().getWorld()==Utils.spawnWorld){
 			if(e.getEntity() instanceof Creature)e.setCancelled(true);
+		}
+
+		if(e.getEntity().getType() == EntityType.ENDER_DRAGON){
+			e.getEntity().remove();
 		}
 	}
 
