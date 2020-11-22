@@ -72,7 +72,6 @@ public class Main extends JavaPlugin {
 			getCommand("skycore").setExecutor(new SkyCoreCommand());
 			getCommand("isadmin").setExecutor(new IsAdminCommand());
 			getCommand("setspawn").setExecutor(new SetSpawnCommand());
-			getCommand("setspawn").setExecutor(new SetSpawnCommand());
 			getCommand("masteredit").setExecutor(new MasterEditCommand());
 
 			getCommand("baltop").setExecutor(new BaltopCommand());
