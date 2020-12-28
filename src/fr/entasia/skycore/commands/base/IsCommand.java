@@ -278,7 +278,7 @@ public class IsCommand implements CommandExecutor {
 								}
 								if (link.is.invitePlayer(target)) {
 									link.is.sendTeamMsg(MemberRank.DEFAULT.getName() + "§3 " + target.name + "§e à été invité sur l'île par " + link.getName() + "§e !");
-									if (target.p != null) {
+									if (target.isOnline()) {
 										target.p.sendMessage("§eTu as été invité sur l'île " + link.is.isid.str() + " par " + link.sp.name + " !");
 										sendInviteMsg(target.p, link.is);
 										target.p.sendMessage("§eTu peux à tout moment regarder tes invitations avec la commande §6/is invites");
@@ -289,7 +289,7 @@ public class IsCommand implements CommandExecutor {
 							if (targetLink == null) {
 								if (link.is.cancelInvite(target)) {
 									link.is.sendTeamMsg("§3L'invitation de " + target.name + "§e à été annulée par " + link.getName() + "§e !");
-									if (target.p != null)
+									if (target.isOnline())
 										target.p.sendMessage("§cL'invitation de l'île §4" + link.is.isid.str() + "§c à été annulée !");
 								} else p.sendMessage("§cCe joueur n'est pas invité !");
 							} else p.sendMessage("§cCe joueur est un membre de l'île ! Utilise §4/is kick");
@@ -519,7 +519,7 @@ public class IsCommand implements CommandExecutor {
 							co.task.cancel();
 							confirmDelete.remove(p);
 							if (co.is.isid.equals(is.isid)) {
-								p.sendMessage("§cSuppression de l'île " + is.isid.x + ";" + is.isid.z + " en cours...");
+								p.sendMessage("§cSuppression de l'île " + is.isid.str() + " en cours...");
 								BaseAPI.deleteIsland(is, new CodePasser.Arg<Boolean>() {
 									@Override
 									public void run(Boolean err) {

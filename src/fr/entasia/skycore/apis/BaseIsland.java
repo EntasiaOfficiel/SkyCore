@@ -160,7 +160,7 @@ public class BaseIsland {
 
 	public int hashCode(){
 		return isid.hashCode();
-	}
+	} // TODO PÄS BON
 
 
 	// FONCTIONS RANDOM
